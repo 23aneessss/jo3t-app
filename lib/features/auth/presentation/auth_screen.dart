@@ -91,7 +91,7 @@ class AuthScreen extends StatelessWidget {
                 label: 'Continue with phone',
                 icon: Icons.phone_outlined,
                 iconColor: AppColors.neutral700,
-                onTap: () => context.go('/wilaya-select'),
+                onTap: () => context.push('/verify-phone'),
               )
                   .animate(delay: const Duration(milliseconds: 260))
                   .fadeIn(duration: AppAnimations.normal)

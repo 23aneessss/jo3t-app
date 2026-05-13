@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/auth_screen.dart';
+import '../../features/auth/presentation/follow_suggestions_screen.dart';
 import '../../features/auth/presentation/food_preferences_screen.dart';
 import '../../features/auth/presentation/onboarding_screen.dart';
+import '../../features/auth/presentation/otp_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/auth/presentation/wilaya_select_screen.dart';
 import '../../features/discovery/presentation/discovery_feed_screen.dart';
 import '../../features/discovery/presentation/search_screen.dart';
 import '../../features/map/presentation/map_screen.dart';
+import '../../features/notifications/presentation/notifications_screen.dart';
 import '../../features/place/presentation/place_profile_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/saved/presentation/saved_screen.dart';
 import '../../features/add_place/presentation/add_place_screen.dart';
 import '../../features/review/presentation/write_review_screen.dart';
 import '../../shared/widgets/main_shell.dart';
@@ -34,6 +38,11 @@ final appRouter = GoRouter(
           _slideUpPage(state, const AuthScreen()),
     ),
     GoRoute(
+      path: '/verify-phone',
+      pageBuilder: (context, state) =>
+          _slideUpPage(state, const OtpScreen()),
+    ),
+    GoRoute(
       path: '/wilaya-select',
       pageBuilder: (context, state) =>
           _slideUpPage(state, const WilayaSelectScreen()),
@@ -42,6 +51,11 @@ final appRouter = GoRouter(
       path: '/food-preferences',
       pageBuilder: (context, state) =>
           _slideUpPage(state, const FoodPreferencesScreen()),
+    ),
+    GoRoute(
+      path: '/follow-suggestions',
+      pageBuilder: (context, state) =>
+          _slideUpPage(state, const FollowSuggestionsScreen()),
     ),
 
     // Main shell with bottom nav
@@ -66,7 +80,7 @@ final appRouter = GoRouter(
         GoRoute(
           path: '/saved',
           pageBuilder: (context, state) =>
-              _fadePage(state, const _SavedPlaceholderScreen()),
+              _fadePage(state, const SavedScreen()),
         ),
         GoRoute(
           path: '/profile',
@@ -76,14 +90,12 @@ final appRouter = GoRouter(
       ],
     ),
 
-    // Add a place (outside shell — full screen)
+    // Full-screen routes (outside shell)
     GoRoute(
       path: '/add-place',
       pageBuilder: (context, state) =>
           _slideUpPage(state, const AddPlaceScreen()),
     ),
-
-    // Place detail (outside shell — full screen)
     GoRoute(
       path: '/place/:id',
       pageBuilder: (context, state) {
@@ -91,14 +103,17 @@ final appRouter = GoRouter(
         return _slideUpPage(state, PlaceProfileScreen(placeId: id));
       },
     ),
-
-    // Write review
     GoRoute(
       path: '/review/new/:placeId',
       pageBuilder: (context, state) {
         final id = state.pathParameters['placeId']!;
         return _slideUpPage(state, WriteReviewScreen(placeId: id));
       },
+    ),
+    GoRoute(
+      path: '/notifications',
+      pageBuilder: (context, state) =>
+          _slideUpPage(state, const NotificationsScreen()),
     ),
   ],
 );
@@ -115,7 +130,8 @@ CustomTransitionPage<void> _slideUpPage(GoRouterState state, Widget child) {
       final slide = Tween<Offset>(
         begin: const Offset(0, 0.06),
         end: Offset.zero,
-      ).animate(CurvedAnimation(parent: animation, curve: AppAnimations.enter));
+      ).animate(
+          CurvedAnimation(parent: animation, curve: AppAnimations.enter));
       return SlideTransition(
         position: slide,
         child: FadeTransition(opacity: animation, child: child),
@@ -132,26 +148,4 @@ CustomTransitionPage<void> _fadePage(GoRouterState state, Widget child) {
     transitionsBuilder: (context, animation, secondaryAnimation, child) =>
         FadeTransition(opacity: animation, child: child),
   );
-}
-
-// Placeholder until saved places screen is built
-class _SavedPlaceholderScreen extends StatelessWidget {
-  const _SavedPlaceholderScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.bookmark_outline, size: 48, color: Color(0xFFB0B0B0)),
-            SizedBox(height: 12),
-            Text('Saved places coming soon',
-                style: TextStyle(color: Color(0xFF6B6B6B))),
-          ],
-        ),
-      ),
-    );
-  }
 }
