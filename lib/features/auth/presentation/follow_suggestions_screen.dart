@@ -149,7 +149,7 @@ class _FollowSuggestionsScreenState extends State<FollowSuggestionsScreen> {
                       child: Text(
                         _followed.isEmpty
                             ? 'Follow at least 3 to see recommendations'
-                            : '${_followed.length} followed · ${_followed.length < 3 ? "${3 - _followed.length} more to go" : "You\'re all set!"}',
+                            : '${_followed.length} followed · ${_followed.length < 3 ? "${3 - _followed.length} more to go" : "You're all set!"}',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
