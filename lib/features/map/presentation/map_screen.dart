@@ -607,7 +607,7 @@ class _PinsCountBadge extends StatelessWidget {
             style: const TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: AppColors.neutral800,
+              color: AppColors.neutral700,
             ),
           ),
         ],
