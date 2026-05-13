@@ -65,6 +65,7 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
                 _buildGallery(place),
                 _buildRatingBreakdown(context, place),
                 _buildReviewsSection(context),
+                _buildSimilarPlaces(context, place),
                 const SizedBox(height: 100),
               ],
             ),
@@ -440,6 +441,37 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
     );
   }
 
+  Widget _buildSimilarPlaces(BuildContext context, PlaceModel place) {
+    final similar = MockData.places
+        .where((p) => p.id != place.id && p.category == place.category)
+        .take(4)
+        .toList();
+    if (similar.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionHeader(title: 'Similar places', onSeeAll: () {})
+            .animate(delay: const Duration(milliseconds: 100))
+            .fadeIn(duration: AppAnimations.normal),
+        SizedBox(
+          height: 200,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppSizes.screenHorizontalPadding),
+            itemCount: similar.length,
+            separatorBuilder: (context, i) => const SizedBox(width: AppSizes.s12),
+            itemBuilder: (context, i) => _SimilarPlaceCard(
+              place: similar[i],
+              index: i,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildFAB(BuildContext context, PlaceModel place) {
     return FloatingActionButton.extended(
       onPressed: () => context.push('/review/new/${place.id}'),
@@ -649,6 +681,160 @@ class _RatingBar extends StatelessWidget {
           .fadeIn(duration: AppAnimations.normal)
           .slideX(begin: 0.05, end: 0, duration: AppAnimations.normal, curve: AppAnimations.enter),
     );
+  }
+}
+
+class _SimilarPlaceCard extends StatefulWidget {
+  const _SimilarPlaceCard({required this.place, required this.index});
+  final PlaceModel place;
+  final int index;
+
+  @override
+  State<_SimilarPlaceCard> createState() => _SimilarPlaceCardState();
+}
+
+class _SimilarPlaceCardState extends State<_SimilarPlaceCard> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final place = widget.place;
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        context.push('/place/${place.id}');
+      },
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.96 : 1.0,
+        duration: AppAnimations.micro,
+        child: Container(
+          width: 160,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+            border: Border.all(color: AppColors.neutral100),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.06),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(AppSizes.radiusLg)),
+                child: Hero(
+                  tag: 'place-cover-${place.id}-similar',
+                  child: Image.network(
+                    place.coverUrl,
+                    width: 160,
+                    height: 110,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, _) => Container(
+                        width: 160,
+                        height: 110,
+                        color: AppColors.neutral100),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(AppSizes.s10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      place.name,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.neutral900,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on,
+                            size: 11, color: AppColors.neutral300),
+                        const SizedBox(width: 2),
+                        Expanded(
+                          child: Text(
+                            place.wilaya,
+                            style: const TextStyle(
+                                fontSize: 11, color: AppColors.neutral500),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.scoreColor(place.score)
+                                .withValues(alpha: 0.12),
+                            borderRadius:
+                                BorderRadius.circular(AppSizes.radiusFull),
+                          ),
+                          child: Text(
+                            place.score.toStringAsFixed(1),
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.scoreColor(place.score),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: AppSizes.s6),
+                        Container(
+                          width: 5,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: place.isOpen
+                                ? AppColors.success
+                                : AppColors.error,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          place.isOpen ? 'Open' : 'Closed',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            color: place.isOpen
+                                ? AppColors.success
+                                : AppColors.error,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    )
+        .animate(delay: Duration(milliseconds: 100 + widget.index * 60))
+        .fadeIn(duration: AppAnimations.normal)
+        .slideX(
+          begin: 0.08,
+          end: 0,
+          curve: AppAnimations.enter,
+          duration: AppAnimations.normal,
+        );
   }
 }
 
