@@ -141,7 +141,7 @@ class _FoodPreferencesScreenState extends State<FoodPreferencesScreen> {
                   const SizedBox(height: AppSizes.s12),
                   PrimaryButton(
                     label: 'Start exploring',
-                    onTap: _canContinue ? () => context.go('/feed') : null,
+                    onTap: _canContinue ? () => context.go('/follow-suggestions') : null,
                   ),
                 ],
               ),
