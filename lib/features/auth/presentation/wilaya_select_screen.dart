@@ -159,7 +159,7 @@ class _WilayaTile extends StatelessWidget {
         curve: AppAnimations.stateChange,
         margin: const EdgeInsets.symmetric(vertical: 3),
         padding: const EdgeInsets.symmetric(
-            horizontal: AppSizes.s16, vertical: AppSizes.s14),
+            horizontal: AppSizes.s16, vertical: 14),
         decoration: BoxDecoration(
           color: selected ? AppColors.primaryLight : Colors.transparent,
           borderRadius: BorderRadius.circular(AppSizes.radiusMd),
