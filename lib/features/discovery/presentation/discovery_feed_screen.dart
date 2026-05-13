@@ -124,6 +124,133 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     );
   }
 
+  Widget _buildDailyPick(BuildContext context) {
+    final pick = MockData.places[1]; // Café Tanit — highest rated
+    return SliverToBoxAdapter(
+      child: GestureDetector(
+        onTap: () => context.push('/place/${pick.id}'),
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(
+              AppSizes.screenHorizontalPadding, AppSizes.s16,
+              AppSizes.screenHorizontalPadding, 0),
+          height: 160,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppSizes.radiusXl),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary.withValues(alpha: 0.22),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppSizes.radiusXl),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Hero(
+                  tag: 'place-cover-${pick.id}',
+                  child: Image.network(
+                    pick.coverUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, _) =>
+                        Container(color: AppColors.neutral100),
+                  ),
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Colors.black54, Colors.transparent],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: AppSizes.s12,
+                  left: AppSizes.s16,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.s10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.auto_awesome,
+                            color: Colors.white, size: 11),
+                        SizedBox(width: 4),
+                        Text(
+                          "JO3T's Pick Today",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: AppSizes.s16,
+                  left: AppSizes.s16,
+                  right: AppSizes.s16,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        pick.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          shadows: [
+                            Shadow(color: Colors.black26, blurRadius: 8)
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(Icons.star_rounded,
+                              color: Colors.amber, size: 14),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${pick.score}/10 · ${pick.reviewCount} reviews · ${pick.wilaya}',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+            .animate()
+            .fadeIn(
+                delay: const Duration(milliseconds: 150),
+                duration: AppAnimations.normal)
+            .slideY(
+              begin: 0.06,
+              end: 0,
+              duration: AppAnimations.normal,
+              curve: AppAnimations.enter,
+            ),
+      ),
+    );
+  }
+
   Widget _buildFeaturedSection() {
     return SliverToBoxAdapter(
       child: Column(
