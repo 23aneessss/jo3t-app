@@ -10,6 +10,7 @@ import '../../features/discovery/presentation/search_screen.dart';
 import '../../features/map/presentation/map_screen.dart';
 import '../../features/place/presentation/place_profile_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/add_place/presentation/add_place_screen.dart';
 import '../../features/review/presentation/write_review_screen.dart';
 import '../../shared/widgets/main_shell.dart';
 import '../constants/app_animations.dart';
@@ -73,6 +74,13 @@ final appRouter = GoRouter(
               _fadePage(state, const ProfileScreen()),
         ),
       ],
+    ),
+
+    // Add a place (outside shell — full screen)
+    GoRoute(
+      path: '/add-place',
+      pageBuilder: (context, state) =>
+          _slideUpPage(state, const AddPlaceScreen()),
     ),
 
     // Place detail (outside shell — full screen)
