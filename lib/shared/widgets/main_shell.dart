@@ -131,7 +131,10 @@ class _BottomBar extends StatelessWidget {
       color: Theme.of(context).colorScheme.surface,
       elevation: 0,
       notchMargin: 8,
-      shape: const CircularNotchAndBarShape(),
+      shape: const AutomaticNotchedShape(
+        RoundedRectangleBorder(),
+        CircleBorder(),
+      ),
       child: Container(
         decoration: BoxDecoration(
           border: Border(

@@ -146,7 +146,7 @@ class _MapPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     final minorRoadPaint = Paint()
-      ..color = Colors.white.withOpacity(0.7)
+      ..color = Colors.white.withValues(alpha: 0.7)
       ..strokeWidth = 4
       ..strokeCap = StrokeCap.round;
 
