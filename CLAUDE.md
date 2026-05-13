@@ -66,10 +66,10 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] Splash screen — white bg → orange wave rises (Headspace-style CustomPainter)
 - [x] Onboarding — 3-page PageView with emoji, animated dots indicator, staggered text
 - [x] Sign in screen (Google + Phone outlined buttons with press feedback)
-- [ ] Phone OTP verification screen
+- [x] Phone OTP verification screen — 6-box input, blinking cursor, resend timer, success animation
 - [x] Wilaya selection screen — searchable list, animated tiles, check icon toggle
 - [x] Food preferences screen — 3×4 grid, emoji cards, selection progress bar
-- [ ] Follow suggestions screen
+- [x] Follow suggestions screen — user cards, animated Follow toggle, "Start exploring" CTA
 
 ### Discovery Feature
 - [x] Home feed screen (animated app bar, category chips, place cards, skeleton loading)
