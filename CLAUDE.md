@@ -109,12 +109,12 @@ Flutter + Firebase + Google Maps. Android-first.
 - [ ] Followers / Following
 
 ### Add Place Feature
-- [ ] Add place form
-- [ ] Category selector
-- [ ] Wilaya + neighborhood selector
-- [ ] Address autocomplete (Places API)
-- [ ] Photo upload
-- [ ] Submission confirmation
+- [x] Add place form — multi-step with animated progress bar
+- [x] Category selector — emoji grid with scale/color selection animation
+- [x] Wilaya + neighborhood selector — quick-pick chips + AppTextField
+- [ ] Address autocomplete (Places API — pending Firebase setup)
+- [x] Photo upload UI (shell done, image_picker pending Firebase)
+- [x] Submission confirmation — SnackBar + 24h moderation info
 
 ---
 
