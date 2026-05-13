@@ -482,6 +482,160 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
   }
 }
 
+// ---- Top Ranked Row ----
+
+class _TopRankedRow extends StatefulWidget {
+  const _TopRankedRow({
+    required this.rank,
+    required this.place,
+    required this.index,
+    required this.onTap,
+  });
+  final int rank;
+  final PlaceModel place;
+  final int index;
+  final VoidCallback onTap;
+
+  @override
+  State<_TopRankedRow> createState() => _TopRankedRowState();
+}
+
+class _TopRankedRowState extends State<_TopRankedRow> {
+  bool _pressed = false;
+
+  static const _rankColors = [Color(0xFFFFB300), Color(0xFF9E9E9E), Color(0xFFBF7340)];
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.place;
+    final rankColor = _rankColors[widget.index];
+
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        widget.onTap();
+      },
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.98 : 1.0,
+        duration: AppAnimations.micro,
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(
+              AppSizes.screenHorizontalPadding, 0,
+              AppSizes.screenHorizontalPadding, AppSizes.s8),
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.s14, vertical: AppSizes.s12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+            border: Border.all(color: AppColors.neutral100),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              // Rank badge
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: rankColor.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    '#${widget.rank}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                      color: rankColor,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSizes.s12),
+              // Thumbnail
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                child: Image.network(
+                  p.coverUrl,
+                  width: 52,
+                  height: 52,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, _) =>
+                      Container(width: 52, height: 52, color: AppColors.neutral100),
+                ),
+              ),
+              const SizedBox(width: AppSizes.s12),
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      p.name,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.neutral900,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      '${p.category.label} · ${p.wilaya}',
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.neutral500,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(Icons.star_rounded,
+                            size: 12, color: Colors.amber),
+                        const SizedBox(width: 3),
+                        Text(
+                          '${p.score}/10',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.neutral700,
+                          ),
+                        ),
+                        const SizedBox(width: AppSizes.s8),
+                        Text(
+                          '${p.reviewCount} reviews',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: AppColors.neutral300,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Arrow
+              const Icon(Icons.chevron_right,
+                  size: 18, color: AppColors.neutral300),
+            ],
+          ),
+        ),
+      ),
+    )
+        .animate(delay: Duration(milliseconds: 200 + widget.index * 70))
+        .fadeIn(duration: AppAnimations.normal)
+        .slideX(begin: 0.04, end: 0, curve: AppAnimations.enter, duration: AppAnimations.normal);
+  }
+}
+
 // ---- Wilaya Filter Bottom Sheet ----
 
 class _WilayaFilterSheet extends StatelessWidget {
