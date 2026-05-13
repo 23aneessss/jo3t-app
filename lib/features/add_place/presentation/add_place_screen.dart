@@ -18,6 +18,7 @@ class AddPlaceScreen extends StatefulWidget {
 
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
   int _step = 0;
+  bool _stepReverse = false;
   bool _submitting = false;
 
   // Step 1
@@ -43,14 +44,22 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
 
   void _next() {
     if (_step < 2) {
-      setState(() => _step++);
+      setState(() {
+        _stepReverse = false;
+        _step++;
+      });
     } else {
       _submit();
     }
   }
 
   void _back() {
-    if (_step > 0) setState(() => _step--);
+    if (_step > 0) {
+      setState(() {
+        _stepReverse = true;
+        _step--;
+      });
+    }
   }
 
   Future<void> _submit() async {
@@ -100,7 +109,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
           Expanded(
             child: PageTransitionSwitcher(
               duration: AppAnimations.medium,
-              reverse: _step == 0,
+              reverse: _stepReverse,
               transitionBuilder: (child, animation, secondaryAnimation) =>
                   SharedAxisTransition(
                 animation: animation,
