@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
-                color: Colors.white.withOpacity(0.80),
+                color: Colors.white.withValues(alpha: 0.80),
                 letterSpacing: 8,
               ),
             )
@@ -69,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: Colors.white.withOpacity(0.60),
+                color: Colors.white.withValues(alpha: 0.60),
                 letterSpacing: 1,
               ),
             )

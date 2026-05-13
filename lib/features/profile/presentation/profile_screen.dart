@@ -37,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 32,
-                          backgroundColor: Colors.white.withOpacity(0.25),
+                          backgroundColor: Colors.white.withValues(alpha: 0.25),
                           child: const Text(
                             'A',
                             style: TextStyle(
@@ -71,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: AppSizes.s8, vertical: AppSizes.s4),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.20),
+                            color: Colors.white.withValues(alpha: 0.20),
                             borderRadius:
                                 BorderRadius.circular(AppSizes.radiusFull),
                           ),
@@ -151,7 +151,7 @@ class _Stat extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppSizes.radiusMd),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2)),
         ],

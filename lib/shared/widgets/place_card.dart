@@ -60,7 +60,7 @@ class _PlaceCardHorizontalState extends State<PlaceCardHorizontal> {
             borderRadius: BorderRadius.circular(AppSizes.radiusLg),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withValues(alpha: 0.06),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -189,7 +189,7 @@ class _PlaceCardVerticalState extends State<PlaceCardVertical> {
             borderRadius: BorderRadius.circular(AppSizes.radiusLg),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -218,7 +218,7 @@ class _PlaceCardVerticalState extends State<PlaceCardVertical> {
                         stops: const [0.6, 1.0],
                         colors: [
                           Colors.transparent,
-                          Colors.black.withOpacity(0.6),
+                          Colors.black.withValues(alpha: 0.6),
                         ],
                       ),
                     ),
@@ -284,7 +284,7 @@ class _PlaceCardVerticalState extends State<PlaceCardVertical> {
       padding: const EdgeInsets.symmetric(
           horizontal: AppSizes.s8, vertical: AppSizes.s4),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.20),
+        color: Colors.white.withValues(alpha: 0.20),
         borderRadius: BorderRadius.circular(AppSizes.radiusSm),
       ),
       child: Text(

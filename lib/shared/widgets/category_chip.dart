@@ -34,7 +34,7 @@ class CategoryChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppSizes.radiusFull),
           border: Border.all(
             color: selected
-                ? AppColors.primary.withOpacity(0.20)
+                ? AppColors.primary.withValues(alpha: 0.20)
                 : AppColors.neutral200,
             width: 1,
           ),

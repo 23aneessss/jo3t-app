@@ -34,9 +34,9 @@ class ScoreBadge extends StatelessWidget {
       width: dimension,
       height: dimension,
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         shape: BoxShape.circle,
-        border: Border.all(color: color.withOpacity(0.30), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.30), width: 1),
       ),
       child: Center(
         child: Text(
