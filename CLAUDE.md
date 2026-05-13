@@ -88,6 +88,7 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] Opening hours / Open-Closed status
 - [x] Price range indicator
 - [x] Save to list button (animated toggle bookmark)
+- [x] Similar places horizontal scroll (filtered by category, animated entry, tappable)
 
 ### Map Feature
 - [ ] Map screen with Google Maps (pending Firebase/Maps SDK setup)
@@ -106,9 +107,9 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] User profile screen — premium gradient header, achievement badges, tappable stat cards
 - [x] Saved tab as 2-column photo grid (image-fill cards, bookmark icon, score overlay)
 - [x] Wilaya badge on profile
-- [ ] Reviewed places list (real data)
-- [ ] Want-to-try list
-- [ ] Followers / Following screen
+- [x] Reviewed places list — compact place rows with user score, review snippet, time ago
+- [x] Want-to-try list — wishlist tab with Visited + Remove actions
+- [x] Followers / Following screen
 
 ### Add Place Feature
 - [x] Add place form — multi-step with animated progress bar
