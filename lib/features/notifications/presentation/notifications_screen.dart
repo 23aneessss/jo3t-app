@@ -1,0 +1,350 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../../../core/constants/app_animations.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_sizes.dart';
+
+class NotificationsScreen extends StatefulWidget {
+  const NotificationsScreen({super.key});
+
+  @override
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
+}
+
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  final _read = <int>{};
+
+  static final _notifications = [
+    (
+      type: _NotifType.review,
+      avatar: 'A',
+      avatarColor: const Color(0xFF4285F4),
+      title: 'Amine liked your review',
+      subtitle: 'Your review of Café Tanit · 8.5/10',
+      time: '2m ago',
+      unread: true,
+    ),
+    (
+      type: _NotifType.follow,
+      avatar: 'S',
+      avatarColor: const Color(0xFF34A853),
+      title: 'Sara Meziane started following you',
+      subtitle: 'Food lover · Blida',
+      time: '18m ago',
+      unread: true,
+    ),
+    (
+      type: _NotifType.place,
+      avatar: '🍽️',
+      avatarColor: AppColors.primaryLight,
+      title: 'New place in Blida',
+      subtitle: 'Chez Atlas just opened near you',
+      time: '1h ago',
+      unread: true,
+    ),
+    (
+      type: _NotifType.review,
+      avatar: 'Y',
+      avatarColor: const Color(0xFFEA4335),
+      title: 'Youcef commented on your review',
+      subtitle: '"Totally agree, Chez Fatima is 🔥"',
+      time: '3h ago',
+      unread: false,
+    ),
+    (
+      type: _NotifType.weekly,
+      avatar: '📊',
+      avatarColor: const Color(0xFFF5F0FF),
+      title: 'Your weekly digest is ready',
+      subtitle: '5 new places added in Blida this week',
+      time: 'Yesterday',
+      unread: false,
+    ),
+    (
+      type: _NotifType.follow,
+      avatar: 'N',
+      avatarColor: const Color(0xFFFF6B2B),
+      title: 'Nadia Bensalem started following you',
+      subtitle: 'Patisserie lover · Constantine',
+      time: '2d ago',
+      unread: false,
+    ),
+    (
+      type: _NotifType.place,
+      avatar: '⭐',
+      avatarColor: const Color(0xFFFFFBEE),
+      title: 'JO3T\'s Pick of the week',
+      subtitle: 'Café Tanit has been selected this week',
+      time: '3d ago',
+      unread: false,
+    ),
+  ];
+
+  int get _unreadCount =>
+      _notifications.where((n) => n.unread && !_read.contains(_notifications.indexOf(n))).length;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: CustomScrollView(
+        slivers: [
+          _buildAppBar(context),
+          _buildList(),
+          const SliverToBoxAdapter(child: SizedBox(height: AppSizes.s48)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context) {
+    return SliverAppBar(
+      pinned: true,
+      expandedHeight: 0,
+      backgroundColor: Colors.white,
+      elevation: 0,
+      title: Row(
+        children: [
+          const Text(
+            'Notifications',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: AppColors.neutral900,
+            ),
+          ),
+          if (_unreadCount > 0) ...[
+            const SizedBox(width: AppSizes.s8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+              ),
+              child: Text(
+                '$_unreadCount',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ],
+      )
+          .animate()
+          .fadeIn(duration: AppAnimations.normal),
+      actions: [
+        if (_unreadCount > 0)
+          TextButton(
+            onPressed: () {
+              setState(() {
+                for (int i = 0; i < _notifications.length; i++) {
+                  _read.add(i);
+                }
+              });
+            },
+            child: const Text(
+              'Mark all read',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: AppColors.primary,
+              ),
+            ),
+          )
+              .animate(delay: 60.ms)
+              .fadeIn(duration: AppAnimations.normal),
+      ],
+    );
+  }
+
+  Widget _buildList() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, i) {
+          final n = _notifications[i];
+          final isRead = _read.contains(i) || !n.unread;
+          return _NotifTile(
+            type: n.type,
+            avatar: n.avatar,
+            avatarColor: n.avatarColor,
+            title: n.title,
+            subtitle: n.subtitle,
+            time: n.time,
+            read: isRead,
+            index: i,
+            onTap: () => setState(() => _read.add(i)),
+          );
+        },
+        childCount: _notifications.length,
+      ),
+    );
+  }
+}
+
+enum _NotifType { review, follow, place, weekly }
+
+class _NotifTile extends StatelessWidget {
+  const _NotifTile({
+    required this.type,
+    required this.avatar,
+    required this.avatarColor,
+    required this.title,
+    required this.subtitle,
+    required this.time,
+    required this.read,
+    required this.index,
+    required this.onTap,
+  });
+
+  final _NotifType type;
+  final String avatar;
+  final Color avatarColor;
+  final String title;
+  final String subtitle;
+  final String time;
+  final bool read;
+  final int index;
+  final VoidCallback onTap;
+
+  IconData get _typeIcon => switch (type) {
+        _NotifType.review => Icons.rate_review_outlined,
+        _NotifType.follow => Icons.person_add_outlined,
+        _NotifType.place => Icons.place_outlined,
+        _NotifType.weekly => Icons.analytics_outlined,
+      };
+
+  Color get _typeColor => switch (type) {
+        _NotifType.review => AppColors.primary,
+        _NotifType.follow => const Color(0xFF34A853),
+        _NotifType.place => const Color(0xFF4285F4),
+        _NotifType.weekly => const Color(0xFF7B2FBE),
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    final isEmoji = avatar.runes.length == 1 &&
+        avatar.runes.first > 127;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: AppAnimations.fast,
+        color: read ? Colors.white : AppColors.primaryLight.withValues(alpha: 0.5),
+        padding: const EdgeInsets.symmetric(
+            horizontal: AppSizes.screenHorizontalPadding,
+            vertical: AppSizes.s14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Avatar with type badge
+            Stack(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: isEmoji ? avatarColor : avatarColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      avatar,
+                      style: TextStyle(
+                        color: isEmoji ? null : Colors.white,
+                        fontSize: isEmoji ? 22 : 20,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    width: 18,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: _typeColor,
+                      shape: BoxShape.circle,
+                      border:
+                          Border.all(color: Colors.white, width: 1.5),
+                    ),
+                    child: Icon(_typeIcon, size: 10, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(width: AppSizes.s12),
+
+            // Content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: read
+                                ? FontWeight.w400
+                                : FontWeight.w600,
+                            color: AppColors.neutral900,
+                            height: 1.3,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: AppSizes.s8),
+                      if (!read)
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: AppColors.primary,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.neutral500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    time,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.neutral300,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    )
+        .animate(delay: Duration(milliseconds: index * 45))
+        .fadeIn(duration: AppAnimations.normal)
+        .slideX(
+          begin: 0.04,
+          end: 0,
+          curve: AppAnimations.enter,
+          duration: AppAnimations.normal,
+        );
+  }
+}
