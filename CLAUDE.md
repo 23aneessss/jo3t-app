@@ -41,26 +41,26 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] Place card entry animation (fade up, translateY 12→0, stagger)
 - [x] Score badge entry animation (scale 0→1 + fade, elasticOut bounce)
 - [x] Card press feedback (scale 0.98, 80ms)
-- [ ] Bottom sheet slide-up animation
+- [x] Bottom sheet slide-up animation (`showJo3tBottomSheet` helper)
 - [ ] Map pin tap scale animation (1→1.3)
 - [x] Skeleton → content crossfade (shimmer → data)
-- [ ] Hero image transition (card → place detail)
+- [x] Hero image transition (card → place detail SliverAppBar)
 - [x] Category chip selection animation (AnimatedContainer color + border)
 - [x] Splash screen animation (scale + fade + slideY staggered)
 - [x] Nav tab icon scale bounce on selection (easeOutBack)
 
 ### Core Widgets (Shared)
-- [x] `PlaceCard` — horizontal (feed) + animated
-- [x] `PlaceCard` — vertical (featured) + animated
+- [x] `PlaceCard` — horizontal (feed) + animated + Hero tag
+- [x] `PlaceCard` — vertical (featured) + animated + Hero tag
 - [x] `ScoreBadge` — large + small variants + animated entry
 - [x] `CategoryChip` — unselected/selected states + animated
 - [x] `ReviewCard` — expandable text, photo strip, animated entry
 - [x] `PrimaryButton` with loading state + press feedback
-- [ ] `BottomSheetHandle`
+- [x] `BottomSheetHandle` + `showJo3tBottomSheet` helper
 - [x] `SkeletonLoader` (shimmer) + `PlaceCardSkeleton`
 - [x] `AppTextField` — animated focus border, label color transition
-- [ ] `WilayaBadge`
-- [x] `MainShell` — bottom nav with animated icons
+- [x] `WilayaBadge` — location pill with icon
+- [x] `MainShell` — 5-tab bottom nav with animated icons
 
 ### Auth Feature
 - [x] Splash screen — white bg → orange wave rises (Headspace-style CustomPainter)
@@ -68,43 +68,43 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] Sign in screen (Google + Phone outlined buttons with press feedback)
 - [ ] Phone OTP verification screen
 - [x] Wilaya selection screen — searchable list, animated tiles, check icon toggle
-- [ ] Food preferences selection screen
+- [x] Food preferences screen — 3×4 grid, emoji cards, selection progress bar
 - [ ] Follow suggestions screen
 
 ### Discovery Feature
-- [x] Home feed screen (animated app bar, category chips, place cards)
-- [x] Category filter chips (horizontal scroll, animated stagger)
+- [x] Home feed screen (animated app bar, category chips, place cards, skeleton loading)
+- [x] Category filter chips (horizontal scroll, animated stagger, filters feed)
 - [ ] Wilaya filter dropdown
-- [ ] Search screen with autocomplete
-- [ ] Search results list
+- [x] Search screen — trending chips, live search with debounce, animated results
+- [x] Search results list (animated entry, navigates to place profile)
 
 ### Place Feature
-- [ ] Place profile screen
-- [ ] Cover image + gallery strip
-- [ ] Score display + rating breakdown
-- [ ] Review list (paginated)
-- [ ] Address + Google Maps deep-link
-- [ ] Opening hours display
-- [ ] Price range indicator
-- [ ] Save to list button
+- [x] Place profile screen — SliverAppBar hero, score badge, quick info row
+- [x] Cover image + gallery strip (staggered scale animation)
+- [x] Score display (large animated ScoreBadge)
+- [x] Review list (3 ReviewCards with stagger)
+- [x] Address + Directions action button
+- [x] Opening hours / Open-Closed status
+- [x] Price range indicator
+- [x] Save to list button (animated toggle bookmark)
 
 ### Map Feature
-- [ ] Map screen with Google Maps
+- [ ] Map screen with Google Maps (pending Firebase/Maps SDK setup)
 - [ ] Custom place pins (category icon)
 - [ ] Marker clustering
 - [ ] Bottom sheet preview on pin tap
 - [ ] "Near me" mode
 
 ### Review Feature
-- [ ] Write review screen
-- [ ] 1–10 score picker
-- [ ] Photo upload (image_picker + compress)
-- [ ] Review submission flow
+- [x] Write review screen
+- [x] 1–10 score picker (animated circle buttons, color by score)
+- [ ] Photo upload (image_picker + compress — UI shell done)
+- [x] Review submission flow (mock delay + SnackBar confirmation)
 
 ### Profile Feature
-- [ ] User profile screen
-- [ ] Wilaya badge
-- [ ] Reviewed places list
+- [x] User profile screen (gradient header, stats row with stagger)
+- [x] Wilaya badge on profile
+- [ ] Reviewed places list (real data)
 - [ ] Want-to-try list
 - [ ] Followers / Following
 
@@ -168,4 +168,4 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ---
 
-*Last updated: 2026-05-13*
+*Last updated: 2026-05-14*
