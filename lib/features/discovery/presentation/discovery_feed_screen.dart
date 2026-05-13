@@ -112,7 +112,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
           padding: const EdgeInsets.symmetric(
               horizontal: AppSizes.screenHorizontalPadding, vertical: AppSizes.s8),
           itemCount: _categories.length,
-          separatorBuilder: (_, _i) => const SizedBox(width: AppSizes.s8),
+          separatorBuilder: (context, i) => const SizedBox(width: AppSizes.s8),
           itemBuilder: (context, i) {
             final cat = _categories[i];
             return CategoryChip(
@@ -151,7 +151,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
               padding: const EdgeInsets.symmetric(
                   horizontal: AppSizes.screenHorizontalPadding),
               itemCount: _featured.length,
-              separatorBuilder: (_, __) => const SizedBox(width: AppSizes.s12),
+              separatorBuilder: (context, i) => const SizedBox(width: AppSizes.s12),
               itemBuilder: (context, i) {
                 final p = _featured[i];
                 return PlaceCardVertical(
