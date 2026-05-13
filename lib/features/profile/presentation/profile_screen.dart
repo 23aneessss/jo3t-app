@@ -593,7 +593,7 @@ class _SavedGridCardState extends State<_SavedGridCard> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     stops: [0.3, 1.0],
-                    colors: [Colors.transparent, Colors.black65],
+                    colors: [Colors.transparent, Color(0xA6000000)],
                   ),
                 ),
               ),
