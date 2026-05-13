@@ -568,6 +568,54 @@ class _SetupCard extends StatelessWidget {
   }
 }
 
+class _PinsCountBadge extends StatelessWidget {
+  const _PinsCountBadge({required this.count, required this.filter});
+  final int count;
+  final String filter;
+
+  @override
+  Widget build(BuildContext context) {
+    final label = filter == 'All' ? '$count places on map' : '$count ${filter.toLowerCase()}s found';
+    return Container(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSizes.s16, vertical: AppSizes.s8),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.96),
+        borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.10),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(
+              color: AppColors.primary,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: AppSizes.s8),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppColors.neutral800,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _PlaceBottomSheet extends StatelessWidget {
   const _PlaceBottomSheet({required this.place, required this.onClose});
   final PlaceModel place;
@@ -655,8 +703,7 @@ class _PlaceBottomSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSizes.s8),
                 GestureDetector(
-                  onTap: () => Navigator.of(context)
-                      .pushNamed('/place/${place.id}'),
+                  onTap: () => context.push('/place/${place.id}'),
                   child: Container(
                     width: 28,
                     height: 28,
