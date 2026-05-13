@@ -1,0 +1,47 @@
+name: jo3t
+description: Algeria's community-driven food & venue discovery app.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Navigation
+  go_router: ^14.8.1
+
+  # Animations — the heart of the UI
+  flutter_animate: ^4.5.2
+  animations: ^2.0.11
+  shimmer: ^3.0.0
+  lottie: ^3.3.1
+
+  # Fonts & icons
+  google_fonts: ^6.2.1
+
+  # Images
+  cached_network_image: ^3.4.1
+
+  # Utilities
+  timeago: ^3.7.0
+  intl: ^0.20.2
+  connectivity_plus: ^6.1.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.14
+  riverpod_generator: ^2.6.1
+  custom_lint: ^0.7.5
+  riverpod_lint: ^2.6.1
+
+flutter:
+  uses-material-design: true
