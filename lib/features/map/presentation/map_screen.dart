@@ -353,6 +353,15 @@ class _PinTipPainter extends CustomPainter {
 }
 
 class _TopSearchBar extends StatelessWidget {
+  const _TopSearchBar({
+    required this.filters,
+    required this.selectedIndex,
+    required this.onFilterSelect,
+  });
+  final List<({String label, IconData icon})> filters;
+  final int selectedIndex;
+  final ValueChanged<int> onFilterSelect;
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -360,70 +369,117 @@ class _TopSearchBar extends StatelessWidget {
       left: 0,
       right: 0,
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-              AppSizes.screenHorizontalPadding, AppSizes.s12,
-              AppSizes.screenHorizontalPadding, 0),
-          child: Container(
-            height: 48,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.96),
-              borderRadius: BorderRadius.circular(AppSizes.radiusFull),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.10),
-                  blurRadius: 16,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: const Row(
-              children: [
-                SizedBox(width: AppSizes.s16),
-                Icon(Icons.search, color: AppColors.neutral300, size: 20),
-                SizedBox(width: AppSizes.s8),
-                Expanded(
-                  child: Text(
-                    'Search on map…',
-                    style: TextStyle(
-                      color: AppColors.neutral300,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
+        child: Column(
+          children: [
+            // Search bar
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                  AppSizes.screenHorizontalPadding, AppSizes.s12,
+                  AppSizes.screenHorizontalPadding, 0),
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.97),
+                  borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.10),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
                     ),
-                  ),
+                  ],
                 ),
-                _FilterChip(label: 'All'),
-                SizedBox(width: AppSizes.s12),
-              ],
+                child: Row(
+                  children: [
+                    const SizedBox(width: AppSizes.s16),
+                    const Icon(Icons.search, color: AppColors.neutral300, size: 20),
+                    const SizedBox(width: AppSizes.s8),
+                    const Expanded(
+                      child: Text(
+                        'Search on map…',
+                        style: TextStyle(
+                          color: AppColors.neutral300,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 24,
+                      color: AppColors.neutral100,
+                    ),
+                    const SizedBox(width: AppSizes.s12),
+                    const Icon(Icons.tune_outlined,
+                        size: 18, color: AppColors.neutral500),
+                    const SizedBox(width: AppSizes.s16),
+                  ],
+                ),
+              )
+                  .animate()
+                  .fadeIn(duration: AppAnimations.normal)
+                  .slideY(begin: -0.3, end: 0, duration: AppAnimations.normal, curve: AppAnimations.enter),
             ),
-          )
-              .animate()
-              .fadeIn(duration: AppAnimations.normal)
-              .slideY(begin: -0.3, end: 0, duration: AppAnimations.normal, curve: AppAnimations.enter),
-        ),
-      ),
-    );
-  }
-}
 
-class _FilterChip extends StatelessWidget {
-  const _FilterChip({required this.label});
-  final String label;
+            const SizedBox(height: AppSizes.s10),
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSizes.s12, vertical: 5),
-      decoration: BoxDecoration(
-        color: AppColors.primaryLight,
-        borderRadius: BorderRadius.circular(AppSizes.radiusFull),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          color: AppColors.primary,
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
+            // Category chips
+            SizedBox(
+              height: 36,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.screenHorizontalPadding),
+                itemCount: filters.length,
+                separatorBuilder: (context, i) =>
+                    const SizedBox(width: AppSizes.s8),
+                itemBuilder: (context, i) {
+                  final f = filters[i];
+                  final active = i == selectedIndex;
+                  return GestureDetector(
+                    onTap: () => onFilterSelect(i),
+                    child: AnimatedContainer(
+                      duration: AppAnimations.fast,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: AppSizes.s12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: active ? AppColors.primary : Colors.white.withValues(alpha: 0.95),
+                        borderRadius:
+                            BorderRadius.circular(AppSizes.radiusFull),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.08),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(f.icon,
+                              size: 13,
+                              color: active ? Colors.white : AppColors.neutral700),
+                          const SizedBox(width: AppSizes.s4),
+                          Text(
+                            f.label,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: active ? Colors.white : AppColors.neutral700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                      .animate(delay: Duration(milliseconds: 100 + i * 40))
+                      .fadeIn(duration: AppAnimations.normal)
+                      .slideX(begin: 0.1, end: 0, curve: AppAnimations.enter);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
