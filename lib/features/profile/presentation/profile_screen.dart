@@ -291,6 +291,7 @@ class _ProfileHeader extends StatelessWidget {
                         label: 'Following',
                         icon: Icons.person_add_outlined,
                         delay: 1,
+                        onTap: () => context.push('/followers?tab=1'),
                       ),
                       const SizedBox(width: AppSizes.s10),
                       _StatCard(
@@ -298,6 +299,7 @@ class _ProfileHeader extends StatelessWidget {
                         label: 'Followers',
                         icon: Icons.people_outline,
                         delay: 2,
+                        onTap: () => context.push('/followers?tab=0'),
                       ),
                     ],
                   ),
