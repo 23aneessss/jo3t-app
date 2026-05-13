@@ -8,6 +8,7 @@ import 'score_badge.dart';
 class PlaceCardHorizontal extends StatefulWidget {
   const PlaceCardHorizontal({
     super.key,
+    required this.placeId,
     required this.name,
     required this.category,
     required this.wilaya,
@@ -18,6 +19,7 @@ class PlaceCardHorizontal extends StatefulWidget {
     this.animationIndex = 0,
   });
 
+  final String placeId;
   final String name;
   final String category;
   final String wilaya;
@@ -68,21 +70,24 @@ class _PlaceCardHorizontalState extends State<PlaceCardHorizontal> {
           ),
           child: Row(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                child: Image.network(
-                  widget.imageUrl,
-                  width: AppSizes.placeCardImageSize,
-                  height: AppSizes.placeCardImageSize,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, _) => Container(
+              Hero(
+                tag: 'place-cover-${widget.placeId}',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                  child: Image.network(
+                    widget.imageUrl,
                     width: AppSizes.placeCardImageSize,
                     height: AppSizes.placeCardImageSize,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColors.neutral100, AppColors.neutral50],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, _) => Container(
+                      width: AppSizes.placeCardImageSize,
+                      height: AppSizes.placeCardImageSize,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColors.neutral100, AppColors.neutral50],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
                       ),
                     ),
                   ),
@@ -144,6 +149,7 @@ class _PlaceCardHorizontalState extends State<PlaceCardHorizontal> {
 class PlaceCardVertical extends StatefulWidget {
   const PlaceCardVertical({
     super.key,
+    required this.placeId,
     required this.name,
     required this.category,
     required this.score,
@@ -153,6 +159,7 @@ class PlaceCardVertical extends StatefulWidget {
     this.animationIndex = 0,
   });
 
+  final String placeId;
   final String name;
   final String category;
   final double score;
@@ -184,7 +191,7 @@ class _PlaceCardVerticalState extends State<PlaceCardVertical> {
         duration: AppAnimations.micro,
         curve: AppAnimations.stateChange,
         child: Container(
-          width: 240,
+          width: 200,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppSizes.radiusLg),
             boxShadow: [
@@ -199,13 +206,15 @@ class _PlaceCardVerticalState extends State<PlaceCardVertical> {
             borderRadius: BorderRadius.circular(AppSizes.radiusLg),
             child: Stack(
               children: [
-                AspectRatio(
-                  aspectRatio: 4 / 3,
-                  child: Image.network(
-                    widget.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, _) => Container(
-                      color: AppColors.neutral100,
+                Hero(
+                  tag: 'place-cover-${widget.placeId}-v',
+                  child: AspectRatio(
+                    aspectRatio: 4 / 3,
+                    child: Image.network(
+                      widget.imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, _) =>
+                          Container(color: AppColors.neutral100),
                     ),
                   ),
                 ),
