@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -24,7 +25,17 @@ class MainShell extends StatelessWidget {
     final currentIndex = _tabs.indexWhere((t) => location.startsWith(t.path));
 
     return Scaffold(
-      body: child,
+      body: PageTransitionSwitcher(
+        duration: AppAnimations.normal,
+        transitionBuilder: (child, animation, secondaryAnimation) =>
+            FadeThroughTransition(
+          animation: animation,
+          secondaryAnimation: secondaryAnimation,
+          fillColor: Colors.transparent,
+          child: child,
+        ),
+        child: KeyedSubtree(key: ValueKey(location), child: child),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _AddFAB()
           .animate()
