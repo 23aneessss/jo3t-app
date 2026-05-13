@@ -691,12 +691,12 @@ class _ResultCardState extends State<_ResultCard> {
                             ),
                           ),
                           const Spacer(),
-                          if (p.distance.isNotEmpty) ...[
+                          if (p.distance?.isNotEmpty ?? false) ...[
                             const Icon(Icons.near_me_outlined,
                                 size: 11, color: AppColors.neutral300),
                             const SizedBox(width: 3),
                             Text(
-                              p.distance,
+                              p.distance!,
                               style: const TextStyle(
                                 fontSize: 11,
                                 color: AppColors.neutral500,
