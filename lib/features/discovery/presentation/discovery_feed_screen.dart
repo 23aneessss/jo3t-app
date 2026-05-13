@@ -18,6 +18,7 @@ class DiscoveryFeedScreen extends StatefulWidget {
 
 class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
   int _selectedCategory = 0;
+  String? _selectedWilaya;
   bool _loading = true;
 
   final _categories = [
@@ -29,12 +30,41 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     (label: 'Juice Bar', icon: Icons.local_drink),
   ];
 
+  static const _wilayas = [
+    'Alger', 'Blida', 'Oran', 'Constantine', 'Annaba',
+    'Tizi Ouzou', 'Sétif', 'Boumerdès', 'Béjaïa', 'Batna',
+  ];
+
   List<PlaceModel> get _filteredPlaces {
-    if (_selectedCategory == 0) return MockData.places;
-    final label = _categories[_selectedCategory].label;
-    return MockData.places
-        .where((p) => p.category.label == label)
-        .toList();
+    var places = MockData.places;
+    if (_selectedCategory != 0) {
+      final label = _categories[_selectedCategory].label;
+      places = places.where((p) => p.category.label == label).toList();
+    }
+    if (_selectedWilaya != null) {
+      places = places.where((p) => p.wilaya == _selectedWilaya).toList();
+    }
+    return places;
+  }
+
+  void _showWilayaFilter() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _WilayaFilterSheet(
+        wilayas: _wilayas,
+        selected: _selectedWilaya,
+        onSelect: (w) {
+          setState(() => _selectedWilaya = w);
+          Navigator.pop(context);
+        },
+        onClear: () {
+          setState(() => _selectedWilaya = null);
+          Navigator.pop(context);
+        },
+      ),
+    );
   }
 
   @override
