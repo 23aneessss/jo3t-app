@@ -75,7 +75,7 @@ class _PlaceCardHorizontalState extends State<PlaceCardHorizontal> {
                   width: AppSizes.placeCardImageSize,
                   height: AppSizes.placeCardImageSize,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, _) => Container(
+                  errorBuilder: (context, error, _) => Container(
                     width: AppSizes.placeCardImageSize,
                     height: AppSizes.placeCardImageSize,
                     decoration: const BoxDecoration(
@@ -204,7 +204,7 @@ class _PlaceCardVerticalState extends State<PlaceCardVertical> {
                   child: Image.network(
                     widget.imageUrl,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, _) => Container(
+                    errorBuilder: (context, error, _) => Container(
                       color: AppColors.neutral100,
                     ),
                   ),
