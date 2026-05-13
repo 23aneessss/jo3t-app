@@ -125,7 +125,9 @@ class _WilayaSelectScreenState extends State<WilayaSelectScreen> {
                   AppSizes.s32),
               child: PrimaryButton(
                 label: 'Continue',
-                onTap: _selected != null ? () => context.go('/feed') : null,
+                onTap: _selected != null
+                    ? () => context.go('/food-preferences')
+                    : null,
               )
                   .animate()
                   .fadeIn(delay: const Duration(milliseconds: 200)),
