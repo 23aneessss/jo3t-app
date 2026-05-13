@@ -37,29 +37,6 @@ final appRouter = GoRouter(
   ],
 );
 
-CustomTransitionPage<void> _slideUpPage(
-    GoRouterState state, Widget child) {
-  return CustomTransitionPage(
-    key: state.pageKey,
-    child: child,
-    transitionDuration: AppAnimations.medium,
-    reverseTransitionDuration: AppAnimations.normal,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      final slideAnimation = Tween<Offset>(
-        begin: const Offset(0, 0.06),
-        end: Offset.zero,
-      ).animate(CurvedAnimation(
-        parent: animation,
-        curve: AppAnimations.enter,
-      ));
-      return SlideTransition(
-        position: slideAnimation,
-        child: FadeTransition(opacity: animation, child: child),
-      );
-    },
-  );
-}
-
 CustomTransitionPage<void> _fadePage(GoRouterState state, Widget child) {
   return CustomTransitionPage(
     key: state.pageKey,
