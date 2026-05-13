@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
@@ -97,21 +98,17 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
             onBack: _back,
           ),
           Expanded(
-            child: AnimatedSwitcher(
+            child: PageTransitionSwitcher(
               duration: AppAnimations.medium,
-              transitionBuilder: (child, animation) {
-                final slide = Tween<Offset>(
-                  begin: const Offset(0.06, 0),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(
-                  parent: animation,
-                  curve: AppAnimations.enter,
-                ));
-                return FadeTransition(
-                  opacity: animation,
-                  child: SlideTransition(position: slide, child: child),
-                );
-              },
+              reverse: _step == 0,
+              transitionBuilder: (child, animation, secondaryAnimation) =>
+                  SharedAxisTransition(
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                transitionType: SharedAxisTransitionType.horizontal,
+                fillColor: Colors.white,
+                child: child,
+              ),
               child: KeyedSubtree(
                 key: ValueKey(_step),
                 child: _stepContent(),
