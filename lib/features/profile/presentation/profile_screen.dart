@@ -397,11 +397,13 @@ class _StatCard extends StatefulWidget {
     required this.label,
     required this.icon,
     required this.delay,
+    this.onTap,
   });
   final int value;
   final String label;
   final IconData icon;
   final int delay;
+  final VoidCallback? onTap;
 
   @override
   State<_StatCard> createState() => _StatCardState();
@@ -415,7 +417,10 @@ class _StatCardState extends State<_StatCard> {
     return Expanded(
       child: GestureDetector(
         onTapDown: (_) => setState(() => _pressed = true),
-        onTapUp: (_) => setState(() => _pressed = false),
+        onTapUp: (_) {
+          setState(() => _pressed = false);
+          widget.onTap?.call();
+        },
         onTapCancel: () => setState(() => _pressed = false),
         child: AnimatedScale(
           scale: _pressed ? 0.95 : 1.0,
