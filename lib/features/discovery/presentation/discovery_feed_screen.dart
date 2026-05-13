@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
+import '../../../shared/models/place_model.dart';
 import '../../../shared/widgets/category_chip.dart';
 import '../../../shared/widgets/place_card.dart';
 import '../../../shared/widgets/skeleton_loader.dart';
@@ -27,25 +29,18 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     (label: 'Juice Bar', icon: Icons.local_drink),
   ];
 
-  // Mock data for demo
-  final _places = [
-    (name: 'Chez Fatima', category: 'Restaurant', wilaya: 'Blida', score: 8.5, distance: '1.2 km', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400'),
-    (name: 'Café Tanit', category: 'Café', wilaya: 'Alger', score: 9.1, distance: '0.8 km', image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400'),
-    (name: 'Le Pâtissier', category: 'Patisserie', wilaya: 'Oran', score: 7.8, distance: '3.4 km', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400'),
-    (name: 'Snack El Baraka', category: 'Street Food', wilaya: 'Constantine', score: 8.2, distance: '0.4 km', image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400'),
-    (name: 'Fresh Corner', category: 'Juice Bar', wilaya: 'Annaba', score: 9.4, distance: '2.1 km', image: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400'),
-  ];
-
-  final _featured = [
-    (name: 'Chez Fatima', category: 'Restaurant', score: 8.5, image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600'),
-    (name: 'Café Tanit', category: 'Café', score: 9.1, image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600'),
-    (name: 'Le Pâtissier', category: 'Patisserie', score: 7.8, image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600'),
-  ];
+  List<PlaceModel> get _filteredPlaces {
+    if (_selectedCategory == 0) return MockData.places;
+    final label = _categories[_selectedCategory].label;
+    return MockData.places
+        .where((p) => p.category.label == label)
+        .toList();
+  }
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 1400), () {
+    Future.delayed(const Duration(milliseconds: 1200), () {
       if (mounted) setState(() => _loading = false);
     });
   }
@@ -72,7 +67,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
         children: [
           Text(
             'جعت',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w800,
               color: AppColors.primary,
@@ -94,7 +89,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
       actions: [
         IconButton(
           icon: const Icon(Icons.search, size: AppSizes.iconNav),
-          onPressed: () {},
+          onPressed: () => context.go('/search'),
         )
             .animate()
             .fadeIn(delay: const Duration(milliseconds: 100), duration: AppAnimations.normal),
@@ -146,31 +141,56 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
           ),
           SizedBox(
             height: 200,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: AppSizes.screenHorizontalPadding),
-              itemCount: _featured.length,
-              separatorBuilder: (context, i) => const SizedBox(width: AppSizes.s12),
-              itemBuilder: (context, i) {
-                final p = _featured[i];
-                return PlaceCardVertical(
-                  name: p.name,
-                  category: p.category,
-                  score: p.score,
-                  imageUrl: p.image,
-                  onTap: () {},
-                  animationIndex: i,
-                );
-              },
-            ),
+            child: _loading
+                ? _buildFeaturedSkeleton()
+                : ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.screenHorizontalPadding),
+                    itemCount: MockData.places.take(3).length,
+                    separatorBuilder: (context, i) =>
+                        const SizedBox(width: AppSizes.s12),
+                    itemBuilder: (context, i) {
+                      final p = MockData.places[i];
+                      return PlaceCardVertical(
+                        placeId: p.id,
+                        name: p.name,
+                        category: p.category.label,
+                        score: p.score,
+                        imageUrl: p.coverUrl,
+                        distance: p.distance,
+                        onTap: () => context.push('/place/${p.id}'),
+                        animationIndex: i,
+                      );
+                    },
+                  ),
           ),
         ],
       ),
     );
   }
 
+  Widget _buildFeaturedSkeleton() {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenHorizontalPadding),
+      itemCount: 3,
+      separatorBuilder: (context, i) => const SizedBox(width: AppSizes.s12),
+      itemBuilder: (context, i) => SkeletonLoader(
+        child: Container(
+          width: 200,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildNearbySection() {
+    final places = _filteredPlaces;
+
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, i) {
@@ -191,23 +211,24 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
             );
           }
           final dataIndex = i - 1;
-          if (_loading) {
-            return const PlaceCardSkeleton();
+          if (_loading) return const PlaceCardSkeleton();
+          if (dataIndex >= places.length) {
+            return const SizedBox(height: AppSizes.s48);
           }
-          if (dataIndex >= _places.length) return const SizedBox(height: AppSizes.s48);
-          final p = _places[dataIndex];
+          final p = places[dataIndex];
           return PlaceCardHorizontal(
+            placeId: p.id,
             name: p.name,
-            category: p.category,
+            category: p.category.label,
             wilaya: p.wilaya,
             score: p.score,
-            imageUrl: p.image,
+            imageUrl: p.coverUrl,
             distance: p.distance,
-            onTap: () {},
+            onTap: () => context.push('/place/${p.id}'),
             animationIndex: dataIndex,
           );
         },
-        childCount: _loading ? 5 : _places.length + 2,
+        childCount: _loading ? 6 : places.length + 2,
       ),
     );
   }
