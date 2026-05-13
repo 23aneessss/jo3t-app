@@ -209,7 +209,3 @@ class _WilayaTile extends StatelessWidget {
   }
 }
 
-// Extension for convenience
-extension on AppSizes {
-  static const double s14 = 14;
-}
