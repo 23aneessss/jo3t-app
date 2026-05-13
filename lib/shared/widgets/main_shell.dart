@@ -11,7 +11,9 @@ class MainShell extends StatelessWidget {
 
   static const _tabs = [
     (path: '/feed', icon: Icons.explore_outlined, activeIcon: Icons.explore, label: 'Discover'),
+    (path: '/search', icon: Icons.search, activeIcon: Icons.search, label: 'Search'),
     (path: '/map', icon: Icons.map_outlined, activeIcon: Icons.map, label: 'Map'),
+    (path: '/saved', icon: Icons.bookmark_outline, activeIcon: Icons.bookmark, label: 'Saved'),
     (path: '/profile', icon: Icons.person_outline, activeIcon: Icons.person, label: 'Profile'),
   ];
 
@@ -35,7 +37,7 @@ class MainShell extends StatelessWidget {
         ),
         child: SafeArea(
           child: SizedBox(
-            height: 64,
+            height: 60,
             child: Row(
               children: List.generate(_tabs.length, (i) {
                 final tab = _tabs[i];
@@ -89,7 +91,7 @@ class _NavItemState extends State<_NavItem>
       vsync: this,
       duration: AppAnimations.fast,
     );
-    _scaleAnim = Tween<double>(begin: 1, end: 1.15).animate(
+    _scaleAnim = Tween<double>(begin: 1, end: 1.18).animate(
       CurvedAnimation(parent: _controller, curve: AppAnimations.overshoot),
     );
   }
@@ -123,23 +125,18 @@ class _NavItemState extends State<_NavItem>
               child: Icon(
                 widget.selected ? widget.activeIcon : widget.icon,
                 key: ValueKey(widget.selected),
-                color: widget.selected
-                    ? AppColors.primary
-                    : AppColors.neutral300,
+                color: widget.selected ? AppColors.primary : AppColors.neutral300,
                 size: AppSizes.iconNav,
               ),
             ),
           ),
-          const SizedBox(height: AppSizes.s2),
+          const SizedBox(height: 2),
           AnimatedDefaultTextStyle(
             duration: AppAnimations.fast,
             style: TextStyle(
-              fontSize: 11,
-              fontWeight:
-                  widget.selected ? FontWeight.w600 : FontWeight.w400,
-              color: widget.selected
-                  ? AppColors.primary
-                  : AppColors.neutral300,
+              fontSize: 10,
+              fontWeight: widget.selected ? FontWeight.w600 : FontWeight.w400,
+              color: widget.selected ? AppColors.primary : AppColors.neutral300,
             ),
             child: Text(widget.label),
           ),
