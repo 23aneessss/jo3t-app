@@ -6,7 +6,6 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../shared/models/place_model.dart';
 import '../../../shared/widgets/animated_counter.dart';
-import '../../../shared/widgets/review_card.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
