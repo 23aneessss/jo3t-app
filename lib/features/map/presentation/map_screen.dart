@@ -17,7 +17,15 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen>
     with SingleTickerProviderStateMixin {
   PlaceModel? _selected;
+  int _filterIndex = 0;
   late final AnimationController _pulseController;
+
+  static const _filters = [
+    (label: 'All', icon: Icons.grid_view_rounded),
+    (label: 'Restaurant', icon: Icons.restaurant),
+    (label: 'Café', icon: Icons.coffee),
+    (label: 'Street Food', icon: Icons.lunch_dining),
+  ];
 
   @override
   void initState() {
@@ -46,8 +54,12 @@ class _MapScreenState extends State<MapScreen>
           // Mock place pins
           ..._buildPins(context),
 
-          // Top search bar
-          _TopSearchBar(),
+          // Top search bar + category chips
+          _TopSearchBar(
+            filters: _filters,
+            selectedIndex: _filterIndex,
+            onFilterSelect: (i) => setState(() => _filterIndex = i),
+          ),
 
           // Bottom selected place card
           if (_selected != null)
@@ -61,28 +73,38 @@ class _MapScreenState extends State<MapScreen>
               ),
             ),
 
-          // Setup notice
+          // Pins count badge (when nothing selected)
           if (_selected == null)
             Positioned(
               bottom: AppSizes.s24,
-              left: AppSizes.screenHorizontalPadding,
-              right: AppSizes.screenHorizontalPadding,
-              child: _SetupCard()
-                  .animate()
-                  .fadeIn(delay: const Duration(milliseconds: 600), duration: AppAnimations.normal)
-                  .slideY(begin: 0.3, end: 0, duration: AppAnimations.normal, curve: AppAnimations.enter),
+              left: 0,
+              right: 0,
+              child: Center(
+                child: _PinsCountBadge(
+                  count: MockData.places.length,
+                  filter: _filters[_filterIndex].label,
+                )
+                    .animate()
+                    .fadeIn(delay: 600.ms, duration: AppAnimations.normal)
+                    .slideY(
+                      begin: 0.3,
+                      end: 0,
+                      duration: AppAnimations.normal,
+                      curve: AppAnimations.enter,
+                    ),
+              ),
             ),
 
           // Location FAB
           Positioned(
             right: AppSizes.screenHorizontalPadding,
-            bottom: _selected != null ? 200 : 100,
+            bottom: _selected != null ? 190 : 90,
             child: _LocationFAB()
                 .animate()
                 .scale(
                   begin: const Offset(0, 0),
                   end: const Offset(1, 1),
-                  delay: const Duration(milliseconds: 400),
+                  delay: 400.ms,
                   curve: AppAnimations.overshoot,
                   duration: AppAnimations.normal,
                 ),
