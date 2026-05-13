@@ -170,4 +170,11 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ---
 
+### Notifications Feature (Phase 2 — started)
+- [x] Notifications screen — unread dot, read/unread state, type badges (review/follow/place/weekly)
+- [x] Mark all read action
+- [ ] Real push notifications (Firebase Cloud Messaging)
+
+---
+
 *Last updated: 2026-05-14*
