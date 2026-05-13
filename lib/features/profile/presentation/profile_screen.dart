@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
-import '../../../shared/widgets/score_badge.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
