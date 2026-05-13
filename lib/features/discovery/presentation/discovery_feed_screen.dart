@@ -94,37 +94,78 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     return SliverAppBar(
       pinned: true,
       expandedHeight: 0,
-      title: Row(
-        children: [
-          Text(
-            'جعت',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              color: AppColors.primary,
+      title: GestureDetector(
+        onTap: _showWilayaFilter,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'جعت',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
+                color: AppColors.primary,
+              ),
             ),
-          ),
-          const SizedBox(width: AppSizes.s8),
-          Text(
-            '· Blida',
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(color: AppColors.neutral500),
-          ),
-        ],
+            const SizedBox(width: AppSizes.s8),
+            AnimatedSwitcher(
+              duration: AppAnimations.fast,
+              child: Text(
+                _selectedWilaya != null ? '· $_selectedWilaya' : '· Algeria',
+                key: ValueKey(_selectedWilaya),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: AppColors.neutral500),
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.keyboard_arrow_down_rounded,
+              size: 18,
+              color: _selectedWilaya != null
+                  ? AppColors.primary
+                  : AppColors.neutral300,
+            ),
+          ],
+        ),
       )
           .animate()
           .fadeIn(duration: AppAnimations.normal)
           .slideY(begin: -0.2, end: 0, duration: AppAnimations.normal, curve: AppAnimations.enter),
       actions: [
+        // Notifications bell
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.notifications_outlined,
+                  size: AppSizes.iconNav),
+              onPressed: () => context.push('/notifications'),
+            ),
+            Positioned(
+              top: 10,
+              right: 10,
+              child: Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
+        )
+            .animate()
+            .fadeIn(delay: const Duration(milliseconds: 80), duration: AppAnimations.normal),
         IconButton(
           icon: const Icon(Icons.search, size: AppSizes.iconNav),
           onPressed: () => context.go('/search'),
         )
             .animate()
-            .fadeIn(delay: const Duration(milliseconds: 100), duration: AppAnimations.normal),
-        const SizedBox(width: AppSizes.s8),
+            .fadeIn(delay: const Duration(milliseconds: 120), duration: AppAnimations.normal),
+        const SizedBox(width: AppSizes.s4),
       ],
     );
   }
