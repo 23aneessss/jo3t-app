@@ -432,3 +432,148 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     );
   }
 }
+
+// ---- Wilaya Filter Bottom Sheet ----
+
+class _WilayaFilterSheet extends StatelessWidget {
+  const _WilayaFilterSheet({
+    required this.wilayas,
+    required this.selected,
+    required this.onSelect,
+    required this.onClear,
+  });
+  final List<String> wilayas;
+  final String? selected;
+  final ValueChanged<String> onSelect;
+  final VoidCallback onClear;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      padding: const EdgeInsets.fromLTRB(
+          AppSizes.screenHorizontalPadding,
+          AppSizes.s16,
+          AppSizes.screenHorizontalPadding,
+          AppSizes.s48),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Handle
+          Center(
+            child: Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.neutral200,
+                borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSizes.s20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Filter by wilaya',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.neutral900,
+                ),
+              ),
+              if (selected != null)
+                GestureDetector(
+                  onTap: onClear,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.s12, vertical: AppSizes.s4),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryLight,
+                      borderRadius:
+                          BorderRadius.circular(AppSizes.radiusFull),
+                    ),
+                    child: const Text(
+                      'Clear filter',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: AppSizes.s16),
+          // "Near me" option
+          GestureDetector(
+            onTap: () => onSelect('Blida'),
+            child: Container(
+              padding: const EdgeInsets.all(AppSizes.s14),
+              margin: const EdgeInsets.only(bottom: AppSizes.s16),
+              decoration: BoxDecoration(
+                color: AppColors.primaryLight,
+                borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+                border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.3)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.near_me, size: 18, color: AppColors.primary),
+                  SizedBox(width: AppSizes.s10),
+                  Text(
+                    'Near me · Blida',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Wrap(
+            spacing: AppSizes.s8,
+            runSpacing: AppSizes.s8,
+            children: wilayas.map((w) {
+              final active = selected == w;
+              return GestureDetector(
+                onTap: () => onSelect(w),
+                child: AnimatedContainer(
+                  duration: AppAnimations.fast,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.s16, vertical: AppSizes.s10),
+                  decoration: BoxDecoration(
+                    color: active ? AppColors.primary : AppColors.neutral50,
+                    borderRadius:
+                        BorderRadius.circular(AppSizes.radiusFull),
+                    border: Border.all(
+                      color: active
+                          ? AppColors.primary
+                          : AppColors.neutral200,
+                    ),
+                  ),
+                  child: Text(
+                    w,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight:
+                          active ? FontWeight.w600 : FontWeight.w400,
+                      color: active ? Colors.white : AppColors.neutral700,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
