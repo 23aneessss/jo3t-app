@@ -74,9 +74,10 @@ Flutter + Firebase + Google Maps. Android-first.
 ### Discovery Feature
 - [x] Home feed screen (animated app bar, category chips, place cards, skeleton loading)
 - [x] Category filter chips (horizontal scroll, animated stagger, filters feed)
-- [ ] Wilaya filter dropdown
-- [x] Search screen — trending chips, live search with debounce, animated results
-- [x] Search results list (animated entry, navigates to place profile)
+- [x] Wilaya filter bottom sheet (tappable title → modal, 10 top wilayas, "Near me" option)
+- [x] Notification bell in feed AppBar → `/notifications` route
+- [x] Search screen — category grid + trending section, live search with debounce, animated results
+- [x] Search results list (animated entry, open/closed status, distance, navigates to place profile)
 
 ### Place Feature
 - [x] Place profile screen — SliverAppBar hero, score badge, quick info row
@@ -102,11 +103,12 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] Review submission flow (mock delay + SnackBar confirmation)
 
 ### Profile Feature
-- [x] User profile screen (gradient header, stats row with stagger)
+- [x] User profile screen — premium gradient header, achievement badges, tappable stat cards
+- [x] Saved tab as 2-column photo grid (image-fill cards, bookmark icon, score overlay)
 - [x] Wilaya badge on profile
 - [ ] Reviewed places list (real data)
 - [ ] Want-to-try list
-- [ ] Followers / Following
+- [ ] Followers / Following screen
 
 ### Add Place Feature
 - [x] Add place form — multi-step with animated progress bar
