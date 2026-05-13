@@ -33,7 +33,7 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ### Animation System (Priority — in progress)
 - [x] `flutter_animate` integrated and configured
-- [ ] `animations` package (SharedAxis, OpenContainer, FadeThrough)
+- [x] `animations` package (SharedAxis, OpenContainer, FadeThrough) — FadeThroughTransition on tab switch, SharedAxisTransition on add-place steps
 - [x] `shimmer` for skeleton loaders
 - [ ] `lottie` for splash + empty states
 - [x] Global animation constants (durations, curves) → `app_animations.dart`
@@ -42,7 +42,7 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] Score badge entry animation (scale 0→1 + fade, elasticOut bounce)
 - [x] Card press feedback (scale 0.98, 80ms)
 - [x] Bottom sheet slide-up animation (`showJo3tBottomSheet` helper)
-- [ ] Map pin tap scale animation (1→1.3)
+- [x] Map pin tap scale animation (AnimatedScale 1→1.25 + pulse ring on selected)
 - [x] Skeleton → content crossfade (shimmer → data)
 - [x] Hero image transition (card → place detail SliverAppBar)
 - [x] Category chip selection animation (AnimatedContainer color + border)
@@ -91,9 +91,9 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ### Map Feature
 - [ ] Map screen with Google Maps (pending Firebase/Maps SDK setup)
-- [ ] Custom place pins (category icon)
+- [x] Custom place pins (category icon, selected label bubble, pulse ring)
 - [ ] Marker clustering
-- [ ] Bottom sheet preview on pin tap
+- [x] Bottom sheet preview on pin tap (place card with cover + score + open status + navigate)
 - [ ] "Near me" mode
 
 ### Review Feature
