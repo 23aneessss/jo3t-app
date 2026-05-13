@@ -509,65 +509,6 @@ class _LocationFAB extends StatelessWidget {
   }
 }
 
-class _SetupCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSizes.s16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppSizes.radiusXl),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.10),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: AppColors.primaryLight,
-              borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-            ),
-            child: const Icon(Icons.map_outlined,
-                color: AppColors.primary, size: 22),
-          ),
-          const SizedBox(width: AppSizes.s12),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Maps SDK required',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.neutral900,
-                  ),
-                ),
-                SizedBox(height: 2),
-                Text(
-                  'Add your Google Maps API key to enable the full map view.',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.neutral500,
-                    height: 1.4,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _PinsCountBadge extends StatelessWidget {
   const _PinsCountBadge({required this.count, required this.filter});
   final int count;
