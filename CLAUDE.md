@@ -54,20 +54,20 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] `PlaceCard` — vertical (featured) + animated
 - [x] `ScoreBadge` — large + small variants + animated entry
 - [x] `CategoryChip` — unselected/selected states + animated
-- [ ] `ReviewCard`
+- [x] `ReviewCard` — expandable text, photo strip, animated entry
 - [x] `PrimaryButton` with loading state + press feedback
 - [ ] `BottomSheetHandle`
 - [x] `SkeletonLoader` (shimmer) + `PlaceCardSkeleton`
-- [ ] `AppTextField`
+- [x] `AppTextField` — animated focus border, label color transition
 - [ ] `WilayaBadge`
 - [x] `MainShell` — bottom nav with animated icons
 
 ### Auth Feature
-- [x] Splash screen (animated: scale bounce + fade + slide stagger)
-- [ ] Onboarding (language select: AR / FR)
-- [ ] Sign in screen (Google + Phone)
+- [x] Splash screen — white bg → orange wave rises (Headspace-style CustomPainter)
+- [x] Onboarding — 3-page PageView with emoji, animated dots indicator, staggered text
+- [x] Sign in screen (Google + Phone outlined buttons with press feedback)
 - [ ] Phone OTP verification screen
-- [ ] Wilaya selection screen
+- [x] Wilaya selection screen — searchable list, animated tiles, check icon toggle
 - [ ] Food preferences selection screen
 - [ ] Follow suggestions screen
 
