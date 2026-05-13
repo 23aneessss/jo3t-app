@@ -52,6 +52,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
         slivers: [
           _buildAppBar(context),
           _buildCategoryFilter(),
+          _buildDailyPick(context),
           _buildFeaturedSection(),
           _buildNearbySection(),
         ],
