@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
-import '../../../shared/widgets/primary_button.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
