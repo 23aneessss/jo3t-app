@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_animations.dart';
 import '../../core/constants/app_colors.dart';
@@ -24,36 +26,146 @@ class MainShell extends StatelessWidget {
 
     return Scaffold(
       body: child,
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
-              blurRadius: 12,
-              offset: const Offset(0, -2),
-            ),
-          ],
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: _AddFAB()
+          .animate()
+          .scale(
+            begin: const Offset(0, 0),
+            end: const Offset(1, 1),
+            delay: const Duration(milliseconds: 300),
+            curve: AppAnimations.overshoot,
+            duration: AppAnimations.normal,
+          ),
+      bottomNavigationBar: _BottomBar(
+        tabs: _tabs,
+        currentIndex: currentIndex,
+        onTap: (path) => context.go(path),
+      ),
+    );
+  }
+}
+
+class _AddFAB extends StatefulWidget {
+  @override
+  State<_AddFAB> createState() => _AddFABState();
+}
+
+class _AddFABState extends State<_AddFAB>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _rotateAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+        vsync: this, duration: AppAnimations.fast);
+    _rotateAnim = Tween<double>(begin: 0, end: 0.125).animate(
+      CurvedAnimation(parent: _controller, curve: AppAnimations.stateChange),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => _controller.forward(),
+      onTapUp: (_) {
+        _controller.reverse();
+        HapticFeedback.mediumImpact();
+        context.push('/add-place');
+      },
+      onTapCancel: () => _controller.reverse(),
+      child: AnimatedBuilder(
+        animation: _rotateAnim,
+        builder: (context, child) => Transform.rotate(
+          angle: _rotateAnim.value * 2 * 3.14159,
+          child: child,
         ),
-        child: SafeArea(
-          child: SizedBox(
-            height: 60,
-            child: Row(
-              children: List.generate(_tabs.length, (i) {
-                final tab = _tabs[i];
-                final selected = i == currentIndex;
-                return Expanded(
-                  child: _NavItem(
-                    icon: tab.icon,
-                    activeIcon: tab.activeIcon,
-                    label: tab.label,
-                    selected: selected,
-                    onTap: () => context.go(tab.path),
-                  ),
-                );
-              }),
+        child: Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [AppColors.primary, AppColors.primaryDark],
+            ),
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary.withValues(alpha: 0.40),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: const Icon(Icons.add, color: Colors.white, size: 26),
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomBar extends StatelessWidget {
+  const _BottomBar({
+    required this.tabs,
+    required this.currentIndex,
+    required this.onTap,
+  });
+
+  final List<({String path, IconData icon, IconData activeIcon, String label})> tabs;
+  final int currentIndex;
+  final ValueChanged<String> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      height: 64,
+      padding: EdgeInsets.zero,
+      color: Theme.of(context).colorScheme.surface,
+      elevation: 0,
+      notchMargin: 8,
+      shape: const CircularNotchAndBarShape(),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: AppColors.neutral100,
+              width: 1,
             ),
           ),
+        ),
+        child: Row(
+          children: [
+            // Left 2 tabs
+            ...tabs.sublist(0, 2).asMap().entries.map((e) => Expanded(
+                  child: _NavItem(
+                    icon: e.value.icon,
+                    activeIcon: e.value.activeIcon,
+                    label: e.value.label,
+                    selected: e.key == currentIndex,
+                    onTap: () => onTap(e.value.path),
+                  ),
+                )),
+            // Center spacer for FAB
+            const Expanded(child: SizedBox()),
+            // Right 2 tabs
+            ...tabs.sublist(3).asMap().entries.map((e) => Expanded(
+                  child: _NavItem(
+                    icon: e.value.icon,
+                    activeIcon: e.value.activeIcon,
+                    label: e.value.label,
+                    selected: (e.key + 3) == currentIndex,
+                    onTap: () => onTap(e.value.path),
+                  ),
+                )),
+          ],
         ),
       ),
     );
@@ -87,11 +199,8 @@ class _NavItemState extends State<_NavItem>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: AppAnimations.fast,
-    );
-    _scaleAnim = Tween<double>(begin: 1, end: 1.18).animate(
+    _controller = AnimationController(vsync: this, duration: AppAnimations.fast);
+    _scaleAnim = Tween<double>(begin: 1, end: 1.2).animate(
       CurvedAnimation(parent: _controller, curve: AppAnimations.overshoot),
     );
   }
@@ -126,7 +235,7 @@ class _NavItemState extends State<_NavItem>
                 widget.selected ? widget.activeIcon : widget.icon,
                 key: ValueKey(widget.selected),
                 color: widget.selected ? AppColors.primary : AppColors.neutral300,
-                size: AppSizes.iconNav,
+                size: 22,
               ),
             ),
           ),
