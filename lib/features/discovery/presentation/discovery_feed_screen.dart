@@ -84,6 +84,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
           _buildCategoryFilter(),
           _buildDailyPick(context),
           _buildFeaturedSection(),
+          _buildTopRatedSection(context),
           _buildNearbySection(),
         ],
       ),
@@ -383,6 +384,54 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
             borderRadius: BorderRadius.circular(AppSizes.radiusLg),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTopRatedSection(BuildContext context) {
+    final topPlaces = [...MockData.places]
+      ..sort((a, b) => b.score.compareTo(a.score));
+    final top3 = topPlaces.take(3).toList();
+
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+                AppSizes.screenHorizontalPadding, AppSizes.s24, 0, AppSizes.s4),
+            child: Row(
+              children: [
+                Container(
+                  width: 4,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                  ),
+                ),
+                const SizedBox(width: AppSizes.s10),
+                Text(
+                  'Top rated this week',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ],
+            )
+                .animate()
+                .fadeIn(delay: 250.ms, duration: AppAnimations.normal)
+                .slideX(begin: -0.05, end: 0, curve: AppAnimations.enter),
+          ),
+          const SizedBox(height: AppSizes.s12),
+          ...top3.asMap().entries.map(
+                (e) => _TopRankedRow(
+                  rank: e.key + 1,
+                  place: e.value,
+                  index: e.key,
+                  onTap: () => context.push('/place/${e.value.id}'),
+                ),
+              ),
+          const SizedBox(height: AppSizes.s8),
+        ],
       ),
     );
   }
