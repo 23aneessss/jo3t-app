@@ -117,6 +117,18 @@ final appRouter = GoRouter(
       pageBuilder: (context, state) =>
           _slideUpPage(state, const NotificationsScreen()),
     ),
+    GoRoute(
+      path: '/settings',
+      pageBuilder: (context, state) =>
+          _slideUpPage(state, const SettingsScreen()),
+    ),
+    GoRoute(
+      path: '/followers',
+      pageBuilder: (context, state) {
+        final tab = int.tryParse(state.uri.queryParameters['tab'] ?? '0') ?? 0;
+        return _slideUpPage(state, FollowersScreen(initialTab: tab));
+      },
+    ),
   ],
 );
 

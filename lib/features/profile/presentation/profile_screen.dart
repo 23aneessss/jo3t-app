@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
           IconButton(
             icon: const Icon(Icons.settings_outlined, size: AppSizes.iconInline),
-            onPressed: () {},
+            onPressed: () => context.push('/settings'),
           ),
           const SizedBox(width: 4),
         ],
