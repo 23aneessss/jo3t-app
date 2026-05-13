@@ -22,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -40,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         ],
         body: TabBarView(
           controller: _tabController,
-          children: [_ReviewsTab(), _SavedTab()],
+          children: [_ReviewsTab(), _WantToTryTab(), _SavedTab()],
         ),
       ),
     );
@@ -99,6 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               ),
               tabs: const [
                 Tab(text: 'Reviews'),
+                Tab(text: 'Want to Try'),
                 Tab(text: 'Saved'),
               ],
             ),
