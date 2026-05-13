@@ -474,6 +474,13 @@ class _StatCardState extends State<_StatCard> {
 
 // ---- Tabs ----
 
+// Mock data for user's own reviews: pairs each review with a place
+final _userReviews = [
+  (place: MockData.places[0], score: 8.5, text: 'Excellent couscous, the lamb was perfectly cooked. Great atmosphere too.', timeAgo: '2 days ago'),
+  (place: MockData.places[1], score: 9.2, text: 'Best café in Blida by far. The coffee is from Tizi Ouzou mountains.', timeAgo: '1 week ago'),
+  (place: MockData.places[2], score: 7.0, text: 'Good food but service was a bit slow. Would go back for the tagine.', timeAgo: '3 weeks ago'),
+];
+
 class _ReviewsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -484,7 +491,7 @@ class _ReviewsTab extends StatelessWidget {
             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: AppSizes.s8)),
-          if (MockData.reviews.isEmpty)
+          if (_userReviews.isEmpty)
             SliverFillRemaining(
               child: _EmptyState(
                 icon: Icons.rate_review_outlined,
@@ -492,25 +499,446 @@ class _ReviewsTab extends StatelessWidget {
                 subtitle: 'Discover places and share your experience.',
               ),
             )
-          else
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, i) => ReviewCard(
-                  authorName: MockData.reviews[i].authorName,
-                  authorWilaya: MockData.reviews[i].authorWilaya,
-                  authorInitial: MockData.reviews[i].authorInitial,
-                  score: MockData.reviews[i].score,
-                  text: MockData.reviews[i].text,
-                  timeAgo: MockData.reviews[i].timeAgo,
-                  animationIndex: i,
+          else ...[
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                    AppSizes.screenHorizontalPadding, AppSizes.s8,
+                    AppSizes.screenHorizontalPadding, AppSizes.s16),
+                child: Text(
+                  '${_userReviews.length} places reviewed',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.neutral500,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                childCount: MockData.reviews.length,
               ),
             ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, i) => _ReviewedPlaceRow(
+                  review: _userReviews[i],
+                  index: i,
+                ),
+                childCount: _userReviews.length,
+              ),
+            ),
+          ],
           const SliverToBoxAdapter(child: SizedBox(height: AppSizes.s48)),
         ],
       ),
     );
+  }
+}
+
+class _ReviewedPlaceRow extends StatefulWidget {
+  const _ReviewedPlaceRow({required this.review, required this.index});
+  final ({PlaceModel place, double score, String text, String timeAgo}) review;
+  final int index;
+
+  @override
+  State<_ReviewedPlaceRow> createState() => _ReviewedPlaceRowState();
+}
+
+class _ReviewedPlaceRowState extends State<_ReviewedPlaceRow> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final r = widget.review;
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        context.push('/place/${r.place.id}');
+      },
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.98 : 1.0,
+        duration: AppAnimations.micro,
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(
+              AppSizes.screenHorizontalPadding, 0,
+              AppSizes.screenHorizontalPadding, AppSizes.s10),
+          padding: const EdgeInsets.all(AppSizes.s14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+            border: Border.all(color: AppColors.neutral100),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Place thumbnail
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                child: Image.network(
+                  r.place.coverUrl,
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, _) =>
+                      Container(width: 60, height: 60, color: AppColors.neutral100),
+                ),
+              ),
+              const SizedBox(width: AppSizes.s12),
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            r.place.name,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.neutral900,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.scoreColor(r.score)
+                                .withValues(alpha: 0.12),
+                            borderRadius:
+                                BorderRadius.circular(AppSizes.radiusFull),
+                          ),
+                          child: Text(
+                            r.score.toStringAsFixed(1),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.scoreColor(r.score),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      '${r.place.category.label} · ${r.place.wilaya}',
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.neutral500,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      r.text,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.neutral700,
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      r.timeAgo,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: AppColors.neutral300,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    )
+        .animate(delay: Duration(milliseconds: widget.index * 60))
+        .fadeIn(duration: AppAnimations.normal)
+        .slideY(begin: 0.06, end: 0, curve: AppAnimations.enter, duration: AppAnimations.normal);
+  }
+}
+
+// ---- Want to Try tab ----
+
+class _WantToTryTab extends StatefulWidget {
+  @override
+  State<_WantToTryTab> createState() => _WantToTryTabState();
+}
+
+class _WantToTryTabState extends State<_WantToTryTab> {
+  late final List<PlaceModel> _list;
+
+  @override
+  void initState() {
+    super.initState();
+    _list = MockData.places.take(4).toList();
+  }
+
+  void _remove(PlaceModel place) {
+    setState(() => _list.remove(place));
+  }
+
+  void _markVisited(BuildContext context, PlaceModel place) {
+    setState(() => _list.remove(place));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${place.name} marked as visited'),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSizes.radiusMd)),
+        backgroundColor: AppColors.success,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) => CustomScrollView(
+        slivers: [
+          SliverOverlapInjector(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: AppSizes.s8)),
+          if (_list.isEmpty)
+            SliverFillRemaining(
+              child: _EmptyState(
+                icon: Icons.bookmark_add_outlined,
+                title: 'Your wishlist is empty',
+                subtitle: 'Save places you want to visit and track them here.',
+              ),
+            )
+          else ...[
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                    AppSizes.screenHorizontalPadding, AppSizes.s8,
+                    AppSizes.screenHorizontalPadding, AppSizes.s16),
+                child: Text(
+                  '${_list.length} places on your wishlist',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.neutral500,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, i) => _WantToTryCard(
+                  place: _list[i],
+                  index: i,
+                  onRemove: () => _remove(_list[i]),
+                  onVisited: () => _markVisited(context, _list[i]),
+                ),
+                childCount: _list.length,
+              ),
+            ),
+          ],
+          const SliverToBoxAdapter(child: SizedBox(height: AppSizes.s48)),
+        ],
+      ),
+    );
+  }
+}
+
+class _WantToTryCard extends StatefulWidget {
+  const _WantToTryCard({
+    required this.place,
+    required this.index,
+    required this.onRemove,
+    required this.onVisited,
+  });
+  final PlaceModel place;
+  final int index;
+  final VoidCallback onRemove;
+  final VoidCallback onVisited;
+
+  @override
+  State<_WantToTryCard> createState() => _WantToTryCardState();
+}
+
+class _WantToTryCardState extends State<_WantToTryCard> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.place;
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        context.push('/place/${p.id}');
+      },
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.98 : 1.0,
+        duration: AppAnimations.micro,
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(
+              AppSizes.screenHorizontalPadding, 0,
+              AppSizes.screenHorizontalPadding, AppSizes.s10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+            border: Border.all(color: AppColors.neutral100),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              // Cover
+              ClipRRect(
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(AppSizes.radiusLg)),
+                child: Image.network(
+                  p.coverUrl,
+                  width: 88,
+                  height: 88,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, _) =>
+                      Container(width: 88, height: 88, color: AppColors.neutral100),
+                ),
+              ),
+              const SizedBox(width: AppSizes.s12),
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      p.name,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.neutral900,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on,
+                            size: 11, color: AppColors.neutral300),
+                        const SizedBox(width: 2),
+                        Text(
+                          '${p.neighborhood}, ${p.wilaya}',
+                          style: const TextStyle(
+                              fontSize: 11, color: AppColors.neutral500),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        // Score pill
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.scoreColor(p.score)
+                                .withValues(alpha: 0.12),
+                            borderRadius:
+                                BorderRadius.circular(AppSizes.radiusFull),
+                          ),
+                          child: Text(
+                            p.score.toStringAsFixed(1),
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.scoreColor(p.score),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: AppSizes.s6),
+                        Text(
+                          p.category.label,
+                          style: const TextStyle(
+                              fontSize: 11, color: AppColors.neutral500),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Actions column
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.s12, vertical: AppSizes.s12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: widget.onVisited,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSizes.s10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius:
+                              BorderRadius.circular(AppSizes.radiusFull),
+                        ),
+                        child: const Text(
+                          'Visited',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppSizes.s8),
+                    GestureDetector(
+                      onTap: widget.onRemove,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSizes.s10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: AppColors.neutral100,
+                          borderRadius:
+                              BorderRadius.circular(AppSizes.radiusFull),
+                        ),
+                        child: const Text(
+                          'Remove',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.neutral700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    )
+        .animate(delay: Duration(milliseconds: widget.index * 60))
+        .fadeIn(duration: AppAnimations.normal)
+        .slideY(begin: 0.06, end: 0, curve: AppAnimations.enter, duration: AppAnimations.normal);
   }
 }
 
