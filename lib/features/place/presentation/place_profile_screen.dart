@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -132,10 +134,15 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
           children: [
             Hero(
               tag: 'place-cover-${place.id}',
-              child: Image.network(
-                place.coverUrl,
+              child: CachedNetworkImage(
+                imageUrl: place.coverUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, _) =>
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: AppColors.neutral200,
+                  highlightColor: AppColors.neutral100,
+                  child: Container(color: AppColors.neutral200),
+                ),
+                errorWidget: (context, url, error) =>
                     Container(color: AppColors.neutral100),
               ),
             ),
