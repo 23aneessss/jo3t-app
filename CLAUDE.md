@@ -171,11 +171,11 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ## Phase 3 — Maturity (Months 7–12)
 
-- [ ] Venue owner dashboard (claim listing)
+- [x] Venue owner dashboard — claim listing UI (`claim_venue_screen.dart`, 3-step flow: verify/contact/review, wired at `/claim-venue/:id`)
 - [ ] Official photos, menu PDF, hours management
-- [ ] Respond to reviews
-- [ ] Events (Ramadan special, live music)
-- [ ] RSVP + share event
+- [x] Respond to reviews — owner reply bottom sheet inline in All Reviews screen, editable, rendered below each review
+- [x] Events (Ramadan special, live music) — `event_detail_screen.dart` with RSVP toggle, attendee list, event info card
+- [x] RSVP + share event — RSVP button with animated toggle + SnackBar confirmation; Share button in bottom bar
 - [ ] JO3T Score algorithm (Cloud Function)
 - [x] Offline mode (Hive cache for saved places — `HiveCacheService` with TTL-based invalidation)
 - [ ] iOS release (App Store)
