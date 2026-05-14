@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../shared/models/place_model.dart';
 import '../../../shared/widgets/primary_button.dart';
+import 'providers/review_providers.dart';
 
-class WriteReviewScreen extends StatefulWidget {
+class WriteReviewScreen extends ConsumerStatefulWidget {
   const WriteReviewScreen({super.key, required this.placeId});
 
   final String placeId;
 
   @override
-  State<WriteReviewScreen> createState() => _WriteReviewScreenState();
+  ConsumerState<WriteReviewScreen> createState() => _WriteReviewScreenState();
 }
 
-class _WriteReviewScreenState extends State<WriteReviewScreen> {
+class _WriteReviewScreenState extends ConsumerState<WriteReviewScreen> {
   int? _score;
   final _controller = TextEditingController();
-  bool _submitting = false;
 
   PlaceModel get _place =>
       MockData.places.firstWhere((p) => p.id == widget.placeId,
@@ -41,9 +42,13 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
       _score != null && _controller.text.trim().length >= 20;
 
   Future<void> _submit() async {
-    setState(() => _submitting = true);
-    await Future.delayed(const Duration(milliseconds: 1200));
-    if (mounted) {
+    final notifier = ref.read(submitReviewNotifierProvider.notifier);
+    final success = await notifier.submit(
+      placeId: widget.placeId,
+      score: _score!.toDouble(),
+      text: _controller.text.trim(),
+    );
+    if (success && mounted) {
       context.pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -65,6 +70,8 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final submitState = ref.watch(submitReviewNotifierProvider);
+    final isSubmitting = submitState.isLoading;
     final place = _place;
 
     return Scaffold(
