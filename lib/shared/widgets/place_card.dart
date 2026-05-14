@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../core/constants/app_animations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
@@ -74,12 +76,21 @@ class _PlaceCardHorizontalState extends State<PlaceCardHorizontal> {
                 tag: 'place-cover-${widget.placeId}',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                  child: Image.network(
-                    widget.imageUrl,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.imageUrl,
                     width: AppSizes.placeCardImageSize,
                     height: AppSizes.placeCardImageSize,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, _) => Container(
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: AppColors.neutral200,
+                      highlightColor: AppColors.neutral100,
+                      child: Container(
+                        width: AppSizes.placeCardImageSize,
+                        height: AppSizes.placeCardImageSize,
+                        color: AppColors.neutral200,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
                       width: AppSizes.placeCardImageSize,
                       height: AppSizes.placeCardImageSize,
                       decoration: const BoxDecoration(
@@ -210,10 +221,15 @@ class _PlaceCardVerticalState extends State<PlaceCardVertical> {
                   tag: 'place-cover-${widget.placeId}-v',
                   child: AspectRatio(
                     aspectRatio: 4 / 3,
-                    child: Image.network(
-                      widget.imageUrl,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.imageUrl,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, _) =>
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: AppColors.neutral200,
+                        highlightColor: AppColors.neutral100,
+                        child: Container(color: AppColors.neutral200),
+                      ),
+                      errorWidget: (context, url, error) =>
                           Container(color: AppColors.neutral100),
                     ),
                   ),
