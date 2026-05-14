@@ -142,6 +142,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
           _buildTabSwitcher(),
           if (_activeTab == 0) _buildCategoryFilter(),
           if (_activeTab == 0) _buildDailyPick(context),
+          if (_activeTab == 0) _buildWilayaExplore(context),
           if (_activeTab == 0) _buildFeaturedSection(),
           if (_activeTab == 0) _buildTopRatedSection(context),
           if (_activeTab == 0) _buildNearbySection(),
@@ -507,6 +508,133 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
                 ),
               ),
           const SizedBox(height: AppSizes.s8),
+        ],
+      ),
+    );
+  }
+
+  static const _wilayaCards = [
+    (name: 'Alger', count: 1247, c1: Color(0xFFFF6B35), c2: Color(0xFFFF9562)),
+    (name: 'Blida', count: 198, c1: Color(0xFF2ECC71), c2: Color(0xFF27AE60)),
+    (name: 'Oran', count: 634, c1: Color(0xFF3498DB), c2: Color(0xFF2980B9)),
+    (name: 'Constantine', count: 421, c1: Color(0xFF9B59B6), c2: Color(0xFF8E44AD)),
+    (name: 'Annaba', count: 287, c1: Color(0xFF1ABC9C), c2: Color(0xFF16A085)),
+    (name: 'Tizi Ouzou', count: 156, c1: Color(0xFFF1C40F), c2: Color(0xFFF39C12)),
+  ];
+
+  Widget _buildWilayaExplore(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+                AppSizes.screenHorizontalPadding, AppSizes.s20,
+                AppSizes.screenHorizontalPadding, AppSizes.s12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Explore by wilaya',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                GestureDetector(
+                  onTap: () => context.push('/leaderboard'),
+                  child: const Text(
+                    'Rankings',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ],
+            )
+                .animate()
+                .fadeIn(delay: 220.ms, duration: AppAnimations.normal)
+                .slideX(begin: -0.05, end: 0, curve: AppAnimations.enter),
+          ),
+          SizedBox(
+            height: 90,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSizes.screenHorizontalPadding),
+              itemCount: _wilayaCards.length,
+              separatorBuilder: (context, i) => const SizedBox(width: AppSizes.s10),
+              itemBuilder: (context, i) {
+                final card = _wilayaCards[i];
+                final isSelected = _selectedWilaya == card.name;
+                return GestureDetector(
+                  onTap: () => setState(() {
+                    _selectedWilaya = isSelected ? null : card.name;
+                  }),
+                  child: AnimatedContainer(
+                    duration: AppAnimations.fast,
+                    curve: AppAnimations.stateChange,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: isSelected
+                            ? [card.c1, card.c2]
+                            : [card.c1.withValues(alpha: 0.75), card.c2.withValues(alpha: 0.75)],
+                      ),
+                      borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+                      border: isSelected
+                          ? Border.all(color: Colors.white.withValues(alpha: 0.6), width: 2)
+                          : null,
+                      boxShadow: isSelected
+                          ? [BoxShadow(
+                              color: card.c1.withValues(alpha: 0.4),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            )]
+                          : null,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                          AppSizes.s12, AppSizes.s12, AppSizes.s12, AppSizes.s10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            card.name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w800,
+                              shadows: [Shadow(color: Colors.black26, blurRadius: 4)],
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '${card.count >= 1000 ? "${(card.count / 1000).toStringAsFixed(1)}k" : card.count} places',
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.85),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+                    .animate(delay: Duration(milliseconds: 180 + i * 40))
+                    .fadeIn(duration: AppAnimations.normal)
+                    .scale(
+                      begin: const Offset(0.88, 0.88),
+                      end: const Offset(1, 1),
+                      curve: AppAnimations.overshoot,
+                      duration: AppAnimations.normal,
+                    );
+              },
+            ),
+          ),
         ],
       ),
     );

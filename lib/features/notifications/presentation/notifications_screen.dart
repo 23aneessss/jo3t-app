@@ -13,6 +13,9 @@ class NotificationsScreen extends StatefulWidget {
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
   final _read = <int>{};
+  int _filterTab = 0;
+
+  static const _filterTabs = ['All', 'Reviews', 'Follows', 'Places', 'Weekly'];
 
   static final _notifications = [
     (
@@ -83,6 +86,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   int get _unreadCount =>
       _notifications.where((n) => n.unread && !_read.contains(_notifications.indexOf(n))).length;
 
+  List<MapEntry<int, ({_NotifType type, String avatar, Color avatarColor, String title, String subtitle, String time, bool unread})>> get _filteredEntries {
+    return _notifications.asMap().entries.where((e) {
+      if (_filterTab == 0) return true;
+      return switch (_filterTab) {
+        1 => e.value.type == _NotifType.review,
+        2 => e.value.type == _NotifType.follow,
+        3 => e.value.type == _NotifType.place,
+        4 => e.value.type == _NotifType.weekly,
+        _ => true,
+      };
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,6 +106,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       body: CustomScrollView(
         slivers: [
           _buildAppBar(context),
+          _buildFilterChips(),
           _buildList(),
           const SliverToBoxAdapter(child: SizedBox(height: AppSizes.s48)),
         ],
@@ -160,12 +177,91 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
+  Widget _buildFilterChips() {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 44,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSizes.screenHorizontalPadding,
+            vertical: AppSizes.s6,
+          ),
+          itemCount: _filterTabs.length,
+          separatorBuilder: (context, i) => const SizedBox(width: AppSizes.s8),
+          itemBuilder: (context, i) {
+            final selected = _filterTab == i;
+            return GestureDetector(
+              onTap: () => setState(() => _filterTab = i),
+              child: AnimatedContainer(
+                duration: AppAnimations.fast,
+                curve: AppAnimations.stateChange,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.s14, vertical: AppSizes.s6),
+                decoration: BoxDecoration(
+                  color: selected ? AppColors.primary : Colors.white,
+                  borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                  border: Border.all(
+                    color: selected ? AppColors.primary : AppColors.neutral200,
+                  ),
+                ),
+                child: Text(
+                  _filterTabs[i],
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                    color: selected ? Colors.white : AppColors.neutral700,
+                  ),
+                ),
+              ),
+            )
+                .animate(delay: Duration(milliseconds: i * 40))
+                .fadeIn(duration: AppAnimations.normal)
+                .slideX(
+                  begin: 0.08,
+                  end: 0,
+                  curve: AppAnimations.enter,
+                  duration: AppAnimations.normal,
+                );
+          },
+        ),
+      ),
+    );
+  }
+
   Widget _buildList() {
+    final entries = _filteredEntries;
+    if (entries.isEmpty) {
+      return SliverFillRemaining(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.notifications_none_outlined,
+                  size: 48, color: AppColors.neutral200),
+              const SizedBox(height: AppSizes.s12),
+              Text(
+                'No ${_filterTabs[_filterTab].toLowerCase()} notifications',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.neutral500,
+                ),
+              ),
+            ],
+          )
+              .animate()
+              .fadeIn(duration: AppAnimations.normal),
+        ),
+      );
+    }
+
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, i) {
-          final n = _notifications[i];
-          final isRead = _read.contains(i) || !n.unread;
+          final entry = entries[i];
+          final originalIndex = entry.key;
+          final n = entry.value;
+          final isRead = _read.contains(originalIndex) || !n.unread;
           return _NotifTile(
             type: n.type,
             avatar: n.avatar,
@@ -175,10 +271,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             time: n.time,
             read: isRead,
             index: i,
-            onTap: () => setState(() => _read.add(i)),
+            onTap: () => setState(() => _read.add(originalIndex)),
           );
         },
-        childCount: _notifications.length,
+        childCount: entries.length,
       ),
     );
   }

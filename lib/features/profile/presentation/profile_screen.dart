@@ -59,7 +59,12 @@ class _ProfileScreenState extends State<ProfileScreen>
         actions: [
           IconButton(
             icon: const Icon(Icons.share_outlined, size: AppSizes.iconInline),
-            onPressed: () {},
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (_) => const _ProfileShareSheet(),
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.settings_outlined, size: AppSizes.iconInline),
