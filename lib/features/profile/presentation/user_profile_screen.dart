@@ -424,12 +424,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                    child: Image.network(
-                      r.place.coverUrl,
+                    child: CachedNetworkImage(
+                      imageUrl: r.place.coverUrl,
                       width: 60,
                       height: 60,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, _) => Container(
+                      errorWidget: (context, url, error) => Container(
                         width: 60,
                         height: 60,
                         color: AppColors.neutral100,

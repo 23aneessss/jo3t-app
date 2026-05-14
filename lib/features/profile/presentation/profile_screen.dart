@@ -585,12 +585,12 @@ class _ReviewedPlaceRowState extends State<_ReviewedPlaceRow> {
               // Place thumbnail
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                child: Image.network(
-                  r.place.coverUrl,
+                child: CachedNetworkImage(
+                  imageUrl: r.place.coverUrl,
                   width: 60,
                   height: 60,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, _) =>
+                  errorWidget: (context, url, error) =>
                       Container(width: 60, height: 60, color: AppColors.neutral100),
                 ),
               ),
