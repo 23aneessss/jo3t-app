@@ -81,14 +81,31 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ### Place Feature
 - [x] Place profile screen — SliverAppBar hero, score badge, quick info row
-- [x] Cover image + gallery strip (staggered scale animation)
+- [x] Cover image + gallery strip (staggered scale animation, tappable → Gallery screen)
+- [x] Gallery screen — full-screen swipeable PageView, pinch-to-zoom (InteractiveViewer), thumbnail strip, counter pill, `/place/:id/gallery` route
 - [x] Score display (large animated ScoreBadge)
-- [x] Review list (3 ReviewCards with stagger)
+- [x] Review list (3 ReviewCards with stagger, "See All" → All Reviews screen)
+- [x] All Reviews screen — sort by newest/highest/lowest, score distribution bars, `/place/:id/reviews` route
 - [x] Address + Directions action button
 - [x] Opening hours / Open-Closed status
 - [x] Price range indicator
 - [x] Save to list button (animated toggle bookmark)
 - [x] Similar places horizontal scroll (filtered by category, animated entry, tappable)
+
+### Domain / Data Layer
+- [x] `failures.dart` — 6 Failure types (Network, Server, NotFound, Auth, Validation, Permission)
+- [x] `place_entity.dart` — immutable PlaceEntity + PlaceCategoryEntity + PriceRangeEntity enums
+- [x] `review_entity.dart` — immutable ReviewEntity with copyWith/==/hashCode
+- [x] `user_entity.dart` — immutable UserEntity with copyWith/==/hashCode
+- [x] `place_repository.dart` — abstract PlaceRepository interface (Either<Failure, T>)
+- [x] `review_repository.dart` — abstract ReviewRepository interface + ReviewSortOrder enum
+- [x] `auth_repository.dart` — abstract AuthRepository interface
+- [x] `get_places_usecase.dart` / `get_place_by_id_usecase.dart` — use cases
+- [x] `submit_review_usecase.dart` / `get_reviews_usecase.dart` — use cases
+- [x] `mock_place_repository.dart` — 7 mock places with full data
+- [x] `mock_review_repository.dart` — 5 mock reviews with like/sort support
+- [x] `place_providers.dart` — Riverpod providers: feed, detail, top-rated, similar, search, saved
+- [x] `review_providers.dart` — Riverpod providers: place reviews, user reviews, submit notifier
 
 ### Map Feature
 - [ ] Map screen with Google Maps (pending Firebase/Maps SDK setup)
