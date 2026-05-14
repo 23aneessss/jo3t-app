@@ -443,6 +443,59 @@ class _ScoreBars extends StatelessWidget {
   }
 }
 
+class _OwnerReply extends StatelessWidget {
+  const _OwnerReply({required this.text, required this.venueName});
+  final String text;
+  final String venueName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(
+          left: AppSizes.s20, top: AppSizes.s8),
+      padding: const EdgeInsets.all(AppSizes.s12),
+      decoration: BoxDecoration(
+        color: AppColors.primaryLight,
+        borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(AppSizes.radiusMd),
+          bottomLeft: Radius.circular(AppSizes.radiusMd),
+          bottomRight: Radius.circular(AppSizes.radiusMd),
+        ),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.storefront_outlined,
+                  size: 13, color: AppColors.primary),
+              const SizedBox(width: 4),
+              Text(
+                'Response from $venueName',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSizes.s6),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              color: AppColors.neutral700,
+              height: 1.4,
+            ),
+          ),
+        ],
+      ),
+    ).animate().fadeIn(duration: 200.ms).slideY(begin: -0.05, end: 0);
+  }
+}
+
 class _ReviewSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
