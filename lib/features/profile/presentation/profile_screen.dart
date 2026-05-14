@@ -1173,3 +1173,159 @@ class _EmptyState extends StatelessWidget {
         );
   }
 }
+
+// ---- Profile Share Sheet ----
+
+class _ProfileShareSheet extends StatefulWidget {
+  const _ProfileShareSheet();
+
+  @override
+  State<_ProfileShareSheet> createState() => _ProfileShareSheetState();
+}
+
+class _ProfileShareSheetState extends State<_ProfileShareSheet> {
+  bool _linkCopied = false;
+
+  static const _shareOptions = [
+    (icon: Icons.link_rounded, label: 'Copy link', color: Color(0xFF4A90D9)),
+    (icon: Icons.chat_bubble_outline_rounded, label: 'WhatsApp', color: Color(0xFF25D366)),
+    (icon: Icons.camera_alt_outlined, label: 'Instagram', color: Color(0xFFE1306C)),
+    (icon: Icons.qr_code_rounded, label: 'QR Code', color: Color(0xFF9B59B6)),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      padding: const EdgeInsets.fromLTRB(
+        AppSizes.screenHorizontalPadding, AppSizes.s16,
+        AppSizes.screenHorizontalPadding, AppSizes.s48,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppColors.neutral200,
+              borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+            ),
+          ),
+          const SizedBox(height: AppSizes.s20),
+          // Profile preview
+          Row(
+            children: [
+              Container(
+                width: 52,
+                height: 52,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryDark],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Text(
+                    'Y',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 22,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSizes.s14),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Yacine Boukhelkhal',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.neutral900,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    'jo3t.app/u/yacine.b',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AppColors.neutral500,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )
+              .animate()
+              .fadeIn(duration: AppAnimations.normal),
+          const SizedBox(height: AppSizes.s28),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: _shareOptions.asMap().entries.map((entry) {
+              final opt = entry.value;
+              final isCopy = entry.key == 0;
+              return GestureDetector(
+                onTap: () {
+                  if (isCopy) {
+                    setState(() => _linkCopied = true);
+                    Future.delayed(const Duration(seconds: 2), () {
+                      if (mounted) setState(() => _linkCopied = false);
+                    });
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
+                child: Column(
+                  children: [
+                    AnimatedContainer(
+                      duration: AppAnimations.fast,
+                      width: 56,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        color: (isCopy && _linkCopied)
+                            ? AppColors.success.withValues(alpha: 0.12)
+                            : opt.color.withValues(alpha: 0.10),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        (isCopy && _linkCopied) ? Icons.check_rounded : opt.icon,
+                        color: (isCopy && _linkCopied) ? AppColors.success : opt.color,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(height: AppSizes.s6),
+                    Text(
+                      (isCopy && _linkCopied) ? 'Copied!' : opt.label,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.neutral700,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+                  .animate(delay: Duration(milliseconds: entry.key * 50))
+                  .fadeIn(duration: AppAnimations.normal)
+                  .scale(
+                    begin: const Offset(0.8, 0.8),
+                    end: const Offset(1, 1),
+                    curve: AppAnimations.overshoot,
+                    duration: AppAnimations.normal,
+                  );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
