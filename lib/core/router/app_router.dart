@@ -9,6 +9,7 @@ import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/auth/presentation/wilaya_select_screen.dart';
 import '../../features/discovery/presentation/discovery_feed_screen.dart';
 import '../../features/discovery/presentation/search_screen.dart';
+import '../../features/leaderboard/presentation/leaderboard_screen.dart';
 import '../../features/map/presentation/map_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
 import '../../features/place/presentation/place_profile_screen.dart';
@@ -128,6 +129,11 @@ final appRouter = GoRouter(
         final tab = int.tryParse(state.uri.queryParameters['tab'] ?? '0') ?? 0;
         return _slideUpPage(state, FollowersScreen(initialTab: tab));
       },
+    ),
+    GoRoute(
+      path: '/leaderboard',
+      pageBuilder: (context, state) =>
+          _slideUpPage(state, const LeaderboardScreen()),
     ),
   ],
 );

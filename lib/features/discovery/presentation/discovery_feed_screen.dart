@@ -459,21 +459,37 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(
-                AppSizes.screenHorizontalPadding, AppSizes.s24, 0, AppSizes.s4),
+                AppSizes.screenHorizontalPadding, AppSizes.s24, AppSizes.screenHorizontalPadding, AppSizes.s4),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: 4,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(AppSizes.radiusFull),
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                      ),
+                    ),
+                    const SizedBox(width: AppSizes.s10),
+                    Text(
+                      'Top rated this week',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  ],
                 ),
-                const SizedBox(width: AppSizes.s10),
-                Text(
-                  'Top rated this week',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                GestureDetector(
+                  onTap: () => context.push('/leaderboard'),
+                  child: const Text(
+                    'Leaderboard',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                    ),
+                  ),
                 ),
               ],
             )
@@ -492,6 +508,76 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
               ),
           const SizedBox(height: AppSizes.s8),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTabSwitcher() {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppSizes.screenHorizontalPadding, AppSizes.s12,
+          AppSizes.screenHorizontalPadding, 0,
+        ),
+        child: Container(
+          height: 38,
+          padding: const EdgeInsets.all(3),
+          decoration: BoxDecoration(
+            color: AppColors.neutral100,
+            borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+          ),
+          child: Row(
+            children: [
+              _TabPill(
+                label: 'For You',
+                selected: _activeTab == 0,
+                onTap: () => setState(() => _activeTab = 0),
+              ),
+              _TabPill(
+                label: 'Following',
+                selected: _activeTab == 1,
+                onTap: () => setState(() => _activeTab = 1),
+              ),
+            ],
+          ),
+        ),
+      )
+          .animate()
+          .fadeIn(duration: AppAnimations.normal),
+    );
+  }
+
+  Widget _buildFollowingFeed() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, i) {
+          if (i == 0) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSizes.screenHorizontalPadding, AppSizes.s16,
+                AppSizes.screenHorizontalPadding, AppSizes.s12,
+              ),
+              child: const Text(
+                'Recent from people you follow',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: AppColors.neutral500,
+                  fontWeight: FontWeight.w500,
+                ),
+              ).animate().fadeIn(duration: AppAnimations.normal),
+            );
+          }
+          final dataIndex = i - 1;
+          if (dataIndex >= _mockActivities.length) {
+            return const SizedBox(height: AppSizes.s48);
+          }
+          return _ActivityCard(
+            activity: _mockActivities[dataIndex],
+            index: dataIndex,
+            onPlaceTap: (place) => context.push('/place/${place.id}'),
+          );
+        },
+        childCount: _mockActivities.length + 2,
       ),
     );
   }
@@ -693,6 +779,331 @@ class _TopRankedRowState extends State<_TopRankedRow> {
         .animate(delay: Duration(milliseconds: 200 + widget.index * 70))
         .fadeIn(duration: AppAnimations.normal)
         .slideX(begin: 0.04, end: 0, curve: AppAnimations.enter, duration: AppAnimations.normal);
+  }
+}
+
+// ---- Tab Pill ----
+
+class _TabPill extends StatelessWidget {
+  const _TabPill({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: AppAnimations.fast,
+          curve: AppAnimations.stateChange,
+          decoration: BoxDecoration(
+            color: selected ? Colors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+            boxShadow: selected
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 4,
+                      offset: const Offset(0, 1),
+                    ),
+                  ]
+                : null,
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                color: selected ? AppColors.neutral900 : AppColors.neutral500,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---- Activity data model ----
+
+class _Activity {
+  const _Activity({
+    required this.type,
+    required this.user,
+    required this.userWilaya,
+    required this.initial,
+    this.place,
+    this.score,
+    this.followedUser,
+    required this.timeAgo,
+    this.reviewText,
+  });
+  final String type; // 'review' | 'follow' | 'new_place' | 'save'
+  final String user;
+  final String userWilaya;
+  final String initial;
+  final PlaceModel? place;
+  final double? score;
+  final String? followedUser;
+  final String timeAgo;
+  final String? reviewText;
+}
+
+// ---- Activity Card ----
+
+class _ActivityCard extends StatefulWidget {
+  const _ActivityCard({
+    required this.activity,
+    required this.index,
+    required this.onPlaceTap,
+  });
+  final _Activity activity;
+  final int index;
+  final ValueChanged<PlaceModel> onPlaceTap;
+
+  @override
+  State<_ActivityCard> createState() => _ActivityCardState();
+}
+
+class _ActivityCardState extends State<_ActivityCard> {
+  bool _pressed = false;
+  bool _following = false;
+
+  bool get _hasPlace => widget.activity.place != null;
+  bool get _isFollow => widget.activity.type == 'follow';
+
+  IconData get _typeIcon => switch (widget.activity.type) {
+        'review' => Icons.star_rounded,
+        'follow' => Icons.person_add_outlined,
+        'new_place' => Icons.add_location_alt_outlined,
+        'save' => Icons.bookmark_outline,
+        _ => Icons.circle,
+      };
+
+  Color get _typeColor => switch (widget.activity.type) {
+        'review' => Colors.amber,
+        'follow' => AppColors.primary,
+        'new_place' => AppColors.success,
+        'save' => AppColors.primary,
+        _ => AppColors.neutral300,
+      };
+
+  String get _actionText {
+    final a = widget.activity;
+    return switch (a.type) {
+      'review' => 'rated ${a.place!.name}',
+      'follow' => 'started following ${a.followedUser!}',
+      'new_place' => 'added ${a.place!.name} to JO3T',
+      'save' => 'saved ${a.place!.name}',
+      _ => '',
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final a = widget.activity;
+    return GestureDetector(
+      onTapDown: (_hasPlace && !_isFollow) ? (_) => setState(() => _pressed = true) : null,
+      onTapUp: (_hasPlace && !_isFollow)
+          ? (_) {
+              setState(() => _pressed = false);
+              widget.onPlaceTap(a.place!);
+            }
+          : null,
+      onTapCancel: (_hasPlace && !_isFollow) ? () => setState(() => _pressed = false) : null,
+      child: AnimatedScale(
+        scale: _pressed ? 0.98 : 1.0,
+        duration: AppAnimations.micro,
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(
+            AppSizes.screenHorizontalPadding, 0,
+            AppSizes.screenHorizontalPadding, AppSizes.s10,
+          ),
+          padding: const EdgeInsets.all(AppSizes.s14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+            border: Border.all(color: AppColors.neutral100),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Avatar with type badge
+              Stack(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          AppColors.primary.withValues(alpha: 0.7),
+                          AppColors.primaryDark,
+                        ],
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        a.initial,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 18,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: _typeColor,
+                        shape: BoxShape.circle,
+                        border: const Border.fromBorderSide(
+                          BorderSide(color: Colors.white, width: 2),
+                        ),
+                      ),
+                      child: Center(
+                        child: Icon(_typeIcon, size: 9, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: AppSizes.s12),
+              // Content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: AppColors.neutral700,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: a.user,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.neutral900,
+                            ),
+                          ),
+                          TextSpan(text: ' $_actionText'),
+                          if (a.score != null)
+                            TextSpan(
+                              text: ' · ${a.score}/10',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.scoreColor(a.score!),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    if (a.reviewText != null) ...[
+                      const SizedBox(height: AppSizes.s6),
+                      Text(
+                        a.reviewText!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.neutral500,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: AppSizes.s8),
+                    if (_isFollow)
+                      GestureDetector(
+                        onTap: () => setState(() => _following = !_following),
+                        child: AnimatedContainer(
+                          duration: AppAnimations.fast,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSizes.s12,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _following ? AppColors.neutral100 : AppColors.primary,
+                            borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                            border: _following
+                                ? Border.all(color: AppColors.neutral200)
+                                : null,
+                          ),
+                          child: Text(
+                            _following ? 'Following' : 'Follow back',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: _following ? AppColors.neutral700 : Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: AppSizes.s4),
+                    Text(
+                      a.timeAgo,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.neutral300,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Place thumbnail (for non-follow activities)
+              if (_hasPlace && !_isFollow) ...[
+                const SizedBox(width: AppSizes.s10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                  child: Image.network(
+                    a.place!.coverUrl,
+                    width: 56,
+                    height: 56,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, _) => Container(
+                      width: 56,
+                      height: 56,
+                      color: AppColors.neutral100,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    )
+        .animate(delay: Duration(milliseconds: widget.index * 60))
+        .fadeIn(duration: AppAnimations.normal)
+        .slideY(
+          begin: 0.06,
+          end: 0,
+          curve: AppAnimations.enter,
+          duration: AppAnimations.normal,
+        );
   }
 }
 
