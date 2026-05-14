@@ -411,12 +411,12 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                child: Image.network(
-                  place.photos[i],
+                child: CachedNetworkImage(
+                  imageUrl: place.photos[i],
                   width: 120,
                   height: 120,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, _) =>
+                  errorWidget: (context, url, error) =>
                       Container(width: 120, height: 120, color: AppColors.neutral100),
                 ),
               ),
@@ -1005,12 +1005,12 @@ class _SimilarPlaceCardState extends State<_SimilarPlaceCard> {
                     top: Radius.circular(AppSizes.radiusLg)),
                 child: Hero(
                   tag: 'place-cover-${place.id}-similar',
-                  child: Image.network(
-                    place.coverUrl,
+                  child: CachedNetworkImage(
+                    imageUrl: place.coverUrl,
                     width: 160,
                     height: 110,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, _) => Container(
+                    errorWidget: (context, url, error) => Container(
                         width: 160,
                         height: 110,
                         color: AppColors.neutral100),
