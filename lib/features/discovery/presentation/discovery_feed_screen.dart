@@ -780,7 +780,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
                     'date': event.date,
                     'imageUrl': place.coverUrl,
                     'attendees': event.attendees,
-                    'colorValue': event.color.value,
+                    'colorValue': event.color.toARGB32(),
                   }),
                   child: Container(
                     width: 200,
