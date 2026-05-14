@@ -20,6 +20,64 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
   int _selectedCategory = 0;
   String? _selectedWilaya;
   bool _loading = true;
+  int _activeTab = 0;
+
+  static final _mockActivities = [
+    _Activity(
+      type: 'review',
+      user: 'Amine K.',
+      userWilaya: 'Blida',
+      initial: 'A',
+      place: MockData.places[0],
+      score: 9.0,
+      timeAgo: '2h ago',
+      reviewText: 'Best couscous in Blida! The lamb was perfectly cooked and the atmosphere is always warm.',
+    ),
+    _Activity(
+      type: 'new_place',
+      user: 'Mohamed A.',
+      userWilaya: 'Oran',
+      initial: 'M',
+      place: MockData.places[2],
+      timeAgo: '5h ago',
+    ),
+    _Activity(
+      type: 'review',
+      user: 'Nadia T.',
+      userWilaya: 'Médéa',
+      initial: 'N',
+      place: MockData.places[4],
+      score: 9.5,
+      timeAgo: '1d ago',
+      reviewText: 'These fresh juices are absolutely life-changing. The mango-ginger combo is a must-try!',
+    ),
+    _Activity(
+      type: 'follow',
+      user: 'Sara M.',
+      userWilaya: 'Alger',
+      initial: 'S',
+      followedUser: 'Yacine B.',
+      timeAgo: '1d ago',
+    ),
+    _Activity(
+      type: 'save',
+      user: 'Karim L.',
+      userWilaya: 'Tizi Ouzou',
+      initial: 'K',
+      place: MockData.places[1],
+      timeAgo: '2d ago',
+    ),
+    _Activity(
+      type: 'review',
+      user: 'Yasmine B.',
+      userWilaya: 'Constantine',
+      initial: 'Y',
+      place: MockData.places[3],
+      score: 8.2,
+      timeAgo: '3d ago',
+      reviewText: 'Great street food right in the heart of Constantine. Quick service and generous portions.',
+    ),
+  ];
 
   final _categories = [
     (label: 'All', icon: Icons.grid_view_rounded),
@@ -81,11 +139,13 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
       body: CustomScrollView(
         slivers: [
           _buildAppBar(context),
-          _buildCategoryFilter(),
-          _buildDailyPick(context),
-          _buildFeaturedSection(),
-          _buildTopRatedSection(context),
-          _buildNearbySection(),
+          _buildTabSwitcher(),
+          if (_activeTab == 0) _buildCategoryFilter(),
+          if (_activeTab == 0) _buildDailyPick(context),
+          if (_activeTab == 0) _buildFeaturedSection(),
+          if (_activeTab == 0) _buildTopRatedSection(context),
+          if (_activeTab == 0) _buildNearbySection(),
+          if (_activeTab == 1) _buildFollowingFeed(),
         ],
       ),
     );
