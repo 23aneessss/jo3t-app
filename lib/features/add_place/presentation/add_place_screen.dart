@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../shared/models/place_model.dart';
 import '../../../shared/widgets/app_text_field.dart';
+import '../../../shared/widgets/photo_picker.dart';
 import '../../../shared/widgets/primary_button.dart';
 
 class AddPlaceScreen extends StatefulWidget {
@@ -782,84 +783,16 @@ class _Step3 extends StatelessWidget {
 
           const SizedBox(height: AppSizes.s24),
 
-          // Upload zone (dashed border)
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              height: 170,
-              decoration: BoxDecoration(
-                color: AppColors.neutral50,
-                borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-              ),
-              child: CustomPaint(
-                painter: _DashedBorderPainter(),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 56,
-                      height: 56,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primaryLight,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.add_photo_alternate_outlined,
-                          color: AppColors.primary, size: 26),
-                    ),
-                    const SizedBox(height: AppSizes.s12),
-                    const Text(
-                      'Tap to add a cover photo',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.neutral700,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'JPEG or PNG · max 5 MB',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.neutral300,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-                .animate()
-                .fadeIn(duration: AppAnimations.normal)
-                .scale(
-                  begin: const Offset(0.93, 0.93),
-                  end: const Offset(1, 1),
-                  duration: AppAnimations.normal,
-                  curve: AppAnimations.enter,
-                ),
-          ),
-
-          const SizedBox(height: AppSizes.s16),
-
-          // Extra photo slots row
-          Row(
-            children: List.generate(3, (i) {
-              return Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(left: i == 0 ? 0 : AppSizes.s8),
-                  height: 72,
-                  decoration: BoxDecoration(
-                    color: AppColors.neutral50,
-                    borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                    border: Border.all(
-                        color: AppColors.neutral200, width: 1.5),
-                  ),
-                  child: const Icon(Icons.add,
-                      size: 22, color: AppColors.neutral300),
-                ),
-              );
-            }),
+          // Photo picker
+          PhotoPicker(
+            maxPhotos: 6,
+            onChanged: (paths) {
+              // photos handled by form state in provider
+            },
           )
-              .animate(delay: 80.ms)
-              .fadeIn(duration: AppAnimations.normal),
+              .animate()
+              .fadeIn(duration: AppAnimations.normal)
+              .slideY(begin: 0.06, end: 0),
 
           const SizedBox(height: AppSizes.s24),
 
@@ -904,36 +837,6 @@ class _Step3 extends StatelessWidget {
   }
 }
 
-class _DashedBorderPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppColors.primary.withValues(alpha: 0.35)
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
-
-    const dashWidth = 8.0;
-    const dashSpace = 5.0;
-    const radius = AppSizes.radiusLg;
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(radius));
-    final path = Path()..addRRect(rrect);
-    final pathMetrics = path.computeMetrics();
-    for (final metric in pathMetrics) {
-      double distance = 0;
-      while (distance < metric.length) {
-        final remaining = metric.length - distance;
-        final drawLength = remaining < dashWidth ? remaining : dashWidth;
-        canvas.drawPath(metric.extractPath(distance, distance + drawLength),
-            paint);
-        distance += dashWidth + dashSpace;
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
 
 class _InfoCard extends StatelessWidget {
   const _InfoCard({

@@ -6,6 +6,7 @@ import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../shared/models/place_model.dart';
+import '../../../shared/widgets/photo_picker.dart';
 import '../../../shared/widgets/primary_button.dart';
 import 'providers/review_providers.dart';
 
@@ -21,6 +22,7 @@ class WriteReviewScreen extends ConsumerStatefulWidget {
 class _WriteReviewScreenState extends ConsumerState<WriteReviewScreen> {
   int? _score;
   final _controller = TextEditingController();
+  List<String> _photoPaths = [];
 
   PlaceModel get _place =>
       MockData.places.firstWhere((p) => p.id == widget.placeId,
@@ -47,6 +49,7 @@ class _WriteReviewScreenState extends ConsumerState<WriteReviewScreen> {
       placeId: widget.placeId,
       score: _score!.toDouble(),
       text: _controller.text.trim(),
+      photoPaths: _photoPaths,
     );
     if (success && mounted) {
       context.pop();
@@ -171,12 +174,15 @@ class _WriteReviewScreenState extends ConsumerState<WriteReviewScreen> {
 
             const SizedBox(height: AppSizes.s24),
 
-            // Photo upload (UI only)
+            // Photo upload
             _Section(
               title: 'Add photos',
-              subtitle: 'Optional',
+              subtitle: 'Optional · up to 5',
               animationDelay: 2,
-              child: _PhotoPicker(),
+              child: PhotoPicker(
+                maxPhotos: 5,
+                onChanged: (paths) => setState(() => _photoPaths = paths),
+              ),
             ),
 
             const SizedBox(height: AppSizes.s32),
@@ -320,56 +326,3 @@ class _ScorePicker extends StatelessWidget {
   }
 }
 
-class _PhotoPicker extends StatefulWidget {
-  @override
-  State<_PhotoPicker> createState() => _PhotoPickerState();
-}
-
-class _PhotoPickerState extends State<_PhotoPicker> {
-  final _photos = <String>[];
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 80,
-      child: Row(
-        children: [
-          // Add button
-          GestureDetector(
-            onTap: () {},
-            child: AnimatedContainer(
-              duration: AppAnimations.fast,
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: AppColors.neutral50,
-                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                border: Border.all(
-                    color: AppColors.neutral200,
-                    style: BorderStyle.solid,
-                    width: 1.5),
-              ),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.add_photo_alternate_outlined,
-                      color: AppColors.neutral300, size: 24),
-                  SizedBox(height: 4),
-                  Text('Add',
-                      style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.neutral300,
-                          fontWeight: FontWeight.w500)),
-                ],
-              ),
-            ),
-          ),
-          if (_photos.isNotEmpty) ...[
-            const SizedBox(width: AppSizes.s8),
-            ...List.generate(_photos.length, (i) => const SizedBox()),
-          ],
-        ],
-      ),
-    );
-  }
-}
