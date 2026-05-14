@@ -65,6 +65,7 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
                 _buildGallery(place),
                 _buildRatingBreakdown(context, place),
                 _buildReviewsSection(context),
+                _buildMutualRecs(context),
                 _buildSimilarPlaces(context, place),
                 const SizedBox(height: 100),
               ],
