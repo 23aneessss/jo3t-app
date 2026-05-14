@@ -136,7 +136,7 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] Write review screen
 - [x] 1–10 score picker (animated circle buttons, color by score)
 - [ ] Photo upload (image_picker + compress — UI shell done)
-- [x] Review submission flow (mock delay + SnackBar confirmation)
+- [x] Review submission flow — wired to `submitReviewNotifierProvider`, real async loading state, SnackBar confirmation
 
 ### Profile Feature
 - [x] User profile screen — premium gradient header, achievement badges, tappable stat cards
@@ -251,4 +251,4 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ---
 
-*Last updated: 2026-05-14 (Phase 2 + clean architecture layer complete; `cached_network_image`, `timeago`, Hive, empty states all wired)*
+*Last updated: 2026-05-14 (Full domain/data layer complete across all features; connectivity, error states, auth/wilaya/add-place providers all wired)*
