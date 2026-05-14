@@ -1021,10 +1021,10 @@ class _SavedGridCardState extends State<_SavedGridCard> {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.network(
-                p.coverUrl,
+              CachedNetworkImage(
+                imageUrl: p.coverUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, _) =>
+                errorWidget: (context, url, error) =>
                     Container(color: AppColors.neutral100),
               ),
               // Gradient overlay
