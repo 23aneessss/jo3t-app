@@ -183,8 +183,8 @@ class _WriteReviewScreenState extends ConsumerState<WriteReviewScreen> {
 
             PrimaryButton(
               label: 'Submit review',
-              onTap: _canSubmit ? _submit : null,
-              loading: _submitting,
+              onTap: _canSubmit && !isSubmitting ? _submit : null,
+              loading: isSubmitting,
             )
                 .animate(delay: const Duration(milliseconds: 300))
                 .fadeIn(duration: AppAnimations.normal)
