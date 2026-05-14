@@ -22,6 +22,8 @@ import '../../features/profile/presentation/settings_screen.dart';
 import '../../features/saved/presentation/saved_screen.dart';
 import '../../features/add_place/presentation/add_place_screen.dart';
 import '../../features/review/presentation/write_review_screen.dart';
+import '../../features/venue/presentation/claim_venue_screen.dart';
+import '../../features/events/presentation/event_detail_screen.dart';
 import '../../shared/widgets/main_shell.dart';
 import '../constants/app_animations.dart';
 
@@ -168,6 +170,33 @@ final appRouter = GoRouter(
       pageBuilder: (context, state) {
         final id = state.pathParameters['id']!;
         return _slideUpPage(state, UserProfileScreen(userId: id));
+      },
+    ),
+    GoRoute(
+      path: '/claim-venue/:placeId',
+      pageBuilder: (context, state) {
+        final id = state.pathParameters['placeId']!;
+        final name = (state.extra as Map<String, dynamic>?)?['name'] as String? ?? '';
+        return _slideUpPage(state, ClaimVenueScreen(placeId: id, placeName: name));
+      },
+    ),
+    GoRoute(
+      path: '/event/:id',
+      pageBuilder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>? ?? {};
+        return _slideUpPage(
+          state,
+          EventDetailScreen(
+            title: extra['title'] as String? ?? '',
+            placeName: extra['placeName'] as String? ?? '',
+            placeId: extra['placeId'] as String? ?? '',
+            date: extra['date'] as String? ?? '',
+            imageUrl: extra['imageUrl'] as String? ?? '',
+            attendees: extra['attendees'] as int? ?? 0,
+            color: Color(extra['colorValue'] as int? ?? 0xFFFF6B35),
+            description: extra['description'] as String?,
+          ),
+        );
       },
     ),
   ],
