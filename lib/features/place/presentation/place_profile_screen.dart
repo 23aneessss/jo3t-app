@@ -481,7 +481,7 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
             '/place/${place.id}/reviews',
             extra: {
               'name': place.name,
-              'averageScore': place.averageScore,
+              'averageScore': place.score,
               'reviewCount': place.reviewCount,
             },
           ),
