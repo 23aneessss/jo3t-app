@@ -35,7 +35,7 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] `flutter_animate` integrated and configured
 - [x] `animations` package (SharedAxis, OpenContainer, FadeThrough) — FadeThroughTransition on tab switch, SharedAxisTransition on add-place steps
 - [x] `shimmer` for skeleton loaders
-- [ ] `lottie` for splash + empty states
+- [x] Empty state widget with pulsing icon animation — `EmptyState` + presets (Search, Feed, Saved, Notifications, Reviews)
 - [x] Global animation constants (durations, curves) → `app_animations.dart`
 - [x] Page transition system (fade push, fade tab switch)
 - [x] Place card entry animation (fade up, translateY 12→0, stagger)
@@ -61,6 +61,8 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] `AppTextField` — animated focus border, label color transition
 - [x] `WilayaBadge` — location pill with icon
 - [x] `MainShell` — 5-tab bottom nav with animated icons
+- [x] `AppImage` — `CachedNetworkImage` wrapper with shimmer placeholder + error state
+- [x] `EmptyState` — animated pulsing icon + title + subtitle + optional CTA button; presets for Search, Feed, Saved, Notifications, Reviews
 
 ### Auth Feature
 - [x] Splash screen — white bg → orange wave rises (Headspace-style CustomPainter)
