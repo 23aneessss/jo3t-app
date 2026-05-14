@@ -242,7 +242,8 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] Share button wired to share sheet
 
 ### Events Feature
-- [x] Events section in discovery feed — horizontal scroll of event cards (title, date chip, attendees count, place image)
+- [x] Events section in discovery feed — horizontal scroll of event cards (title, date chip, attendees count, place image), tappable → `EventDetailScreen`
+- [x] "Claim this place" banner in place profile → `/claim-venue/:id` with animated entry
 
 ### User Profile Feature (Phase 2)
 - [x] User profile screen `/user/:id` — gradient header, avatar, follow button, stats row, reviews list
