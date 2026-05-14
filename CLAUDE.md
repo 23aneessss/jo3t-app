@@ -135,7 +135,7 @@ Flutter + Firebase + Google Maps. Android-first.
 ### Review Feature
 - [x] Write review screen
 - [x] 1–10 score picker (animated circle buttons, color by score)
-- [ ] Photo upload (image_picker + compress — UI shell done)
+- [x] Photo upload (image_picker + compress — UI shell done, `PhotoPicker` wired end-to-end in Write Review + Add Place; `submitReview` mock persists new reviews in-memory)
 - [x] Review submission flow — wired to `submitReviewNotifierProvider`, real async loading state, SnackBar confirmation
 
 ### Profile Feature
@@ -172,7 +172,7 @@ Flutter + Firebase + Google Maps. Android-first.
 ## Phase 3 — Maturity (Months 7–12)
 
 - [x] Venue owner dashboard — claim listing UI (`claim_venue_screen.dart`, 3-step flow: verify/contact/review, wired at `/claim-venue/:id`)
-- [ ] Official photos, menu PDF, hours management
+- [x] Official photos, menu PDF, hours management — `manage_venue_screen.dart` with PhotoPicker (up to 10), editable hours per day (TimePicker), menu URL field, contact fields; accessible via `/manage-venue/:id`
 - [x] Respond to reviews — owner reply bottom sheet inline in All Reviews screen, editable, rendered below each review
 - [x] Events (Ramadan special, live music) — `event_detail_screen.dart` with RSVP toggle, attendee list, event info card
 - [x] RSVP + share event — RSVP button with animated toggle + SnackBar confirmation; Share button in bottom bar

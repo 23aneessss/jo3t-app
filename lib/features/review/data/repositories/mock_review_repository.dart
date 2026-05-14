@@ -127,6 +127,19 @@ class MockReviewRepository implements ReviewRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 1000));
     final newId = 'review_${DateTime.now().millisecondsSinceEpoch}';
+    _reviews.add(ReviewEntity(
+      id: newId,
+      placeId: placeId,
+      userId: 'current_user',
+      userName: 'You',
+      userAvatar: '',
+      score: score,
+      text: text,
+      photos: photoPaths,
+      likeCount: 0,
+      createdAt: DateTime.now(),
+      isLikedByMe: false,
+    ));
     return Right(newId);
   }
 

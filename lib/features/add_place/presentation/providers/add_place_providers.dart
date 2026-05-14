@@ -87,6 +87,8 @@ class AddPlaceFormNotifier extends Notifier<AddPlaceFormState> {
   void setNeighborhood(String v) => state = state.copyWith(neighborhood: v);
   void setAddress(String v) => state = state.copyWith(address: v);
   void setPriceRange(PriceRangeEntity v) => state = state.copyWith(priceRange: v);
+  void setPhotos(List<String> paths) =>
+      state = state.copyWith(photoPaths: List.unmodifiable(paths));
   void addPhoto(String path) =>
       state = state.copyWith(photoPaths: [...state.photoPaths, path]);
   void removePhoto(String path) => state = state.copyWith(

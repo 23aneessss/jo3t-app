@@ -287,6 +287,8 @@ class _ClaimVenueScreenState extends State<ClaimVenueScreen> {
     setState(() => _submitting = true);
     await Future.delayed(const Duration(milliseconds: 1500));
     if (mounted) {
+      final placeId = widget.placeId;
+      final placeName = widget.placeName;
       context.pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -294,6 +296,14 @@ class _ClaimVenueScreenState extends State<ClaimVenueScreen> {
           backgroundColor: AppColors.success,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.radiusMd)),
+          action: SnackBarAction(
+            label: 'Manage',
+            textColor: Colors.white,
+            onPressed: () => context.push(
+              '/manage-venue/$placeId',
+              extra: {'name': placeName},
+            ),
+          ),
         ),
       );
     }

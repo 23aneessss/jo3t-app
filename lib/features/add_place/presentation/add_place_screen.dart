@@ -31,6 +31,9 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final _neighborhoodCtrl = TextEditingController();
   final _addressCtrl = TextEditingController();
 
+  // Step 3
+  final List<String> _photoPaths = [];
+
   static const _steps = ['Basic Info', 'Location', 'Photos'];
 
   bool get _step1Valid =>
@@ -150,7 +153,13 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
             onWilayaSelect: (w) => setState(() => _wilaya = w),
             onChanged: () => setState(() {}),
           ),
-        _ => const _Step3(),
+        _ => _Step3(
+            onPhotosChanged: (paths) {
+              _photoPaths
+                ..clear()
+                ..addAll(paths);
+            },
+          ),
       };
 }
 
@@ -763,7 +772,8 @@ class _MiniMapPainter extends CustomPainter {
 // ---- Step 3: Photos ----
 
 class _Step3 extends StatelessWidget {
-  const _Step3();
+  const _Step3({required this.onPhotosChanged});
+  final ValueChanged<List<String>> onPhotosChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -786,9 +796,7 @@ class _Step3 extends StatelessWidget {
           // Photo picker
           PhotoPicker(
             maxPhotos: 6,
-            onChanged: (paths) {
-              // photos handled by form state in provider
-            },
+            onChanged: onPhotosChanged,
           )
               .animate()
               .fadeIn(duration: AppAnimations.normal)

@@ -23,6 +23,7 @@ import '../../features/saved/presentation/saved_screen.dart';
 import '../../features/add_place/presentation/add_place_screen.dart';
 import '../../features/review/presentation/write_review_screen.dart';
 import '../../features/venue/presentation/claim_venue_screen.dart';
+import '../../features/venue/presentation/manage_venue_screen.dart';
 import '../../features/events/presentation/event_detail_screen.dart';
 import '../../shared/widgets/main_shell.dart';
 import '../constants/app_animations.dart';
@@ -170,6 +171,14 @@ final appRouter = GoRouter(
       pageBuilder: (context, state) {
         final id = state.pathParameters['id']!;
         return _slideUpPage(state, UserProfileScreen(userId: id));
+      },
+    ),
+    GoRoute(
+      path: '/manage-venue/:placeId',
+      pageBuilder: (context, state) {
+        final id = state.pathParameters['placeId']!;
+        final name = (state.extra as Map<String, dynamic>?)?['name'] as String? ?? '';
+        return _slideUpPage(state, ManageVenueScreen(placeId: id, placeName: name));
       },
     ),
     GoRoute(
