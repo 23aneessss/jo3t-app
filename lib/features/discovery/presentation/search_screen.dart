@@ -734,10 +734,10 @@ class _ResultCardState extends State<_ResultCard> {
                 child: SizedBox(
                   width: 88,
                   height: 88,
-                  child: Image.network(
-                    p.coverUrl,
+                  child: CachedNetworkImage(
+                    imageUrl: p.coverUrl,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, _) =>
+                    errorWidget: (context, url, error) =>
                         Container(color: AppColors.neutral100),
                   ),
                 ),
