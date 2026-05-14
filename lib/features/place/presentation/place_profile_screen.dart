@@ -46,6 +46,15 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
 
   bool get _isCollapsed => _scrollOffset > _expandedHeight - 80;
 
+  void _showShareSheet(BuildContext context, PlaceModel place) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _ShareSheet(place: place),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final place = _place;
@@ -99,7 +108,7 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
         const SizedBox(width: 6),
         _CircleBtn(
           icon: Icons.share_outlined,
-          onTap: () {},
+          onTap: () => _showShareSheet(context, place),
         ),
         const SizedBox(width: AppSizes.s8),
       ],
@@ -440,6 +449,210 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
             ),
       ],
     );
+  }
+
+  Widget _buildMutualRecs(BuildContext context) {
+    const recs = [
+      (name: 'Amine K.', initial: 'A', score: 9.0, action: 'reviewed', timeAgo: '2d ago',
+       text: 'Best couscous in Blida! The lamb was perfectly cooked.'),
+      (name: 'Sara M.', initial: 'S', score: 0.0, action: 'saved', timeAgo: '1w ago', text: ''),
+      (name: 'Nadia T.', initial: 'N', score: 9.5, action: 'reviewed', timeAgo: '3w ago',
+       text: 'Exceptional cooking, like being at a family table.'),
+    ];
+    const reviewers = ['Amine K.', 'Nadia T.'];
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSizes.screenHorizontalPadding, AppSizes.s8,
+        AppSizes.screenHorizontalPadding, AppSizes.s4,
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(AppSizes.s16),
+        decoration: BoxDecoration(
+          color: AppColors.primaryLight,
+          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header row
+            Row(
+              children: [
+                const Icon(Icons.people_outline_rounded,
+                    size: 16, color: AppColors.primary),
+                const SizedBox(width: AppSizes.s6),
+                const Text(
+                  'People you follow',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSizes.s12),
+            // Avatar row + summary
+            Row(
+              children: [
+                // Stacked avatars
+                SizedBox(
+                  width: recs.length * 24.0 + 12,
+                  height: 32,
+                  child: Stack(
+                    children: recs.asMap().entries.map((e) {
+                      return Positioned(
+                        left: e.key * 20.0,
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.primary.withValues(alpha: 0.7),
+                                AppColors.primaryDark,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            shape: BoxShape.circle,
+                            border: const Border.fromBorderSide(
+                              BorderSide(color: Colors.white, width: 2),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              e.value.initial,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(width: AppSizes.s8),
+                Expanded(
+                  child: Text(
+                    '${reviewers.join(', ')} and 1 other know this place',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.neutral700,
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSizes.s12),
+            // Latest friend review snippet
+            Container(
+              padding: const EdgeInsets.all(AppSizes.s12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.primary.withValues(alpha: 0.7),
+                          AppColors.primaryDark,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'A',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSizes.s8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Text(
+                              'Amine K.',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.neutral900,
+                              ),
+                            ),
+                            const SizedBox(width: AppSizes.s6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 1),
+                              decoration: BoxDecoration(
+                                color: AppColors.scoreColor(9.0)
+                                    .withValues(alpha: 0.12),
+                                borderRadius:
+                                    BorderRadius.circular(AppSizes.radiusFull),
+                              ),
+                              child: Text(
+                                '9.0/10',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.scoreColor(9.0),
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            const Text(
+                              '2d ago',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.neutral300,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 3),
+                        const Text(
+                          'Best couscous in Blida! The lamb was perfectly cooked.',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppColors.neutral500,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    )
+        .animate(delay: 150.ms)
+        .fadeIn(duration: AppAnimations.normal)
+        .slideY(begin: 0.06, end: 0, curve: AppAnimations.enter, duration: AppAnimations.normal);
   }
 
   Widget _buildSimilarPlaces(BuildContext context, PlaceModel place) {
@@ -909,5 +1122,176 @@ class _ActionBtnState extends State<_ActionBtn> {
         .animate(delay: Duration(milliseconds: 160 + widget.delay * 60))
         .fadeIn(duration: AppAnimations.normal)
         .slideY(begin: 0.2, end: 0, duration: AppAnimations.normal, curve: AppAnimations.enter);
+  }
+}
+
+// ---- Share Sheet ----
+
+class _ShareSheet extends StatefulWidget {
+  const _ShareSheet({required this.place});
+  final PlaceModel place;
+
+  @override
+  State<_ShareSheet> createState() => _ShareSheetState();
+}
+
+class _ShareSheetState extends State<_ShareSheet> {
+  bool _linkCopied = false;
+
+  static const _shareOptions = [
+    (icon: Icons.link_rounded, label: 'Copy link', color: Color(0xFF4A90D9)),
+    (icon: Icons.chat_bubble_outline_rounded, label: 'WhatsApp', color: Color(0xFF25D366)),
+    (icon: Icons.camera_alt_outlined, label: 'Instagram', color: Color(0xFFE1306C)),
+    (icon: Icons.send_rounded, label: 'Messenger', color: Color(0xFF0084FF)),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final place = widget.place;
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      padding: const EdgeInsets.fromLTRB(
+        AppSizes.screenHorizontalPadding, AppSizes.s16,
+        AppSizes.screenHorizontalPadding, AppSizes.s48,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Handle
+          Container(
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppColors.neutral200,
+              borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+            ),
+          ),
+          const SizedBox(height: AppSizes.s20),
+          // Place preview
+          Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                child: Image.network(
+                  place.coverUrl,
+                  width: 56,
+                  height: 56,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, _) =>
+                      Container(width: 56, height: 56, color: AppColors.neutral100),
+                ),
+              ),
+              const SizedBox(width: AppSizes.s12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      place.name,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.neutral900,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${place.category.label} · ${place.wilaya}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.neutral500,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(Icons.star_rounded,
+                            size: 12, color: Colors.amber),
+                        const SizedBox(width: 3),
+                        Text(
+                          '${place.score}/10',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.neutral700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
+              .animate()
+              .fadeIn(duration: AppAnimations.normal),
+          const SizedBox(height: AppSizes.s24),
+          // Share options grid
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: _shareOptions.asMap().entries.map((entry) {
+              final opt = entry.value;
+              final isCopy = entry.key == 0;
+              return GestureDetector(
+                onTap: () {
+                  if (isCopy) {
+                    setState(() => _linkCopied = true);
+                    Future.delayed(const Duration(seconds: 2), () {
+                      if (mounted) setState(() => _linkCopied = false);
+                    });
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
+                child: Column(
+                  children: [
+                    AnimatedContainer(
+                      duration: AppAnimations.fast,
+                      width: 56,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        color: (isCopy && _linkCopied)
+                            ? AppColors.success.withValues(alpha: 0.12)
+                            : opt.color.withValues(alpha: 0.10),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        (isCopy && _linkCopied)
+                            ? Icons.check_rounded
+                            : opt.icon,
+                        color: (isCopy && _linkCopied)
+                            ? AppColors.success
+                            : opt.color,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(height: AppSizes.s6),
+                    Text(
+                      (isCopy && _linkCopied) ? 'Copied!' : opt.label,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.neutral700,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+                  .animate(delay: Duration(milliseconds: entry.key * 50))
+                  .fadeIn(duration: AppAnimations.normal)
+                  .scale(
+                    begin: const Offset(0.8, 0.8),
+                    end: const Offset(1, 1),
+                    curve: AppAnimations.overshoot,
+                    duration: AppAnimations.normal,
+                  );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -17,12 +17,38 @@ class SavedScreen extends StatefulWidget {
 class _SavedScreenState extends State<SavedScreen> {
   int _activeCollection = 0;
 
-  static const _collections = [
+  final _collections = [
     (label: 'All saved', icon: Icons.bookmark, count: 5),
     (label: 'Want to try', icon: Icons.bookmark_add_outlined, count: 3),
     (label: 'Favorites', icon: Icons.favorite_outline, count: 2),
     (label: 'Visited', icon: Icons.check_circle_outline, count: 4),
   ];
+
+  void _showCreateCollection() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _CreateCollectionSheet(
+        onCreated: (label, icon) {
+          setState(() {
+            _collections.add((label: label, icon: icon, count: 0));
+          });
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('"$label" collection created'),
+              backgroundColor: AppColors.success,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   List<PlaceModel> get _places {
     return MockData.places;
@@ -63,7 +89,7 @@ class _SavedScreenState extends State<SavedScreen> {
         IconButton(
           icon: const Icon(Icons.add, size: AppSizes.iconNav,
               color: AppColors.primary),
-          onPressed: () {},
+          onPressed: _showCreateCollection,
         )
             .animate(delay: 60.ms)
             .fadeIn(duration: AppAnimations.normal),
@@ -467,6 +493,170 @@ class _EmptyState extends StatelessWidget {
             end: const Offset(1, 1),
             curve: AppAnimations.enter,
           ),
+    );
+  }
+}
+
+// ---- Create Collection Bottom Sheet ----
+
+class _CreateCollectionSheet extends StatefulWidget {
+  const _CreateCollectionSheet({required this.onCreated});
+  final void Function(String label, IconData icon) onCreated;
+
+  @override
+  State<_CreateCollectionSheet> createState() => _CreateCollectionSheetState();
+}
+
+class _CreateCollectionSheetState extends State<_CreateCollectionSheet> {
+  final _controller = TextEditingController();
+  int _selectedIcon = 0;
+
+  static const _iconOptions = [
+    (icon: Icons.bookmark_outline, label: 'Bookmark'),
+    (icon: Icons.favorite_outline, label: 'Favorite'),
+    (icon: Icons.restaurant_outlined, label: 'Food'),
+    (icon: Icons.coffee_outlined, label: 'Café'),
+    (icon: Icons.star_outline_rounded, label: 'Star'),
+    (icon: Icons.map_outlined, label: 'Map'),
+    (icon: Icons.celebration_outlined, label: 'Event'),
+    (icon: Icons.travel_explore, label: 'Explore'),
+  ];
+
+  bool get _canCreate => _controller.text.trim().length >= 2;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        AppSizes.screenHorizontalPadding,
+        AppSizes.s16,
+        AppSizes.screenHorizontalPadding,
+        AppSizes.s16 + MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Handle
+          Center(
+            child: Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.neutral200,
+                borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSizes.s20),
+          const Text(
+            'New collection',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: AppColors.neutral900,
+            ),
+          ),
+          const SizedBox(height: AppSizes.s20),
+          // Name field
+          TextField(
+            controller: _controller,
+            onChanged: (_) => setState(() {}),
+            autofocus: true,
+            maxLength: 30,
+            decoration: InputDecoration(
+              hintText: 'Collection name',
+              counterStyle: const TextStyle(fontSize: 11, color: AppColors.neutral300),
+              prefixIcon: Icon(
+                _iconOptions[_selectedIcon].icon,
+                color: AppColors.primary,
+                size: 20,
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSizes.s20),
+          // Icon picker
+          const Text(
+            'Choose an icon',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppColors.neutral700,
+            ),
+          ),
+          const SizedBox(height: AppSizes.s12),
+          Wrap(
+            spacing: AppSizes.s10,
+            runSpacing: AppSizes.s10,
+            children: _iconOptions.asMap().entries.map((entry) {
+              final selected = _selectedIcon == entry.key;
+              return GestureDetector(
+                onTap: () => setState(() => _selectedIcon = entry.key),
+                child: AnimatedContainer(
+                  duration: AppAnimations.fast,
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: selected ? AppColors.primaryLight : AppColors.neutral50,
+                    borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                    border: Border.all(
+                      color: selected ? AppColors.primary : AppColors.neutral200,
+                      width: selected ? 1.5 : 1,
+                    ),
+                  ),
+                  child: Icon(
+                    entry.value.icon,
+                    size: 22,
+                    color: selected ? AppColors.primary : AppColors.neutral500,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: AppSizes.s24),
+          // Create button
+          SizedBox(
+            width: double.infinity,
+            child: AnimatedContainer(
+              duration: AppAnimations.fast,
+              height: 52,
+              decoration: BoxDecoration(
+                color: _canCreate ? AppColors.primary : AppColors.neutral100,
+                borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+              ),
+              child: GestureDetector(
+                onTap: _canCreate
+                    ? () => widget.onCreated(
+                          _controller.text.trim(),
+                          _iconOptions[_selectedIcon].icon,
+                        )
+                    : null,
+                child: Center(
+                  child: Text(
+                    'Create collection',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: _canCreate ? Colors.white : AppColors.neutral300,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSizes.s8),
+        ],
+      ),
     );
   }
 }

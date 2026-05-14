@@ -41,6 +41,8 @@ class _SearchScreenState extends State<SearchScreen> {
     'Oran',
   ];
 
+  int _searchTab = 0; // 0 = Places, 1 = People
+
   static const _categories = [
     (label: 'Restaurant', emoji: '🍽️', color: Color(0xFFFFF3EE)),
     (label: 'Café', emoji: '☕', color: Color(0xFFEFF6FF)),
@@ -48,6 +50,14 @@ class _SearchScreenState extends State<SearchScreen> {
     (label: 'Street Food', emoji: '🌮', color: Color(0xFFEFFFF4)),
     (label: 'Juice Bar', emoji: '🥤', color: Color(0xFFFFFBEE)),
     (label: 'Sandwich', emoji: '🥙', color: Color(0xFFF5EEFF)),
+  ];
+
+  static const _suggestedPeople = [
+    (name: 'Amine Kader', wilaya: 'Blida', initial: 'A', reviews: 47, mutual: 2),
+    (name: 'Sara Meziane', wilaya: 'Alger', initial: 'S', reviews: 83, mutual: 5),
+    (name: 'Nadia Talbi', wilaya: 'Médéa', initial: 'N', reviews: 29, mutual: 1),
+    (name: 'Karim Lounès', wilaya: 'Tizi Ouzou', initial: 'K', reviews: 61, mutual: 3),
+    (name: 'Mohamed Ayad', wilaya: 'Oran', initial: 'M', reviews: 112, mutual: 7),
   ];
 
   @override
@@ -96,21 +106,146 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             // Divider
             const Divider(height: 1, color: AppColors.neutral100),
+            // Tab switcher
+            _buildSearchTabs(),
+            const Divider(height: 1, color: AppColors.neutral100),
             // Body
             Expanded(
               child: AnimatedSwitcher(
                 duration: AppAnimations.normal,
                 switchInCurve: AppAnimations.enter,
-                child: _query.isEmpty
-                    ? _buildExplore()
-                    : _searching
-                        ? _buildSkeleton()
-                        : _buildResults(),
+                child: KeyedSubtree(
+                  key: ValueKey('$_searchTab-${_searching ? "l" : _query.isEmpty ? "e" : "r"}'),
+                  child: _buildBody(),
+                ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSearchTabs() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.screenHorizontalPadding,
+        vertical: AppSizes.s8,
+      ),
+      child: Row(
+        children: [
+          _SearchTabChip(
+            label: 'Places',
+            selected: _searchTab == 0,
+            onTap: () => setState(() => _searchTab = 0),
+          ),
+          const SizedBox(width: AppSizes.s8),
+          _SearchTabChip(
+            label: 'People',
+            selected: _searchTab == 1,
+            onTap: () => setState(() => _searchTab = 1),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    if (_searchTab == 0) {
+      if (_query.isEmpty) return _buildExplore();
+      if (_searching) return _buildSkeleton();
+      return _buildResults();
+    } else {
+      if (_query.isEmpty) return _buildPeopleExplore();
+      if (_searching) return _buildPeopleSkeleton();
+      return _buildPeopleResults();
+    }
+  }
+
+  Widget _buildPeopleExplore() {
+    return ListView(
+      padding: const EdgeInsets.all(AppSizes.screenHorizontalPadding),
+      children: [
+        const Text(
+          'Suggested for you',
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+            color: AppColors.neutral900,
+          ),
+        )
+            .animate()
+            .fadeIn(duration: AppAnimations.normal),
+        const SizedBox(height: AppSizes.s12),
+        ..._suggestedPeople.asMap().entries.map(
+              (e) => _UserCard(user: e.value, index: e.key),
+            ),
+      ],
+    );
+  }
+
+  Widget _buildPeopleSkeleton() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(AppSizes.screenHorizontalPadding),
+      itemCount: 4,
+      itemBuilder: (context, i) => Container(
+        margin: const EdgeInsets.only(bottom: AppSizes.s10),
+        height: 72,
+        decoration: BoxDecoration(
+          color: AppColors.neutral100,
+          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPeopleResults() {
+    final q = _query.toLowerCase();
+    final filtered = _suggestedPeople
+        .where((u) =>
+            u.name.toLowerCase().contains(q) ||
+            u.wilaya.toLowerCase().contains(q))
+        .toList();
+
+    if (filtered.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.person_search, size: 48, color: AppColors.neutral200),
+            const SizedBox(height: AppSizes.s12),
+            Text(
+              'No people found for "$_query"',
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.neutral500,
+              ),
+            ),
+          ],
+        )
+            .animate()
+            .fadeIn(duration: AppAnimations.normal),
+      );
+    }
+
+    return ListView(
+      padding: const EdgeInsets.all(AppSizes.screenHorizontalPadding),
+      children: [
+        Text(
+          '${filtered.length} ${filtered.length == 1 ? "person" : "people"} found',
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: AppColors.neutral500,
+          ),
+        )
+            .animate()
+            .fadeIn(duration: AppAnimations.normal),
+        const SizedBox(height: AppSizes.s12),
+        ...filtered.asMap().entries.map(
+              (e) => _UserCard(user: e.value, index: e.key),
+            ),
+      ],
     );
   }
 
@@ -723,5 +858,188 @@ class _ResultCardState extends State<_ResultCard> {
             ),
       ),
     );
+  }
+}
+
+// ---- Search Tab Chip ----
+
+class _SearchTabChip extends StatelessWidget {
+  const _SearchTabChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: AppAnimations.fast,
+        curve: AppAnimations.stateChange,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSizes.s16,
+          vertical: AppSizes.s6,
+        ),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primary : AppColors.neutral50,
+          borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+          border: Border.all(
+            color: selected ? AppColors.primary : AppColors.neutral200,
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            color: selected ? Colors.white : AppColors.neutral500,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---- User Card ----
+
+class _UserCard extends StatefulWidget {
+  const _UserCard({required this.user, required this.index});
+  final ({String name, String wilaya, String initial, int reviews, int mutual}) user;
+  final int index;
+
+  @override
+  State<_UserCard> createState() => _UserCardState();
+}
+
+class _UserCardState extends State<_UserCard> {
+  bool _following = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final u = widget.user;
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppSizes.s10),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.s14,
+        vertical: AppSizes.s12,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+        border: Border.all(color: AppColors.neutral100),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Avatar
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppColors.primary.withValues(alpha: 0.7),
+                  AppColors.primaryDark,
+                ],
+              ),
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                u.initial,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSizes.s12),
+          // Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  u.name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.neutral900,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${u.wilaya} · ${u.reviews} reviews',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.neutral500,
+                  ),
+                ),
+                if (u.mutual > 0) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    '${u.mutual} mutual ${u.mutual == 1 ? "connection" : "connections"}',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(width: AppSizes.s10),
+          // Follow button
+          GestureDetector(
+            onTap: () => setState(() => _following = !_following),
+            child: AnimatedContainer(
+              duration: AppAnimations.fast,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSizes.s14,
+                vertical: AppSizes.s6,
+              ),
+              decoration: BoxDecoration(
+                color: _following ? AppColors.neutral100 : AppColors.primary,
+                borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                border: _following
+                    ? Border.all(color: AppColors.neutral200)
+                    : null,
+              ),
+              child: Text(
+                _following ? 'Following' : 'Follow',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: _following ? AppColors.neutral700 : Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    )
+        .animate(delay: Duration(milliseconds: widget.index * 50))
+        .fadeIn(duration: AppAnimations.normal)
+        .slideY(
+          begin: 0.06,
+          end: 0,
+          curve: AppAnimations.enter,
+          duration: AppAnimations.normal,
+        );
   }
 }

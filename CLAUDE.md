@@ -123,12 +123,12 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ## Phase 2 — Social Layer (Months 4–6)
 
-- [ ] Follow / Unfollow system
-- [ ] Activity feed ("Amine reviewed Chez Fatima · Blida · 8.5")
-- [ ] Mutual recommendations ("3 people you follow liked this")
-- [ ] Collections / curated lists
-- [ ] Share list as link
-- [ ] Wilaya leaderboard (top 10, weekly)
+- [x] Follow / Unfollow system — UI toggle in Want-to-try + Follow suggestions
+- [x] Activity feed ("Amine reviewed Chez Fatima · Blida · 8.5") — "Following" tab in discovery feed
+- [x] Mutual recommendations ("3 people you follow liked this") — section in place profile
+- [x] Collections / curated lists — Create collection bottom sheet in Saved screen
+- [ ] Share list as link (requires Firebase Dynamic Links)
+- [x] Wilaya leaderboard (top 10, weekly) — `/leaderboard` route, This Week / All Time toggle
 - [ ] Push notifications (Firebase Cloud Messaging)
 - [ ] Weekly digest notification
 
