@@ -32,15 +32,18 @@ class MainShell extends ConsumerWidget {
           const OfflineBanner(),
           Expanded(
             child: PageTransitionSwitcher(
-        duration: AppAnimations.normal,
-        transitionBuilder: (child, animation, secondaryAnimation) =>
-            FadeThroughTransition(
-          animation: animation,
-          secondaryAnimation: secondaryAnimation,
-          fillColor: Colors.transparent,
-          child: child,
-        ),
-        child: KeyedSubtree(key: ValueKey(location), child: child),
+              duration: AppAnimations.normal,
+              transitionBuilder: (child, animation, secondaryAnimation) =>
+                  FadeThroughTransition(
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                fillColor: Colors.transparent,
+                child: child,
+              ),
+              child: KeyedSubtree(key: ValueKey(location), child: child),
+            ),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _AddFAB()
