@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../shared/models/place_model.dart';
 import '../../../shared/widgets/score_badge.dart';
+import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/skeleton_loader.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -412,45 +413,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildResults() {
     if (_results.isEmpty) {
-      return Center(
-        key: const ValueKey('no-results'),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                color: AppColors.neutral100,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.search_off,
-                  size: 32, color: AppColors.neutral300),
-            ),
-            const SizedBox(height: AppSizes.s16),
-            Text(
-              'No results for "$_query"',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.neutral700,
-              ),
-            ),
-            const SizedBox(height: AppSizes.s8),
-            const Text(
-              'Try a different name, city or category',
-              style: TextStyle(fontSize: 13, color: AppColors.neutral500),
-            ),
-          ],
-        )
-            .animate()
-            .fadeIn(duration: AppAnimations.normal)
-            .scale(
-              begin: const Offset(0.9, 0.9),
-              end: const Offset(1, 1),
-              curve: AppAnimations.enter,
-            ),
-      );
+      return EmptySearchState(key: const ValueKey('no-results'), query: _query);
     }
 
     return ListView.builder(
