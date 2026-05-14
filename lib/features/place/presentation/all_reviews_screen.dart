@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
+import '../../../core/utils/time_utils.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../shared/widgets/review_card.dart';
 import '../../review/domain/repositories/review_repository.dart';
@@ -266,7 +267,7 @@ class _AllReviewsScreenState extends ConsumerState<AllReviewsScreen> {
                             : '?',
                         score: review.score,
                         text: review.text,
-                        timeAgo: _timeAgo(review.createdAt),
+                        timeAgo: formatTimeAgo(review.createdAt),
                         photos: review.photos,
                         animationIndex: index,
                       )
@@ -290,13 +291,6 @@ class _AllReviewsScreenState extends ConsumerState<AllReviewsScreen> {
     );
   }
 
-  String _timeAgo(DateTime date) {
-    final diff = DateTime.now().difference(date);
-    if (diff.inDays >= 30) return '${(diff.inDays / 30).floor()}mo ago';
-    if (diff.inDays > 0) return '${diff.inDays}d ago';
-    if (diff.inHours > 0) return '${diff.inHours}h ago';
-    return '${diff.inMinutes}m ago';
-  }
 }
 
 class _ScoreBars extends StatelessWidget {
