@@ -292,10 +292,10 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
               children: [
                 Hero(
                   tag: 'place-cover-${pick.id}',
-                  child: Image.network(
-                    pick.coverUrl,
+                  child: CachedNetworkImage(
+                    imageUrl: pick.coverUrl,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, _) =>
+                    errorWidget: (context, url, error) =>
                         Container(color: AppColors.neutral100),
                   ),
                 ),
@@ -796,12 +796,12 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
                               top: Radius.circular(AppSizes.radiusLg)),
                           child: Stack(
                             children: [
-                              Image.network(
-                                place.coverUrl,
+                              CachedNetworkImage(
+                                imageUrl: place.coverUrl,
                                 width: 200,
                                 height: 100,
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, _) => Container(
+                                errorWidget: (context, url, error) => Container(
                                   width: 200,
                                   height: 100,
                                   color: AppColors.neutral100,
@@ -1063,12 +1063,12 @@ class _TopRankedRowState extends State<_TopRankedRow> {
               // Thumbnail
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                child: Image.network(
-                  p.coverUrl,
+                child: CachedNetworkImage(
+                  imageUrl: p.coverUrl,
                   width: 52,
                   height: 52,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, _) =>
+                  errorWidget: (context, url, error) =>
                       Container(width: 52, height: 52, color: AppColors.neutral100),
                 ),
               ),
@@ -1439,12 +1439,12 @@ class _ActivityCardState extends State<_ActivityCard> {
                 const SizedBox(width: AppSizes.s10),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                  child: Image.network(
-                    a.place!.coverUrl,
+                  child: CachedNetworkImage(
+                    imageUrl: a.place!.coverUrl,
                     width: 56,
                     height: 56,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, _) => Container(
+                    errorWidget: (context, url, error) => Container(
                       width: 56,
                       height: 56,
                       color: AppColors.neutral100,
