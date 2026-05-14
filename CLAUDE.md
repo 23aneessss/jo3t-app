@@ -202,6 +202,18 @@ Flutter + Firebase + Google Maps. Android-first.
 ### Saved Screen (enhanced)
 - [x] Create Collection bottom sheet — name input + icon picker (8 icons) + animated create button
 
+### Place Profile (further enhanced)
+- [x] Check-In button in quick actions — animated toggle, SnackBar confirmation, "Visited!" state
+- [x] Share button wired to share sheet
+
+### Events Feature
+- [x] Events section in discovery feed — horizontal scroll of event cards (title, date chip, attendees count, place image)
+
+### User Profile Feature (Phase 2)
+- [x] User profile screen `/user/:id` — gradient header, avatar, follow button, stats row, reviews list
+- [x] Mock user data for: amine, sara, nadia, karim, mohamed
+- [x] Avatar tappable from: activity feed cards, People search results → navigates to `/user/:id`
+
 ---
 
-*Last updated: 2026-05-14*
+*Last updated: 2026-05-14 (Phase 2 social layer substantially complete)*
