@@ -29,6 +29,9 @@ dependencies:
   # Images
   cached_network_image: ^3.4.1
 
+  # Functional programming / Either type
+  dartz: ^0.10.1
+
   # Utilities
   timeago: ^3.7.0
   intl: ^0.20.2
