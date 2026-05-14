@@ -114,6 +114,16 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] `discovery_providers.dart` — Riverpod: DiscoveryFiltersNotifier, filteredFeedProvider, feedTabProvider
 - [x] `hive_cache_service.dart` — Hive offline cache: saved place IDs (permanent), feed (2h TTL), place detail (6h TTL)
 - [x] `time_utils.dart` — `formatTimeAgo()` via `timeago` package, `formatDate()` helper
+- [x] `new_place_entity.dart` — AddPlace form entity with `isValid` guard
+- [x] `add_place_repository.dart` + `mock_add_place_repository.dart` — submit + photo upload
+- [x] `submit_place_usecase.dart` — use case
+- [x] `add_place_providers.dart` — `AddPlaceFormNotifier` (step state + field setters), `SubmitPlaceNotifier`
+- [x] `wilaya_entity.dart` — WilayaEntity with nameFr/nameAr/code/placeCount
+- [x] `wilaya_repository.dart` + `mock_wilaya_repository.dart` — 12 Algerian wilayas
+- [x] `wilaya_providers.dart` — allWilayasProvider, wilayaByIdProvider
+- [x] `mock_auth_repository.dart` — full AuthRepository mock with OTP, Google, follow/unfollow, user search
+- [x] `auth_providers.dart` — AuthNotifier, currentUserProvider, isAuthenticatedProvider, FollowNotifier
+- [x] `connectivity_service.dart` — `connectivityProvider` (Stream), `isOnlineProvider`
 
 ### Map Feature
 - [ ] Map screen with Google Maps (pending Firebase/Maps SDK setup)
