@@ -773,7 +773,15 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
                 final event = _mockEvents[i];
                 final place = MockData.places[event.placeIndex];
                 return GestureDetector(
-                  onTap: () => context.push('/place/${place.id}'),
+                  onTap: () => context.push('/event/${place.id}_$i', extra: {
+                    'title': event.title,
+                    'placeName': place.name,
+                    'placeId': place.id,
+                    'date': event.date,
+                    'imageUrl': place.coverUrl,
+                    'attendees': event.attendees,
+                    'colorValue': event.color.value,
+                  }),
                   child: Container(
                     width: 200,
                     decoration: BoxDecoration(
