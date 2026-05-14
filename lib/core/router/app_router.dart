@@ -110,6 +110,31 @@ final appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: '/place/:id/gallery',
+      pageBuilder: (context, state) {
+        final photos = (state.extra as Map<String, dynamic>?)?['photos'] as List<String>? ?? [];
+        final name = (state.extra as Map<String, dynamic>?)?['name'] as String? ?? '';
+        final index = (state.extra as Map<String, dynamic>?)?['index'] as int? ?? 0;
+        return _slideUpPage(state, GalleryScreen(photos: photos, placeName: name, initialIndex: index));
+      },
+    ),
+    GoRoute(
+      path: '/place/:id/reviews',
+      pageBuilder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>? ?? {};
+        final id = state.pathParameters['id']!;
+        return _slideUpPage(
+          state,
+          AllReviewsScreen(
+            placeId: id,
+            placeName: extra['name'] as String? ?? '',
+            averageScore: (extra['averageScore'] as num?)?.toDouble() ?? 0,
+            reviewCount: extra['reviewCount'] as int? ?? 0,
+          ),
+        );
+      },
+    ),
+    GoRoute(
       path: '/review/new/:placeId',
       pageBuilder: (context, state) {
         final id = state.pathParameters['placeId']!;
