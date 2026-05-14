@@ -374,7 +374,17 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionHeader(title: 'Photos', onSeeAll: () {}).animate(delay: const Duration(milliseconds: 100)).fadeIn(duration: AppAnimations.normal),
+        _SectionHeader(
+          title: 'Photos',
+          onSeeAll: () => context.push(
+            '/place/${place.id}/gallery',
+            extra: {
+              'photos': place.photos,
+              'name': place.name,
+              'index': 0,
+            },
+          ),
+        ).animate(delay: const Duration(milliseconds: 100)).fadeIn(duration: AppAnimations.normal),
         SizedBox(
           height: 120,
           child: ListView.separated(
@@ -383,15 +393,25 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
                 horizontal: AppSizes.screenHorizontalPadding),
             itemCount: place.photos.length,
             separatorBuilder: (context, i) => const SizedBox(width: AppSizes.s8),
-            itemBuilder: (context, i) => ClipRRect(
-              borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-              child: Image.network(
-                place.photos[i],
-                width: 120,
-                height: 120,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, _) =>
-                    Container(width: 120, height: 120, color: AppColors.neutral100),
+            itemBuilder: (context, i) => GestureDetector(
+              onTap: () => context.push(
+                '/place/${place.id}/gallery',
+                extra: {
+                  'photos': place.photos,
+                  'name': place.name,
+                  'index': i,
+                },
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                child: Image.network(
+                  place.photos[i],
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, _) =>
+                      Container(width: 120, height: 120, color: AppColors.neutral100),
+                ),
               ),
             )
                 .animate(delay: Duration(milliseconds: 80 * i))
@@ -451,10 +471,21 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
   }
 
   Widget _buildReviewsSection(BuildContext context) {
+    final place = _place;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionHeader(title: 'Reviews', onSeeAll: () {})
+        _SectionHeader(
+          title: 'Reviews',
+          onSeeAll: () => context.push(
+            '/place/${place.id}/reviews',
+            extra: {
+              'name': place.name,
+              'averageScore': place.averageScore,
+              'reviewCount': place.reviewCount,
+            },
+          ),
+        )
             .animate(delay: const Duration(milliseconds: 100))
             .fadeIn(duration: AppAnimations.normal),
         ...MockData.reviews.take(3).toList().asMap().entries.map(

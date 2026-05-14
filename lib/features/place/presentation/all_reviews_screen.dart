@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_sizes.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../shared/widgets/review_card.dart';
 import '../../review/domain/repositories/review_repository.dart';
@@ -259,17 +259,16 @@ class _AllReviewsScreenState extends ConsumerState<AllReviewsScreen> {
                         0,
                       ),
                       child: ReviewCard(
-                        userName: review.userName,
-                        userInitial: review.userName.isNotEmpty
+                        authorName: review.userName,
+                        authorWilaya: '',
+                        authorInitial: review.userName.isNotEmpty
                             ? review.userName[0]
                             : '?',
                         score: review.score,
-                        reviewText: review.text,
+                        text: review.text,
                         timeAgo: _timeAgo(review.createdAt),
-                        photoUrls: review.photos,
-                        likeCount: review.likeCount,
-                        isLiked: review.isLikedByMe,
-                        onLike: () {},
+                        photos: review.photos,
+                        animationIndex: index,
                       )
                           .animate()
                           .fadeIn(
