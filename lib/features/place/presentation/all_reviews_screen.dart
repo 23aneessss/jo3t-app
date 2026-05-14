@@ -31,6 +31,95 @@ class AllReviewsScreen extends ConsumerStatefulWidget {
 
 class _AllReviewsScreenState extends ConsumerState<AllReviewsScreen> {
   ReviewSortOrder _sortOrder = ReviewSortOrder.newest;
+  final Map<String, String> _ownerReplies = {};
+
+  void _showReplySheet(String reviewId) {
+    final controller = TextEditingController(text: _ownerReplies[reviewId]);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => Padding(
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          padding: const EdgeInsets.fromLTRB(
+              AppSizes.s20, AppSizes.s16, AppSizes.s20, AppSizes.s24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.neutral200,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSizes.s16),
+              Text(
+                'Respond as owner',
+                style: TextStyle(
+                  color: AppColors.neutral900,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: AppSizes.s4),
+              Text(
+                'Your response will be visible publicly below the review.',
+                style: TextStyle(color: AppColors.neutral500, fontSize: 13),
+              ),
+              const SizedBox(height: AppSizes.s16),
+              TextField(
+                controller: controller,
+                autofocus: true,
+                maxLines: 4,
+                maxLength: 300,
+                decoration: InputDecoration(
+                  hintText: 'Thank you for your feedback…',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                  ),
+                  counterStyle: const TextStyle(
+                      fontSize: 11, color: AppColors.neutral300),
+                ),
+              ),
+              const SizedBox(height: AppSizes.s12),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                    ),
+                  ),
+                  onPressed: () {
+                    final text = controller.text.trim();
+                    if (text.isEmpty) return;
+                    setState(() => _ownerReplies[reviewId] = text);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Post response',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: 15)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -239,17 +328,50 @@ class _AllReviewsScreenState extends ConsumerState<AllReviewsScreen> {
                         AppSizes.s16,
                         0,
                       ),
-                      child: ReviewCard(
-                        authorName: review.userName,
-                        authorWilaya: '',
-                        authorInitial: review.userName.isNotEmpty
-                            ? review.userName[0]
-                            : '?',
-                        score: review.score,
-                        text: review.text,
-                        timeAgo: formatTimeAgo(review.createdAt),
-                        photos: review.photos,
-                        animationIndex: index,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ReviewCard(
+                            authorName: review.userName,
+                            authorWilaya: '',
+                            authorInitial: review.userName.isNotEmpty
+                                ? review.userName[0]
+                                : '?',
+                            score: review.score,
+                            text: review.text,
+                            timeAgo: formatTimeAgo(review.createdAt),
+                            photos: review.photos,
+                            animationIndex: index,
+                          ),
+                          if (_ownerReplies.containsKey(review.id))
+                            _OwnerReply(text: _ownerReplies[review.id]!,
+                                venueName: widget.placeName),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: AppSizes.s8, left: AppSizes.s4),
+                            child: GestureDetector(
+                              onTap: () => _showReplySheet(review.id),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.reply_rounded,
+                                      size: 14, color: AppColors.neutral400),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    _ownerReplies.containsKey(review.id)
+                                        ? 'Edit response'
+                                        : 'Respond as owner',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.neutral500,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       )
                           .animate()
                           .fadeIn(

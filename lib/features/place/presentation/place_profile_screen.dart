@@ -79,6 +79,7 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
                 _buildReviewsSection(context),
                 _buildMutualRecs(context),
                 _buildSimilarPlaces(context, place),
+                _buildClaimSection(context, place),
                 const SizedBox(height: 100),
               ],
             ),
@@ -744,6 +745,69 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
         ),
       ],
     );
+  }
+
+  Widget _buildClaimSection(BuildContext context, PlaceModel place) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+          AppSizes.screenHorizontalPadding, AppSizes.s24,
+          AppSizes.screenHorizontalPadding, 0),
+      child: GestureDetector(
+        onTap: () => context.push(
+          '/claim-venue/${place.id}',
+          extra: {'name': place.name},
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(AppSizes.s16),
+          decoration: BoxDecoration(
+            color: AppColors.neutral50,
+            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+            border: Border.all(color: AppColors.neutral200),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryLight,
+                  borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                ),
+                child: const Icon(Icons.verified_outlined,
+                    color: AppColors.primary, size: 20),
+              ),
+              const SizedBox(width: AppSizes.s12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Is this your place?',
+                      style: TextStyle(
+                        color: AppColors.neutral900,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Claim ownership to manage this listing',
+                      style: TextStyle(
+                          color: AppColors.neutral500, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right_rounded,
+                  color: AppColors.neutral300, size: 20),
+            ],
+          ),
+        ),
+      ),
+    )
+        .animate(delay: const Duration(milliseconds: 200))
+        .fadeIn(duration: AppAnimations.normal)
+        .slideY(begin: 0.06, end: 0);
   }
 
   Widget _buildFAB(BuildContext context, PlaceModel place) {
