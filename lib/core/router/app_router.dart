@@ -15,6 +15,7 @@ import '../../features/notifications/presentation/notifications_screen.dart';
 import '../../features/place/presentation/place_profile_screen.dart';
 import '../../features/profile/presentation/followers_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/profile/presentation/user_profile_screen.dart';
 import '../../features/profile/presentation/settings_screen.dart';
 import '../../features/saved/presentation/saved_screen.dart';
 import '../../features/add_place/presentation/add_place_screen.dart';
@@ -134,6 +135,13 @@ final appRouter = GoRouter(
       path: '/leaderboard',
       pageBuilder: (context, state) =>
           _slideUpPage(state, const LeaderboardScreen()),
+    ),
+    GoRoute(
+      path: '/user/:id',
+      pageBuilder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return _slideUpPage(state, UserProfileScreen(userId: id));
+      },
     ),
   ],
 );

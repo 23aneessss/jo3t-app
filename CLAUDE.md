@@ -173,8 +173,34 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ### Notifications Feature (Phase 2 — started)
 - [x] Notifications screen — unread dot, read/unread state, type badges (review/follow/place/weekly)
-- [x] Mark all read action
+- [x] Mark all read action + individual mark as read on tap
+- [x] Notification type filter chips (All / Reviews / Follows / Places / Weekly)
 - [ ] Real push notifications (Firebase Cloud Messaging)
+
+### Search Feature (enhanced)
+- [x] People tab — search/discover users with Follow toggle + mutual connections count
+- [x] Suggested users explore state + filtered search results
+
+### Discovery Feed (enhanced)
+- [x] "For You" / "Following" tab toggle with animated pill switcher
+- [x] Following feed — activity cards (review/follow/new_place/save) with avatars + place thumbnails
+- [x] Explore by Wilaya — horizontal gradient cards with place counts, tap to filter feed
+- [x] Leaderboard CTA in Top Rated section header
+
+### Place Profile (enhanced)
+- [x] Mutual recommendations section — "Friends who know this place" with stacked avatars + friend review snippet
+- [x] Share sheet — Copy link, WhatsApp, Instagram, Messenger with animated icons + "Copied!" feedback
+
+### Profile (enhanced)
+- [x] Share profile sheet — avatar preview + copy link / WhatsApp / Instagram / QR code
+
+### Leaderboard Feature
+- [x] Leaderboard screen — `/leaderboard` route, This Week / All Time toggle
+- [x] Top 3 podium cards (gold/silver/bronze) with shadow highlights
+- [x] Ranks 4-10 list with trend indicators (+/- %)
+
+### Saved Screen (enhanced)
+- [x] Create Collection bottom sheet — name input + icon picker (8 icons) + animated create button
 
 ---
 

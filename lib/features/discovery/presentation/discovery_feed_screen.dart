@@ -26,6 +26,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     _Activity(
       type: 'review',
       user: 'Amine K.',
+      userId: 'amine',
       userWilaya: 'Blida',
       initial: 'A',
       place: MockData.places[0],
@@ -36,6 +37,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     _Activity(
       type: 'new_place',
       user: 'Mohamed A.',
+      userId: 'mohamed',
       userWilaya: 'Oran',
       initial: 'M',
       place: MockData.places[2],
@@ -44,6 +46,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     _Activity(
       type: 'review',
       user: 'Nadia T.',
+      userId: 'nadia',
       userWilaya: 'Médéa',
       initial: 'N',
       place: MockData.places[4],
@@ -54,6 +57,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     _Activity(
       type: 'follow',
       user: 'Sara M.',
+      userId: 'sara',
       userWilaya: 'Alger',
       initial: 'S',
       followedUser: 'Yacine B.',
@@ -62,6 +66,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     _Activity(
       type: 'save',
       user: 'Karim L.',
+      userId: 'karim',
       userWilaya: 'Tizi Ouzou',
       initial: 'K',
       place: MockData.places[1],
@@ -70,6 +75,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     _Activity(
       type: 'review',
       user: 'Yasmine B.',
+      userId: 'nadia',
       userWilaya: 'Constantine',
       initial: 'Y',
       place: MockData.places[3],
@@ -145,6 +151,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
           if (_activeTab == 0) _buildWilayaExplore(context),
           if (_activeTab == 0) _buildFeaturedSection(),
           if (_activeTab == 0) _buildTopRatedSection(context),
+          if (_activeTab == 0) _buildEventsSection(context),
           if (_activeTab == 0) _buildNearbySection(),
           if (_activeTab == 1) _buildFollowingFeed(),
         ],
@@ -675,6 +682,223 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     );
   }
 
+  static const _mockEvents = [
+    (
+      placeIndex: 0,
+      title: 'Ramadan Special Night',
+      date: 'Fri, 7:00 PM',
+      attendees: 42,
+      color: Color(0xFFFF6B35),
+    ),
+    (
+      placeIndex: 1,
+      title: 'Coffee Tasting Session',
+      date: 'Sat, 10:00 AM',
+      attendees: 18,
+      color: Color(0xFF3498DB),
+    ),
+    (
+      placeIndex: 4,
+      title: 'Fresh Juice Workshop',
+      date: 'Sun, 3:00 PM',
+      attendees: 24,
+      color: Color(0xFF2ECC71),
+    ),
+  ];
+
+  Widget _buildEventsSection(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+                AppSizes.screenHorizontalPadding, AppSizes.s24,
+                AppSizes.screenHorizontalPadding, AppSizes.s12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Color(0xFFFF6B35), Color(0xFFFF9562)],
+                        ),
+                        borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                      ),
+                    ),
+                    const SizedBox(width: AppSizes.s10),
+                    Text(
+                      'Events near you',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: AppSizes.s8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryLight,
+                    borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                  ),
+                  child: const Text(
+                    'This week',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ],
+            )
+                .animate()
+                .fadeIn(delay: 280.ms, duration: AppAnimations.normal)
+                .slideX(begin: -0.05, end: 0, curve: AppAnimations.enter),
+          ),
+          SizedBox(
+            height: 170,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSizes.screenHorizontalPadding),
+              itemCount: _mockEvents.length,
+              separatorBuilder: (context, i) => const SizedBox(width: AppSizes.s12),
+              itemBuilder: (context, i) {
+                final event = _mockEvents[i];
+                final place = MockData.places[event.placeIndex];
+                return GestureDetector(
+                  onTap: () => context.push('/place/${place.id}'),
+                  child: Container(
+                    width: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.06),
+                          blurRadius: 12,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Image header
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(AppSizes.radiusLg)),
+                          child: Stack(
+                            children: [
+                              Image.network(
+                                place.coverUrl,
+                                width: 200,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, _) => Container(
+                                  width: 200,
+                                  height: 100,
+                                  color: AppColors.neutral100,
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                left: 8,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: AppSizes.s8, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: event.color,
+                                    borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.event_rounded,
+                                          size: 10, color: Colors.white),
+                                      const SizedBox(width: 3),
+                                      Text(
+                                        event.date,
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Info
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                              AppSizes.s10, AppSizes.s8, AppSizes.s10, AppSizes.s8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                event.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.neutral900,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                place.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  color: AppColors.neutral500,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Row(
+                                children: [
+                                  const Icon(Icons.people_outline,
+                                      size: 11, color: AppColors.neutral300),
+                                  const SizedBox(width: 3),
+                                  Text(
+                                    '${event.attendees} attending',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: AppColors.neutral500,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+                    .animate(delay: Duration(milliseconds: 240 + i * 60))
+                    .fadeIn(duration: AppAnimations.normal)
+                    .slideX(begin: 0.06, end: 0, curve: AppAnimations.enter, duration: AppAnimations.normal);
+              },
+            ),
+          ),
+          const SizedBox(height: AppSizes.s8),
+        ],
+      ),
+    );
+  }
+
   Widget _buildFollowingFeed() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -703,6 +927,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
             activity: _mockActivities[dataIndex],
             index: dataIndex,
             onPlaceTap: (place) => context.push('/place/${place.id}'),
+            onUserTap: (userId) => context.push('/user/$userId'),
           );
         },
         childCount: _mockActivities.length + 2,
@@ -965,6 +1190,7 @@ class _Activity {
   const _Activity({
     required this.type,
     required this.user,
+    required this.userId,
     required this.userWilaya,
     required this.initial,
     this.place,
@@ -975,6 +1201,7 @@ class _Activity {
   });
   final String type; // 'review' | 'follow' | 'new_place' | 'save'
   final String user;
+  final String userId;
   final String userWilaya;
   final String initial;
   final PlaceModel? place;
@@ -991,10 +1218,12 @@ class _ActivityCard extends StatefulWidget {
     required this.activity,
     required this.index,
     required this.onPlaceTap,
+    required this.onUserTap,
   });
   final _Activity activity;
   final int index;
   final ValueChanged<PlaceModel> onPlaceTap;
+  final ValueChanged<String> onUserTap;
 
   @override
   State<_ActivityCard> createState() => _ActivityCardState();
@@ -1070,9 +1299,11 @@ class _ActivityCardState extends State<_ActivityCard> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Avatar with type badge
-              Stack(
-                children: [
+              // Avatar with type badge (tappable → user profile)
+              GestureDetector(
+                onTap: () => widget.onUserTap(a.userId),
+                child: Stack(
+                  children: [
                   Container(
                     width: 44,
                     height: 44,
@@ -1117,6 +1348,7 @@ class _ActivityCardState extends State<_ActivityCard> {
                     ),
                   ),
                 ],
+              ),
               ),
               const SizedBox(width: AppSizes.s12),
               // Content

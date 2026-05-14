@@ -20,6 +20,7 @@ class PlaceProfileScreen extends StatefulWidget {
 
 class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
   bool _saved = false;
+  bool _checkedIn = false;
   late final ScrollController _scrollController;
   double _scrollOffset = 0;
 
@@ -338,8 +339,29 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
             child: _ActionBtn(
               icon: Icons.share_outlined,
               label: 'Share',
-              onTap: () {},
+              onTap: () => _showShareSheet(context, place),
               delay: 2,
+            ),
+          ),
+          const SizedBox(width: AppSizes.s8),
+          Expanded(
+            child: _CheckInBtn(
+              checkedIn: _checkedIn,
+              onTap: () {
+                setState(() => _checkedIn = !_checkedIn);
+                if (!_checkedIn) return;
+                HapticFeedback.mediumImpact();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Checked in to ${place.name}! 📍'),
+                    backgroundColor: AppColors.success,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -1120,6 +1142,79 @@ class _ActionBtnState extends State<_ActionBtn> {
       ),
     )
         .animate(delay: Duration(milliseconds: 160 + widget.delay * 60))
+        .fadeIn(duration: AppAnimations.normal)
+        .slideY(begin: 0.2, end: 0, duration: AppAnimations.normal, curve: AppAnimations.enter);
+  }
+}
+
+// ---- Check-In Button ----
+
+class _CheckInBtn extends StatefulWidget {
+  const _CheckInBtn({required this.checkedIn, required this.onTap});
+  final bool checkedIn;
+  final VoidCallback onTap;
+
+  @override
+  State<_CheckInBtn> createState() => _CheckInBtnState();
+}
+
+class _CheckInBtnState extends State<_CheckInBtn> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        widget.onTap();
+      },
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.95 : 1.0,
+        duration: AppAnimations.micro,
+        child: AnimatedContainer(
+          duration: AppAnimations.fast,
+          height: 52,
+          decoration: BoxDecoration(
+            color: widget.checkedIn
+                ? AppColors.success.withValues(alpha: 0.12)
+                : AppColors.neutral50,
+            borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+            border: Border.all(
+              color: widget.checkedIn ? AppColors.success : AppColors.neutral200,
+              width: widget.checkedIn ? 1.5 : 1,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedSwitcher(
+                duration: AppAnimations.fast,
+                child: Icon(
+                  widget.checkedIn
+                      ? Icons.check_circle_rounded
+                      : Icons.add_location_alt_outlined,
+                  key: ValueKey(widget.checkedIn),
+                  size: 18,
+                  color: widget.checkedIn ? AppColors.success : AppColors.neutral700,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                widget.checkedIn ? 'Visited!' : 'Check In',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: widget.checkedIn ? AppColors.success : AppColors.neutral700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    )
+        .animate(delay: const Duration(milliseconds: 340))
         .fadeIn(duration: AppAnimations.normal)
         .slideY(begin: 0.2, end: 0, duration: AppAnimations.normal, curve: AppAnimations.enter);
   }
