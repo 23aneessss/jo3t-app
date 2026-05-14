@@ -12,6 +12,8 @@ import '../../features/discovery/presentation/search_screen.dart';
 import '../../features/leaderboard/presentation/leaderboard_screen.dart';
 import '../../features/map/presentation/map_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
+import '../../features/place/presentation/all_reviews_screen.dart';
+import '../../features/place/presentation/gallery_screen.dart';
 import '../../features/place/presentation/place_profile_screen.dart';
 import '../../features/profile/presentation/followers_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
