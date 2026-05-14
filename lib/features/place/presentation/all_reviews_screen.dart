@@ -224,28 +224,10 @@ class _AllReviewsScreenState extends ConsumerState<AllReviewsScreen> {
             ),
             data: (reviews) {
               if (reviews.isEmpty) {
-                return SliverToBoxAdapter(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppSizes.s48),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.rate_review_outlined,
-                            color: AppColors.neutral300,
-                            size: AppSizes.s48,
-                          ),
-                          const SizedBox(height: AppSizes.s12),
-                          Text(
-                            'No reviews yet',
-                            style: TextStyle(
-                              color: AppColors.neutral500,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                return SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: EmptyReviewsState(
+                    onWrite: () => Navigator.of(context).pop(),
                   ),
                 );
               }
