@@ -63,6 +63,8 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] `MainShell` — 5-tab bottom nav with animated icons
 - [x] `AppImage` — `CachedNetworkImage` wrapper with shimmer placeholder + error state
 - [x] `EmptyState` — animated pulsing icon + title + subtitle + optional CTA button; presets for Search, Feed, Saved, Notifications, Reviews
+- [x] `AppErrorWidget` — error state with icon + message + retry button, used in provider error handlers
+- [x] `OfflineBanner` — slide-down banner shown when `connectivity_plus` detects no network; wired into `MainShell`
 
 ### Auth Feature
 - [x] Splash screen — white bg → orange wave rises (Headspace-style CustomPainter)

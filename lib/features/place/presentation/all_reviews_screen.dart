@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/utils/time_utils.dart';
 import '../../../core/constants/app_animations.dart';
+import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/review_card.dart';
 import '../../review/domain/repositories/review_repository.dart';
@@ -211,15 +212,11 @@ class _AllReviewsScreenState extends ConsumerState<AllReviewsScreen> {
                 childCount: 5,
               ),
             ),
-            error: (e, _) => SliverToBoxAdapter(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppSizes.s32),
-                  child: Text(
-                    'Could not load reviews',
-                    style: TextStyle(color: AppColors.neutral500),
-                  ),
-                ),
+            error: (e, _) => SliverFillRemaining(
+              hasScrollBody: false,
+              child: AppErrorWidget(
+                message: 'Could not load reviews',
+                onRetry: () => ref.invalidate(placeReviewsProvider),
               ),
             ),
             data: (reviews) {
