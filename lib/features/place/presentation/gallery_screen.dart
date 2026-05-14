@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/constants/app_colors.dart';
@@ -51,23 +52,16 @@ class _GalleryScreenState extends State<GalleryScreen> {
               return InteractiveViewer(
                 minScale: 1.0,
                 maxScale: 4.0,
-                child: Image.network(
-                  widget.photos[index],
+                child: CachedNetworkImage(
+                  imageUrl: widget.photos[index],
                   fit: BoxFit.contain,
-                  loadingBuilder: (context, child, progress) {
-                    if (progress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: progress.expectedTotalBytes != null
-                            ? progress.cumulativeBytesLoaded /
-                                progress.expectedTotalBytes!
-                            : null,
-                        color: AppColors.primary,
-                        strokeWidth: 2,
-                      ),
-                    );
-                  },
-                  errorBuilder: (context, error, stack) => Center(
+                  placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primary,
+                      strokeWidth: 2,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Center(
                     child: Icon(
                       Icons.broken_image_outlined,
                       color: AppColors.neutral500,
@@ -185,8 +179,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(AppSizes.s6),
-                            child: Image.network(
-                              widget.photos[index],
+                            child: CachedNetworkImage(
+                              imageUrl: widget.photos[index],
                               fit: BoxFit.cover,
                             ),
                           ),

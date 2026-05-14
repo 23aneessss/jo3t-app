@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/constants/app_animations.dart';
@@ -165,12 +166,12 @@ class _ReviewCardState extends State<ReviewCard> {
                     const SizedBox(width: AppSizes.s8),
                 itemBuilder: (context, i) => ClipRRect(
                   borderRadius: BorderRadius.circular(AppSizes.radiusSm),
-                  child: Image.network(
-                    widget.photos[i],
+                  child: CachedNetworkImage(
+                    imageUrl: widget.photos[i],
                     width: 64,
                     height: 64,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, _) =>
+                    errorWidget: (context, url, error) =>
                         Container(width: 64, height: 64, color: AppColors.neutral100),
                   ),
                 ),
