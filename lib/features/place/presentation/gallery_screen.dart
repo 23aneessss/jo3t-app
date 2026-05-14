@@ -67,7 +67,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                       ),
                     );
                   },
-                  errorBuilder: (_, __, ___) => Center(
+                  errorBuilder: (context, error, stack) => Center(
                     child: Icon(
                       Icons.broken_image_outlined,
                       color: AppColors.neutral500,
@@ -158,7 +158,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: widget.photos.length,
-                    separatorBuilder: (_, __) =>
+                    separatorBuilder: (context, index) =>
                         const SizedBox(width: AppSizes.s8),
                     itemBuilder: (context, index) {
                       final isActive = index == _currentIndex;
