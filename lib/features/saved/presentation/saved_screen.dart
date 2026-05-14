@@ -308,10 +308,10 @@ class _SavedCardState extends State<_SavedCard> {
                     children: [
                       Hero(
                         tag: 'place-cover-${p.id}-saved',
-                        child: Image.network(
-                          p.coverUrl,
+                        child: CachedNetworkImage(
+                          imageUrl: p.coverUrl,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, _) =>
+                          errorWidget: (context, url, error) =>
                               Container(color: AppColors.neutral100),
                         ),
                       ),

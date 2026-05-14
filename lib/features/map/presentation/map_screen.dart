@@ -584,12 +584,12 @@ class _PlaceBottomSheet extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-              child: Image.network(
-                place.coverUrl,
+              child: CachedNetworkImage(
+                imageUrl: place.coverUrl,
                 width: 64,
                 height: 64,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, _) =>
+                errorWidget: (context, url, error) =>
                     Container(width: 64, height: 64, color: AppColors.neutral100),
               ),
             ),
