@@ -815,12 +815,12 @@ class _WantToTryCardState extends State<_WantToTryCard> {
               ClipRRect(
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(AppSizes.radiusLg)),
-                child: Image.network(
-                  p.coverUrl,
+                child: CachedNetworkImage(
+                  imageUrl: p.coverUrl,
                   width: 88,
                   height: 88,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, _) =>
+                  errorWidget: (context, url, error) =>
                       Container(width: 88, height: 88, color: AppColors.neutral100),
                 ),
               ),
