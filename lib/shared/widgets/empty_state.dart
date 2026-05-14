@@ -81,10 +81,12 @@ class EmptyState extends StatelessWidget {
             ],
             if (actionLabel != null && onAction != null) ...[
               const SizedBox(height: AppSizes.s24),
-              PrimaryButton(
-                label: actionLabel!,
-                onTap: onAction!,
+              SizedBox(
                 width: 180,
+                child: PrimaryButton(
+                  label: actionLabel!,
+                  onTap: onAction!,
+                ),
               )
                   .animate()
                   .fadeIn(delay: 200.ms, duration: 300.ms)
