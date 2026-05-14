@@ -53,11 +53,11 @@ class _SearchScreenState extends State<SearchScreen> {
   ];
 
   static const _suggestedPeople = [
-    (name: 'Amine Kader', wilaya: 'Blida', initial: 'A', reviews: 47, mutual: 2),
-    (name: 'Sara Meziane', wilaya: 'Alger', initial: 'S', reviews: 83, mutual: 5),
-    (name: 'Nadia Talbi', wilaya: 'Médéa', initial: 'N', reviews: 29, mutual: 1),
-    (name: 'Karim Lounès', wilaya: 'Tizi Ouzou', initial: 'K', reviews: 61, mutual: 3),
-    (name: 'Mohamed Ayad', wilaya: 'Oran', initial: 'M', reviews: 112, mutual: 7),
+    (name: 'Amine Kader', userId: 'amine', wilaya: 'Blida', initial: 'A', reviews: 47, mutual: 2),
+    (name: 'Sara Meziane', userId: 'sara', wilaya: 'Alger', initial: 'S', reviews: 83, mutual: 5),
+    (name: 'Nadia Talbi', userId: 'nadia', wilaya: 'Médéa', initial: 'N', reviews: 29, mutual: 1),
+    (name: 'Karim Lounès', userId: 'karim', wilaya: 'Tizi Ouzou', initial: 'K', reviews: 61, mutual: 3),
+    (name: 'Mohamed Ayad', userId: 'mohamed', wilaya: 'Oran', initial: 'M', reviews: 112, mutual: 7),
   ];
 
   @override
@@ -908,7 +908,7 @@ class _SearchTabChip extends StatelessWidget {
 
 class _UserCard extends StatefulWidget {
   const _UserCard({required this.user, required this.index});
-  final ({String name, String wilaya, String initial, int reviews, int mutual}) user;
+  final ({String name, String userId, String wilaya, String initial, int reviews, int mutual}) user;
   final int index;
 
   @override
