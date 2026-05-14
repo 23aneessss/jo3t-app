@@ -2,11 +2,13 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_animations.dart';
 import '../../core/constants/app_colors.dart';
+import 'offline_banner.dart';
 
-class MainShell extends StatelessWidget {
+class MainShell extends ConsumerWidget {
   const MainShell({super.key, required this.child});
 
   final Widget child;
@@ -20,12 +22,16 @@ class MainShell extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final location = GoRouterState.of(context).uri.toString();
     final currentIndex = _tabs.indexWhere((t) => location.startsWith(t.path));
 
     return Scaffold(
-      body: PageTransitionSwitcher(
+      body: Column(
+        children: [
+          const OfflineBanner(),
+          Expanded(
+            child: PageTransitionSwitcher(
         duration: AppAnimations.normal,
         transitionBuilder: (child, animation, secondaryAnimation) =>
             FadeThroughTransition(
