@@ -99,6 +99,7 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] `place_entity.dart` — immutable PlaceEntity + PlaceCategoryEntity + PriceRangeEntity enums
 - [x] `review_entity.dart` — immutable ReviewEntity with copyWith/==/hashCode
 - [x] `user_entity.dart` — immutable UserEntity with copyWith/==/hashCode
+- [x] `discovery_filters.dart` — immutable DiscoveryFilters entity (category, wilayaId, nearMe)
 - [x] `place_repository.dart` — abstract PlaceRepository interface (Either<Failure, T>)
 - [x] `review_repository.dart` — abstract ReviewRepository interface + ReviewSortOrder enum
 - [x] `auth_repository.dart` — abstract AuthRepository interface
@@ -108,6 +109,9 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] `mock_review_repository.dart` — 5 mock reviews with like/sort support
 - [x] `place_providers.dart` — Riverpod providers: feed, detail, top-rated, similar, search, saved
 - [x] `review_providers.dart` — Riverpod providers: place reviews, user reviews, submit notifier
+- [x] `discovery_providers.dart` — Riverpod: DiscoveryFiltersNotifier, filteredFeedProvider, feedTabProvider
+- [x] `hive_cache_service.dart` — Hive offline cache: saved place IDs (permanent), feed (2h TTL), place detail (6h TTL)
+- [x] `time_utils.dart` — `formatTimeAgo()` via `timeago` package, `formatDate()` helper
 
 ### Map Feature
 - [ ] Map screen with Google Maps (pending Firebase/Maps SDK setup)
@@ -161,7 +165,7 @@ Flutter + Firebase + Google Maps. Android-first.
 - [ ] Events (Ramadan special, live music)
 - [ ] RSVP + share event
 - [ ] JO3T Score algorithm (Cloud Function)
-- [ ] Offline mode (Hive cache for saved places)
+- [x] Offline mode (Hive cache for saved places — `HiveCacheService` with TTL-based invalidation)
 - [ ] iOS release (App Store)
 
 ---
@@ -235,4 +239,4 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ---
 
-*Last updated: 2026-05-14 (Phase 2 social layer substantially complete)*
+*Last updated: 2026-05-14 (Phase 2 + clean architecture layer complete; `cached_network_image`, `timeago`, Hive, empty states all wired)*
