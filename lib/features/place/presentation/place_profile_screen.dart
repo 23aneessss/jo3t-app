@@ -1308,12 +1308,12 @@ class _ShareSheetState extends State<_ShareSheet> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                child: Image.network(
-                  place.coverUrl,
+                child: CachedNetworkImage(
+                  imageUrl: place.coverUrl,
                   width: 56,
                   height: 56,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, _) =>
+                  errorWidget: (context, url, error) =>
                       Container(width: 56, height: 56, color: AppColors.neutral100),
                 ),
               ),
