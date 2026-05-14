@@ -355,7 +355,7 @@ class _AllReviewsScreenState extends ConsumerState<AllReviewsScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(Icons.reply_rounded,
-                                      size: 14, color: AppColors.neutral400),
+                                      size: 14, color: AppColors.neutral300),
                                   const SizedBox(width: 4),
                                   Text(
                                     _ownerReplies.containsKey(review.id)
