@@ -252,4 +252,17 @@ Flutter + Firebase + Google Maps. Android-first.
 
 ---
 
-*Last updated: 2026-05-14 (Full domain/data layer complete across all features; connectivity, error states, auth/wilaya/add-place providers all wired)*
+### Profile Feature (enhanced)
+- [x] Edit profile screen — `/edit-profile`, avatar photo picker, display name + username + bio fields, wilaya selector, Save action
+- [x] Settings "Edit" button wired to `/edit-profile`
+
+### Discovery Feed (enhanced)
+- [x] Pull-to-refresh on feed — `RefreshIndicator` with 1.4s mock reload and loading state reset
+
+### Venue Owner Flow (complete)
+- [x] Venue dashboard screen — `/venue-dashboard/:id`, score/reviews/saves stats, quick-action cards (Manage listing, All reviews, View listing), recent reviews list, score trend bar chart
+- [x] Full owner flow: Claim → Verify → Submit → "Manage" SnackBar action → Dashboard or Manage listing
+
+---
+
+*Last updated: 2026-05-15 (Edit profile, venue dashboard, pull-to-refresh, all routes wired; 88% complete — remaining 20 items are Firebase-blocked)*
