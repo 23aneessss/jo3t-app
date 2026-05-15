@@ -23,16 +23,56 @@ class _SearchScreenState extends State<SearchScreen> {
   String _query = '';
   bool _searching = false;
 
+  // Filters
+  String? _filterCategory;
+  PriceRange? _filterPrice;
+  double _filterMinScore = 0;
+  bool _filterOpenNow = false;
+
+  bool get _hasFilters =>
+      _filterCategory != null ||
+      _filterPrice != null ||
+      _filterMinScore > 0 ||
+      _filterOpenNow;
+
   List<PlaceModel> get _results {
     if (_query.trim().isEmpty) return [];
     final q = _query.toLowerCase();
-    return MockData.places
-        .where((p) =>
-            p.name.toLowerCase().contains(q) ||
-            p.category.label.toLowerCase().contains(q) ||
-            p.wilaya.toLowerCase().contains(q) ||
-            p.neighborhood.toLowerCase().contains(q))
-        .toList();
+    return MockData.places.where((p) {
+      final matchQuery = p.name.toLowerCase().contains(q) ||
+          p.category.label.toLowerCase().contains(q) ||
+          p.wilaya.toLowerCase().contains(q) ||
+          p.neighborhood.toLowerCase().contains(q);
+      if (!matchQuery) return false;
+      if (_filterCategory != null &&
+          p.category.label != _filterCategory) return false;
+      if (_filterPrice != null && p.priceRange != _filterPrice) return false;
+      if (_filterMinScore > 0 && p.score < _filterMinScore) return false;
+      if (_filterOpenNow && !p.isOpen) return false;
+      return true;
+    }).toList();
+  }
+
+  void _showFilters() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _FilterSheet(
+        category: _filterCategory,
+        price: _filterPrice,
+        minScore: _filterMinScore,
+        openNow: _filterOpenNow,
+        onApply: ({category, price, minScore, openNow}) {
+          setState(() {
+            _filterCategory = category;
+            _filterPrice = price;
+            _filterMinScore = minScore;
+            _filterOpenNow = openNow;
+          });
+        },
+      ),
+    );
   }
 
   static const _trending = [
