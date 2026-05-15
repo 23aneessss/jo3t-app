@@ -27,6 +27,7 @@ import '../../features/venue/presentation/manage_venue_screen.dart';
 import '../../features/venue/presentation/venue_dashboard_screen.dart';
 import '../../features/events/presentation/event_detail_screen.dart';
 import '../../features/profile/presentation/edit_profile_screen.dart';
+import '../../features/place/presentation/suggest_edits_screen.dart';
 import '../../shared/widgets/main_shell.dart';
 import '../constants/app_animations.dart';
 
@@ -173,6 +174,14 @@ final appRouter = GoRouter(
       pageBuilder: (context, state) {
         final id = state.pathParameters['id']!;
         return _slideUpPage(state, UserProfileScreen(userId: id));
+      },
+    ),
+    GoRoute(
+      path: '/suggest-edits/:placeId',
+      pageBuilder: (context, state) {
+        final id = state.pathParameters['placeId']!;
+        final name = (state.extra as Map<String, dynamic>?)?['name'] as String? ?? '';
+        return _slideUpPage(state, SuggestEditsScreen(placeId: id, placeName: name));
       },
     ),
     GoRoute(

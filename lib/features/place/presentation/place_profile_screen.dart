@@ -78,6 +78,9 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
                 _buildRatingBreakdown(context, place),
                 _buildReviewsSection(context),
                 _buildMutualRecs(context),
+                _buildTags(place),
+                _buildOpeningHours(context, place),
+                _buildSuggestEdits(context, place),
                 _buildSimilarPlaces(context, place),
                 _buildClaimSection(context, place),
                 const SizedBox(height: 100),
@@ -714,6 +717,252 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
         .animate(delay: 150.ms)
         .fadeIn(duration: AppAnimations.normal)
         .slideY(begin: 0.06, end: 0, curve: AppAnimations.enter, duration: AppAnimations.normal);
+  }
+
+  Widget _buildTags(PlaceModel place) {
+    final tags = _tagsForCategory(place.category);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+          AppSizes.screenHorizontalPadding, AppSizes.s24,
+          AppSizes.screenHorizontalPadding, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Features',
+                  style: TextStyle(
+                    color: AppColors.neutral900,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                  ))
+              .animate(delay: 80.ms)
+              .fadeIn(duration: AppAnimations.normal),
+          const SizedBox(height: AppSizes.s12),
+          Wrap(
+            spacing: AppSizes.s8,
+            runSpacing: AppSizes.s8,
+            children: tags.asMap().entries.map((e) {
+              return Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.s12, vertical: AppSizes.s6),
+                decoration: BoxDecoration(
+                  color: AppColors.neutral50,
+                  borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                  border: Border.all(color: AppColors.neutral200),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(e.value.$2, size: 13, color: AppColors.neutral500),
+                    const SizedBox(width: 5),
+                    Text(e.value.$1,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.neutral700,
+                        )),
+                  ],
+                ),
+              )
+                  .animate(
+                      delay: Duration(milliseconds: 100 + e.key * 40))
+                  .fadeIn(duration: AppAnimations.normal)
+                  .scale(
+                    begin: const Offset(0.85, 0.85),
+                    end: const Offset(1, 1),
+                    duration: AppAnimations.normal,
+                    curve: AppAnimations.overshoot,
+                  );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<(String, IconData)> _tagsForCategory(PlaceCategory cat) {
+    const shared = [
+      ('WiFi', Icons.wifi_rounded),
+      ('Air-conditioned', Icons.ac_unit_rounded),
+      ('Family-friendly', Icons.family_restroom_rounded),
+    ];
+    return switch (cat) {
+      PlaceCategory.restaurant => [
+          ('Halal', Icons.verified_outlined),
+          ('Outdoor seating', Icons.deck_outlined),
+          ('Reservations', Icons.event_available_outlined),
+          ...shared,
+        ],
+      PlaceCategory.cafe => [
+          ('Quiet atmosphere', Icons.volume_off_outlined),
+          ('Work-friendly', Icons.laptop_outlined),
+          ('Outdoor seating', Icons.deck_outlined),
+          ...shared,
+        ],
+      PlaceCategory.patisserie => [
+          ('Takeaway', Icons.shopping_bag_outlined),
+          ('Fresh daily', Icons.star_outline_rounded),
+          ...shared,
+        ],
+      _ => [
+          ('Takeaway', Icons.shopping_bag_outlined),
+          ('Open late', Icons.nightlight_outlined),
+          ...shared,
+        ],
+    };
+  }
+
+  Widget _buildOpeningHours(BuildContext context, PlaceModel place) {
+    const hours = [
+      (day: 'Monday', open: '09:00', close: '22:00', isOpen: true),
+      (day: 'Tuesday', open: '09:00', close: '22:00', isOpen: true),
+      (day: 'Wednesday', open: '09:00', close: '22:00', isOpen: true),
+      (day: 'Thursday', open: '09:00', close: '22:00', isOpen: true),
+      (day: 'Friday', open: '12:00', close: '23:30', isOpen: true),
+      (day: 'Saturday', open: '10:00', close: '23:00', isOpen: true),
+      (day: 'Sunday', open: '', close: '', isOpen: false),
+    ];
+
+    final now = DateTime.now();
+    final todayIndex = now.weekday - 1; // 0=Mon
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+          AppSizes.screenHorizontalPadding, AppSizes.s24,
+          AppSizes.screenHorizontalPadding, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Opening hours',
+                  style: TextStyle(
+                    color: AppColors.neutral900,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                  )),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.s10, vertical: 3),
+                decoration: BoxDecoration(
+                  color: place.isOpen
+                      ? AppColors.success.withValues(alpha: 0.1)
+                      : AppColors.error.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                ),
+                child: Text(
+                  place.isOpen ? 'Open now' : 'Closed',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: place.isOpen ? AppColors.success : AppColors.error,
+                  ),
+                ),
+              ),
+            ],
+          )
+              .animate(delay: 100.ms)
+              .fadeIn(duration: AppAnimations.normal),
+          const SizedBox(height: AppSizes.s12),
+          Container(
+            padding: const EdgeInsets.all(AppSizes.s16),
+            decoration: BoxDecoration(
+              color: AppColors.neutral0,
+              borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+              border: Border.all(color: AppColors.neutral100),
+            ),
+            child: Column(
+              children: hours.asMap().entries.map((e) {
+                final h = e.value;
+                final isToday = e.key == todayIndex;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 90,
+                        child: Text(h.day,
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: isToday
+                                  ? FontWeight.w700
+                                  : FontWeight.w400,
+                              color: isToday
+                                  ? AppColors.neutral900
+                                  : AppColors.neutral500,
+                            )),
+                      ),
+                      Expanded(
+                        child: Text(
+                          h.isOpen ? '${h.open} — ${h.close}' : 'Closed',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: isToday
+                                ? FontWeight.w600
+                                : FontWeight.w400,
+                            color: h.isOpen
+                                ? (isToday
+                                    ? AppColors.neutral900
+                                    : AppColors.neutral500)
+                                : AppColors.error.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ),
+                      if (isToday)
+                        Container(
+                          width: 6,
+                          height: 6,
+                          decoration: BoxDecoration(
+                            color: place.isOpen
+                                ? AppColors.success
+                                : AppColors.error,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          )
+              .animate(delay: 150.ms)
+              .fadeIn(duration: AppAnimations.normal)
+              .slideY(begin: 0.05, end: 0),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSuggestEdits(BuildContext context, PlaceModel place) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+          AppSizes.screenHorizontalPadding, AppSizes.s20,
+          AppSizes.screenHorizontalPadding, 0),
+      child: GestureDetector(
+        onTap: () => context.push(
+          '/suggest-edits/${place.id}',
+          extra: {'name': place.name},
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.edit_note_rounded,
+                size: 16, color: AppColors.neutral300),
+            const SizedBox(width: AppSizes.s6),
+            Text(
+              'Suggest an edit to this place',
+              style: TextStyle(
+                fontSize: 13,
+                color: AppColors.neutral500,
+                decoration: TextDecoration.underline,
+                decorationColor: AppColors.neutral300,
+              ),
+            ),
+          ],
+        ),
+      ),
+    )
+        .animate(delay: 200.ms)
+        .fadeIn(duration: AppAnimations.normal);
   }
 
   Widget _buildSimilarPlaces(BuildContext context, PlaceModel place) {
