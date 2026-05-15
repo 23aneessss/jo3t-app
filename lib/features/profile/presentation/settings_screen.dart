@@ -249,21 +249,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppSizes.s12, vertical: AppSizes.s6),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(AppSizes.radiusFull),
-              border:
-                  Border.all(color: Colors.white.withValues(alpha: 0.3)),
-            ),
-            child: const Text(
-              'Edit',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+          GestureDetector(
+            onTap: () => context.push('/edit-profile'),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSizes.s12, vertical: AppSizes.s6),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                border:
+                    Border.all(color: Colors.white.withValues(alpha: 0.3)),
+              ),
+              child: const Text(
+                'Edit',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

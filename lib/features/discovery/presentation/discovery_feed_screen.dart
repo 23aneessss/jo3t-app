@@ -140,10 +140,20 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
     });
   }
 
+  Future<void> _onRefresh() async {
+    setState(() => _loading = true);
+    await Future.delayed(const Duration(milliseconds: 1400));
+    if (mounted) setState(() => _loading = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        color: AppColors.primary,
+        displacement: 80,
+        child: CustomScrollView(
         slivers: [
           _buildAppBar(context),
           _buildTabSwitcher(),
@@ -156,6 +166,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
           if (_activeTab == 0) _buildNearbySection(),
           if (_activeTab == 1) _buildFollowingFeed(),
         ],
+      ),
       ),
     );
   }
