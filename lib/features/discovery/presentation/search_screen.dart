@@ -1123,8 +1123,8 @@ class _FilterSheet extends StatefulWidget {
   final void Function({
     String? category,
     PriceRange? price,
-    required double minScore,
-    required bool openNow,
+    double minScore,
+    bool openNow,
   }) onApply;
 
   @override

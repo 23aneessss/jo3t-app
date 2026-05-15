@@ -32,7 +32,6 @@ class _SuggestEditsScreenState extends State<SuggestEditsScreen> {
   late PlaceCategory _category;
   late PriceRange _price;
   bool _isOpen = true;
-  final Set<String> _changes = {};
 
   @override
   void initState() {
