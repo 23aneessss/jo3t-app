@@ -43,12 +43,12 @@ class _SearchScreenState extends State<SearchScreen> {
           p.category.label.toLowerCase().contains(q) ||
           p.wilaya.toLowerCase().contains(q) ||
           p.neighborhood.toLowerCase().contains(q);
-      if (!matchQuery) return false;
+      if (!matchQuery) { return false; }
       if (_filterCategory != null &&
-          p.category.label != _filterCategory) return false;
-      if (_filterPrice != null && p.priceRange != _filterPrice) return false;
-      if (_filterMinScore > 0 && p.score < _filterMinScore) return false;
-      if (_filterOpenNow && !p.isOpen) return false;
+          p.category.label != _filterCategory) { return false; }
+      if (_filterPrice != null && p.priceRange != _filterPrice) { return false; }
+      if (_filterMinScore > 0 && p.score < _filterMinScore) { return false; }
+      if (_filterOpenNow && !p.isOpen) { return false; }
       return true;
     }).toList();
   }
@@ -63,7 +63,7 @@ class _SearchScreenState extends State<SearchScreen> {
         price: _filterPrice,
         minScore: _filterMinScore,
         openNow: _filterOpenNow,
-        onApply: ({category, price, minScore, openNow}) {
+        onApply: ({category, price, minScore = 0, openNow = false}) {
           setState(() {
             _filterCategory = category;
             _filterPrice = price;
@@ -148,8 +148,63 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             // Divider
             const Divider(height: 1, color: AppColors.neutral100),
-            // Tab switcher
-            _buildSearchTabs(),
+            // Tab switcher + filter
+            Row(
+              children: [
+                Expanded(child: _buildSearchTabs()),
+                if (_searchTab == 0)
+                  Padding(
+                    padding: const EdgeInsets.only(right: AppSizes.s12),
+                    child: GestureDetector(
+                      onTap: _showFilters,
+                      child: AnimatedContainer(
+                        duration: AppAnimations.fast,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSizes.s10, vertical: AppSizes.s6),
+                        decoration: BoxDecoration(
+                          color: _hasFilters
+                              ? AppColors.primary
+                              : AppColors.neutral100,
+                          borderRadius:
+                              BorderRadius.circular(AppSizes.radiusFull),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.tune_rounded,
+                                size: 14,
+                                color: _hasFilters
+                                    ? Colors.white
+                                    : AppColors.neutral700),
+                            const SizedBox(width: 4),
+                            Text('Filter',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: _hasFilters
+                                      ? Colors.white
+                                      : AppColors.neutral700,
+                                )),
+                            if (_hasFilters) ...[
+                              const SizedBox(width: 4),
+                              GestureDetector(
+                                onTap: () => setState(() {
+                                  _filterCategory = null;
+                                  _filterPrice = null;
+                                  _filterMinScore = 0;
+                                  _filterOpenNow = false;
+                                }),
+                                child: const Icon(Icons.close_rounded,
+                                    size: 13, color: Colors.white),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
             const Divider(height: 1, color: AppColors.neutral100),
             // Body
             Expanded(
@@ -1048,5 +1103,282 @@ class _UserCardState extends State<_UserCard> {
           curve: AppAnimations.enter,
           duration: AppAnimations.normal,
         );
+  }
+}
+
+// ---- Filter Sheet ----
+
+class _FilterSheet extends StatefulWidget {
+  const _FilterSheet({
+    required this.category,
+    required this.price,
+    required this.minScore,
+    required this.openNow,
+    required this.onApply,
+  });
+  final String? category;
+  final PriceRange? price;
+  final double minScore;
+  final bool openNow;
+  final void Function({
+    String? category,
+    PriceRange? price,
+    required double minScore,
+    required bool openNow,
+  }) onApply;
+
+  @override
+  State<_FilterSheet> createState() => _FilterSheetState();
+}
+
+class _FilterSheetState extends State<_FilterSheet> {
+  late String? _category;
+  late PriceRange? _price;
+  late double _minScore;
+  late bool _openNow;
+
+  static const _categories = [
+    'Restaurant', 'Café', 'Patisserie', 'Street Food', 'Juice Bar', 'Sandwich'
+  ];
+  static const _scores = [
+    (label: 'Any', value: 0.0),
+    (label: '5+', value: 5.0),
+    (label: '7+', value: 7.0),
+    (label: '8+', value: 8.0),
+    (label: '9+', value: 9.0),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _category = widget.category;
+    _price = widget.price;
+    _minScore = widget.minScore;
+    _openNow = widget.openNow;
+  }
+
+  void _apply() {
+    widget.onApply(
+      category: _category,
+      price: _price,
+      minScore: _minScore,
+      openNow: _openNow,
+    );
+    Navigator.pop(context);
+  }
+
+  void _reset() => setState(() {
+        _category = null;
+        _price = null;
+        _minScore = 0;
+        _openNow = false;
+      });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      padding: EdgeInsets.fromLTRB(
+          AppSizes.s20, AppSizes.s16, AppSizes.s20,
+          AppSizes.s20 + MediaQuery.of(context).viewInsets.bottom),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Handle + header
+          Center(
+            child: Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                  color: AppColors.neutral200,
+                  borderRadius: BorderRadius.circular(2)),
+            ),
+          ),
+          const SizedBox(height: AppSizes.s16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Filter results',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.neutral900)),
+              TextButton(
+                onPressed: _reset,
+                child: const Text('Reset',
+                    style: TextStyle(color: AppColors.neutral500)),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: AppSizes.s20),
+
+          // Category
+          const Text('Category',
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.neutral700)),
+          const SizedBox(height: AppSizes.s10),
+          Wrap(
+            spacing: AppSizes.s8,
+            runSpacing: AppSizes.s8,
+            children: _categories.map((cat) {
+              final selected = _category == cat;
+              return GestureDetector(
+                onTap: () =>
+                    setState(() => _category = selected ? null : cat),
+                child: AnimatedContainer(
+                  duration: AppAnimations.fast,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.s12, vertical: AppSizes.s6),
+                  decoration: BoxDecoration(
+                    color: selected ? AppColors.primary : AppColors.neutral100,
+                    borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                  ),
+                  child: Text(cat,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: selected ? Colors.white : AppColors.neutral700,
+                      )),
+                ),
+              );
+            }).toList(),
+          ),
+
+          const SizedBox(height: AppSizes.s20),
+
+          // Price
+          const Text('Price range',
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.neutral700)),
+          const SizedBox(height: AppSizes.s10),
+          Row(
+            children: PriceRange.values.map((p) {
+              final selected = _price == p;
+              return Padding(
+                padding: const EdgeInsets.only(right: AppSizes.s8),
+                child: GestureDetector(
+                  onTap: () =>
+                      setState(() => _price = selected ? null : p),
+                  child: AnimatedContainer(
+                    duration: AppAnimations.fast,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.s16, vertical: AppSizes.s8),
+                    decoration: BoxDecoration(
+                      color: selected
+                          ? AppColors.primary
+                          : AppColors.neutral100,
+                      borderRadius:
+                          BorderRadius.circular(AppSizes.radiusFull),
+                    ),
+                    child: Text(p.label,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: selected ? Colors.white : AppColors.neutral700,
+                        )),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+
+          const SizedBox(height: AppSizes.s20),
+
+          // Min score
+          const Text('Minimum score',
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.neutral700)),
+          const SizedBox(height: AppSizes.s10),
+          Row(
+            children: _scores.map((s) {
+              final selected = _minScore == s.value;
+              return Padding(
+                padding: const EdgeInsets.only(right: AppSizes.s8),
+                child: GestureDetector(
+                  onTap: () => setState(() => _minScore = s.value),
+                  child: AnimatedContainer(
+                    duration: AppAnimations.fast,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.s12, vertical: AppSizes.s6),
+                    decoration: BoxDecoration(
+                      color: selected
+                          ? AppColors.primary
+                          : AppColors.neutral100,
+                      borderRadius:
+                          BorderRadius.circular(AppSizes.radiusFull),
+                    ),
+                    child: Text(s.label,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: selected ? Colors.white : AppColors.neutral700,
+                        )),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+
+          const SizedBox(height: AppSizes.s20),
+
+          // Open now
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text('Open now',
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.neutral700)),
+                    Text('Only show currently open places',
+                        style: TextStyle(
+                            fontSize: 12, color: AppColors.neutral500)),
+                  ],
+                ),
+              ),
+              Switch(
+                value: _openNow,
+                onChanged: (v) => setState(() => _openNow = v),
+                activeTrackColor: AppColors.primary,
+                activeThumbColor: Colors.white,
+              ),
+            ],
+          ),
+
+          const SizedBox(height: AppSizes.s24),
+
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(AppSizes.radiusMd)),
+              ),
+              onPressed: _apply,
+              child: const Text('Apply filters',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
