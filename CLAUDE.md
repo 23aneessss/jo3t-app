@@ -263,6 +263,14 @@ Flutter + Firebase + Google Maps. Android-first.
 - [x] Venue dashboard screen — `/venue-dashboard/:id`, score/reviews/saves stats, quick-action cards (Manage listing, All reviews, View listing), recent reviews list, score trend bar chart
 - [x] Full owner flow: Claim → Verify → Submit → "Manage" SnackBar action → Dashboard or Manage listing
 
+### Place Profile (further enhanced)
+- [x] Place tags/features — category-specific attribute chips (Halal, WiFi, Outdoor seating, etc.) with staggered scale animation
+- [x] Full opening hours table — 7-day schedule with today highlighted, open/closed dot indicator
+- [x] "Suggest edits" link → `/suggest-edits/:id` screen with pre-filled name/address/category/price/status fields
+
+### Search (enhanced)
+- [x] Search filters — Filter button with active state; bottom sheet with category, price range, min score, open-now toggle; real-time filtering applied to results; one-tap reset
+
 ---
 
 *Last updated: 2026-05-15 (Edit profile, venue dashboard, pull-to-refresh, all routes wired; 88% complete — remaining 20 items are Firebase-blocked)*
