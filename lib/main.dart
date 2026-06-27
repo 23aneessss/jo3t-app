@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +19,12 @@ void main() async {
   if (AppEnv.useFirebase) {
     await FirebaseService.initialize();
     await FcmService.initialize();
+    // In debug, let Firebase phone-auth *test numbers* work on the iOS Simulator
+    // / Android emulator without real SMS, APNs, or reCAPTCHA.
+    if (kDebugMode) {
+      await FirebaseAuth.instance
+          .setSettings(appVerificationDisabledForTesting: true);
+    }
   }
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
