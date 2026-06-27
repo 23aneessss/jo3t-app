@@ -318,6 +318,8 @@ class _ProfileHeader extends StatelessWidget {
                       duration: AppAnimations.normal,
                       curve: AppAnimations.enter,
                     ),
+
+                const SizedBox(height: AppSizes.s16),
               ],
             ),
           ),
