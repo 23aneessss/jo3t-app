@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     return SliverOverlapAbsorber(
       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
       sliver: SliverAppBar(
-        expandedHeight: 390,
+        expandedHeight: 448,
         pinned: true,
         floating: false,
         forceElevated: innerBoxIsScrolled,
@@ -138,7 +138,7 @@ class _ProfileHeader extends StatelessWidget {
             child: Column(
               children: [
                 // Space for toolbar
-                const SizedBox(height: 56),
+                const SizedBox(height: 48),
 
                 // Avatar
                 Stack(
