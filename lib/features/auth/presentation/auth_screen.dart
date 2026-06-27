@@ -1,12 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
+import 'providers/auth_providers.dart';
 
-class AuthScreen extends StatelessWidget {
+class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
+
+  @override
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends ConsumerState<AuthScreen> {
+  Future<void> _startPhoneAuth() async {
+    final result = await showModalBottomSheet<Map<String, String>>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => const _PhoneEntrySheet(),
+    );
+    if (result != null && mounted) {
+      context.push('/verify-phone', extra: result);
+    }
+  }
+
+  void _googleComingSoon() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Google Sign-In is coming soon — use phone for now.'),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +105,7 @@ class AuthScreen extends StatelessWidget {
                 label: 'Continue with Google',
                 icon: Icons.g_mobiledata,
                 iconColor: const Color(0xFF4285F4),
-                onTap: () => context.go('/wilaya-select'),
+                onTap: _googleComingSoon,
               )
                   .animate(delay: const Duration(milliseconds: 200))
                   .fadeIn(duration: AppAnimations.normal)
@@ -91,7 +122,7 @@ class AuthScreen extends StatelessWidget {
                 label: 'Continue with phone',
                 icon: Icons.phone_outlined,
                 iconColor: AppColors.neutral700,
-                onTap: () => context.push('/verify-phone'),
+                onTap: _startPhoneAuth,
               )
                   .animate(delay: const Duration(milliseconds: 260))
                   .fadeIn(duration: AppAnimations.normal)
@@ -142,6 +173,150 @@ class AuthScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Bottom sheet that collects a phone number and requests an OTP.
+/// Pops with `{phone, verificationId}` on success.
+class _PhoneEntrySheet extends ConsumerStatefulWidget {
+  const _PhoneEntrySheet();
+
+  @override
+  ConsumerState<_PhoneEntrySheet> createState() => _PhoneEntrySheetState();
+}
+
+class _PhoneEntrySheetState extends ConsumerState<_PhoneEntrySheet> {
+  final _controller = TextEditingController(text: '+213');
+  bool _sending = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _send() async {
+    final phone = _controller.text.replaceAll(' ', '').trim();
+    if (phone.length < 8) {
+      setState(() => _error = 'Enter a valid phone number');
+      return;
+    }
+    setState(() {
+      _sending = true;
+      _error = null;
+    });
+    final id = await ref.read(authNotifierProvider.notifier).sendOtp(phone);
+    if (!mounted) return;
+    if (id == null) {
+      setState(() {
+        _sending = false;
+        _error = 'Could not send the code. Check the number and try again.';
+      });
+      return;
+    }
+    Navigator.pop(context, {'phone': phone, 'verificationId': id});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(24, 16, 24, 24 + bottomInset),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.neutral200,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSizes.s24),
+          const Text(
+            'Enter your phone number',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: AppColors.neutral900,
+              letterSpacing: -0.5,
+            ),
+          ),
+          const SizedBox(height: AppSizes.s8),
+          const Text(
+            'We\'ll send you a 6-digit verification code.',
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.neutral500,
+            ),
+          ),
+          const SizedBox(height: AppSizes.s20),
+          TextField(
+            controller: _controller,
+            autofocus: true,
+            keyboardType: TextInputType.phone,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9+ ]')),
+            ],
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.neutral900,
+            ),
+            decoration: InputDecoration(
+              hintText: '+213 555 000 000',
+              filled: true,
+              fillColor: AppColors.neutral50,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                borderSide: BorderSide.none,
+              ),
+              errorText: _error,
+            ),
+            onSubmitted: (_) => _send(),
+          ),
+          const SizedBox(height: AppSizes.s20),
+          GestureDetector(
+            onTap: _sending ? null : _send,
+            child: AnimatedContainer(
+              duration: AppAnimations.fast,
+              height: AppSizes.buttonHeight,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [AppColors.primary, AppColors.primaryDark],
+                ),
+                borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+              ),
+              child: Center(
+                child: _sending
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : const Text(
+                        'Send code',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

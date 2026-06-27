@@ -2,20 +2,30 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
+import 'providers/auth_providers.dart';
 
-class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+class OtpScreen extends ConsumerStatefulWidget {
+  const OtpScreen({
+    super.key,
+    required this.phone,
+    required this.verificationId,
+  });
+
+  final String phone;
+  final String verificationId;
 
   @override
-  State<OtpScreen> createState() => _OtpScreenState();
+  ConsumerState<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen>
+class _OtpScreenState extends ConsumerState<OtpScreen>
     with SingleTickerProviderStateMixin {
+  late String _verificationId = widget.verificationId;
   final _controller = TextEditingController();
   final _focus = FocusNode();
   String _otp = '';
@@ -74,8 +84,26 @@ class _OtpScreenState extends State<OtpScreen>
   Future<void> _verify() async {
     _focus.unfocus();
     setState(() => _verifying = true);
-    await Future.delayed(const Duration(milliseconds: 1400));
+
+    final ok = await ref.read(authNotifierProvider.notifier).verifyOtp(
+          verificationId: _verificationId,
+          otp: _otp,
+        );
     if (!mounted) return;
+
+    if (!ok) {
+      _controller.clear();
+      setState(() {
+        _verifying = false;
+        _otp = '';
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid or expired code. Try again.')),
+      );
+      _focus.requestFocus();
+      return;
+    }
+
     setState(() {
       _verifying = false;
       _verified = true;
@@ -134,7 +162,7 @@ class _OtpScreenState extends State<OtpScreen>
               const SizedBox(height: AppSizes.s8),
 
               Text(
-                'Enter the 6-digit code sent to\n+213 ••• ••• ••42',
+                'Enter the 6-digit code sent to\n${widget.phone}',
                 style: const TextStyle(
                   fontSize: 15,
                   color: AppColors.neutral500,
@@ -181,7 +209,12 @@ class _OtpScreenState extends State<OtpScreen>
                           ),
                         )
                       : GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            final id = await ref
+                                .read(authNotifierProvider.notifier)
+                                .sendOtp(widget.phone);
+                            if (!mounted) return;
+                            if (id != null) _verificationId = id;
                             _startResendTimer();
                             _controller.clear();
                             setState(() => _otp = '');

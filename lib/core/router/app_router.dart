@@ -51,8 +51,16 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/verify-phone',
-      pageBuilder: (context, state) =>
-          _slideUpPage(state, const OtpScreen()),
+      pageBuilder: (context, state) {
+        final extra = state.extra as Map<String, String>?;
+        return _slideUpPage(
+          state,
+          OtpScreen(
+            phone: extra?['phone'] ?? '',
+            verificationId: extra?['verificationId'] ?? '',
+          ),
+        );
+      },
     ),
     GoRoute(
       path: '/wilaya-select',
