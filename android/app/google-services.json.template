@@ -1,0 +1,30 @@
+{
+  "_comment": "TEMPLATE — Run `flutterfire configure` to generate the real google-services.json for your Firebase project. Do NOT commit the real file.",
+  "project_info": {
+    "project_number": "YOUR_PROJECT_NUMBER",
+    "project_id": "jo3t-dev",
+    "storage_bucket": "jo3t-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:YOUR_PROJECT_NUMBER:android:YOUR_APP_HASH",
+        "android_client_info": {
+          "package_name": "com.jo3t.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "YOUR_ANDROID_API_KEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,45 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ── Helpers ──────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    function isUnder5MB() {
+      return request.resource.size <= 5 * 1024 * 1024;
+    }
+
+    // ── Avatars ───────────────────────────────────────────────────────────
+    match /avatars/{userId}.jpg {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() &&
+        request.auth.uid == userId &&
+        isImage() &&
+        isUnder5MB();
+    }
+
+    // ── Place photos ──────────────────────────────────────────────────────
+    match /places/{placeId}/{fileName} {
+      allow read: if isSignedIn();
+      // Any authenticated user can upload photos for a place submission
+      allow write: if isSignedIn() && isImage() && isUnder5MB();
+    }
+
+    // ── Review photos ─────────────────────────────────────────────────────
+    match /reviews/{reviewId}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && isImage() && isUnder5MB();
+    }
+
+    // Block all other paths
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,16 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/config/app_env.dart';
+import '../../data/repositories/firestore_review_repository.dart';
 import '../../data/repositories/mock_review_repository.dart';
 import '../../domain/entities/review_entity.dart';
 import '../../domain/repositories/review_repository.dart';
 import '../../domain/usecases/get_reviews_usecase.dart';
 import '../../domain/usecases/submit_review_usecase.dart';
 
-// Repository provider
 final reviewRepositoryProvider = Provider<ReviewRepository>(
-  (_) => MockReviewRepository(),
+  (_) => AppEnv.useFirebase
+      ? FirestoreReviewRepository()
+      : MockReviewRepository(),
 );
 
-// Use case providers
 final getReviewsUseCaseProvider = Provider(
   (ref) => GetReviewsUseCase(ref.watch(reviewRepositoryProvider)),
 );
@@ -19,10 +21,10 @@ final submitReviewUseCaseProvider = Provider(
   (ref) => SubmitReviewUseCase(ref.watch(reviewRepositoryProvider)),
 );
 
-// Reviews for a place, with sort order
 typedef ReviewsParams = ({String placeId, ReviewSortOrder sortOrder});
 
-final placeReviewsProvider = FutureProvider.family<List<ReviewEntity>, ReviewsParams>(
+final placeReviewsProvider =
+    FutureProvider.family<List<ReviewEntity>, ReviewsParams>(
   (ref, params) async {
     final useCase = ref.watch(getReviewsUseCaseProvider);
     final result = await useCase(
@@ -36,8 +38,8 @@ final placeReviewsProvider = FutureProvider.family<List<ReviewEntity>, ReviewsPa
   },
 );
 
-// Reviews by user
-final userReviewsProvider = FutureProvider.family<List<ReviewEntity>, String>(
+final userReviewsProvider =
+    FutureProvider.family<List<ReviewEntity>, String>(
   (ref, userId) async {
     final repo = ref.watch(reviewRepositoryProvider);
     final result = await repo.getReviewsByUser(userId);
@@ -48,7 +50,6 @@ final userReviewsProvider = FutureProvider.family<List<ReviewEntity>, String>(
   },
 );
 
-// Submit review notifier
 class SubmitReviewNotifier extends AsyncNotifier<void> {
   @override
   Future<void> build() async {}
@@ -82,4 +83,5 @@ class SubmitReviewNotifier extends AsyncNotifier<void> {
 }
 
 final submitReviewNotifierProvider =
-    AsyncNotifierProvider<SubmitReviewNotifier, void>(SubmitReviewNotifier.new);
+    AsyncNotifierProvider<SubmitReviewNotifier, void>(
+        SubmitReviewNotifier.new);

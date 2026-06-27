@@ -1,20 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/config/app_env.dart';
+import '../../data/repositories/firebase_auth_repository.dart';
 import '../../data/repositories/mock_auth_repository.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>(
-  (_) => MockAuthRepository(),
+  (_) => AppEnv.useFirebase
+      ? FirebaseAuthRepository()
+      : MockAuthRepository(),
 );
 
-// Current authenticated user
 final currentUserProvider = FutureProvider<UserEntity?>((ref) async {
   final repo = ref.watch(authRepositoryProvider);
   final result = await repo.getCurrentUser();
   return result.fold((_) => null, (user) => user);
 });
 
-// Auth state notifier — handles sign in/out flows
 class AuthNotifier extends AsyncNotifier<UserEntity?> {
   @override
   Future<UserEntity?> build() async {
@@ -52,7 +54,9 @@ class AuthNotifier extends AsyncNotifier<UserEntity?> {
     state = const AsyncLoading();
     final repo = ref.read(authRepositoryProvider);
     final result = await repo.verifyOtp(
-        verificationId: verificationId, otp: otp);
+      verificationId: verificationId,
+      otp: otp,
+    );
     return result.fold(
       (failure) {
         state = AsyncError(failure.message, StackTrace.current);
@@ -75,7 +79,6 @@ class AuthNotifier extends AsyncNotifier<UserEntity?> {
 final authNotifierProvider =
     AsyncNotifierProvider<AuthNotifier, UserEntity?>(AuthNotifier.new);
 
-// Is the user authenticated?
 final isAuthenticatedProvider = Provider<bool>((ref) {
   return ref.watch(authNotifierProvider).maybeWhen(
         data: (user) => user != null,
@@ -83,7 +86,6 @@ final isAuthenticatedProvider = Provider<bool>((ref) {
       );
 });
 
-// Follow state notifier
 class FollowNotifier extends Notifier<Set<String>> {
   @override
   Set<String> build() => {};

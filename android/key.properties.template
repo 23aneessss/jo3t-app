@@ -1,0 +1,12 @@
+# Android release signing — copy this file to `key.properties` (same folder) and
+# fill in real values. The real key.properties + keystore are git-ignored.
+#
+# Generate an upload keystore first:
+#   keytool -genkey -v -keystore ~/jo3t-upload.jks -keyalg RSA -keysize 2048 \
+#     -validity 10000 -alias jo3t
+#
+storePassword=YOUR_KEYSTORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=jo3t
+# Absolute path to the .jks file (or relative to android/app/)
+storeFile=/Users/mac/jo3t-upload.jks

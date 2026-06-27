@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ──────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // ── Users ─────────────────────────────────────────────────────────────
+    match /users/{userId} {
+      // Anyone signed in can read public profiles
+      allow read: if isSignedIn();
+      // Only the owner can write their own document
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) &&
+        // Prevent users from tampering with jo3tPoints (set by Cloud Function)
+        !request.resource.data.diff(resource.data).affectedKeys()
+          .hasAny(['jo3tPoints']);
+      allow delete: if false;
+    }
+
+    // ── Places (approved) ─────────────────────────────────────────────────
+    match /places/{placeId} {
+      // Any signed-in user can read approved places
+      allow read: if isSignedIn() && resource.data.isApproved == true;
+      // Only Cloud Functions write to this collection (score calc, approval)
+      allow write: if false;
+    }
+
+    // ── Pending places ────────────────────────────────────────────────────
+    match /places_pending/{placeId} {
+      // Owner can read their own submissions
+      allow read: if isOwner(resource.data.submittedBy);
+      // Any signed-in user can submit a new place
+      allow create: if isSignedIn() &&
+        request.resource.data.submittedBy == request.auth.uid &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.isApproved == false;
+      // Owner can update only photos (after initial submit)
+      allow update: if isOwner(resource.data.submittedBy) &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['photos', 'coverPhotoUrl']);
+      allow delete: if false;
+    }
+
+    // ── Reviews ───────────────────────────────────────────────────────────
+    match /reviews/{reviewId} {
+      // Any signed-in user can read reviews
+      allow read: if isSignedIn();
+      // Author can submit, update, or delete their own review
+      allow create: if isSignedIn() &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.score >= 1 &&
+        request.resource.data.score <= 10;
+      allow update: if isOwner(resource.data.userId) &&
+        // Only allow editing text/photos, not score or likeCount
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['text', 'photos']);
+      allow delete: if isOwner(resource.data.userId);
+    }
+  }
+}

@@ -43,3 +43,23 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase secrets — use templates instead
+google-services.json
+GoogleService-Info.plist
+lib/firebase_options.dart
+
+# Signing / API key secrets — use templates instead
+key.properties
+android/key.properties
+**/*.keystore
+**/*.jks
+ios/Flutter/Secrets.xcconfig
+
+# Cloud Functions
+functions/node_modules/
+functions/lib/
+
+# Environment
+.env
+*.env.local

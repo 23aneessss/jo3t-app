@@ -1,0 +1,10 @@
+{
+  "projects": {
+    "default": "jo3t-dev",
+    "dev": "jo3t-dev",
+    "staging": "jo3t-staging",
+    "prod": "jo3t-prod"
+  },
+  "targets": {},
+  "etags": {}
+}

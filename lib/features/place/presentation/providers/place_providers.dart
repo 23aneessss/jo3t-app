@@ -1,16 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/config/app_env.dart';
+import '../../data/repositories/firestore_place_repository.dart';
 import '../../data/repositories/mock_place_repository.dart';
 import '../../domain/entities/place_entity.dart';
 import '../../domain/repositories/place_repository.dart';
 import '../../domain/usecases/get_place_by_id_usecase.dart';
 import '../../domain/usecases/get_places_usecase.dart';
 
-// Repository provider
 final placeRepositoryProvider = Provider<PlaceRepository>(
-  (_) => MockPlaceRepository(),
+  (_) => AppEnv.useFirebase
+      ? FirestorePlaceRepository()
+      : MockPlaceRepository(),
 );
 
-// Use case providers
 final getPlacesUseCaseProvider = Provider(
   (ref) => GetPlacesUseCase(ref.watch(placeRepositoryProvider)),
 );
@@ -19,8 +21,8 @@ final getPlaceByIdUseCaseProvider = Provider(
   (ref) => GetPlaceByIdUseCase(ref.watch(placeRepositoryProvider)),
 );
 
-// Feed places — filtered by category
-final feedPlacesProvider = FutureProvider.family<List<PlaceEntity>, PlaceCategoryEntity?>(
+final feedPlacesProvider =
+    FutureProvider.family<List<PlaceEntity>, PlaceCategoryEntity?>(
   (ref, category) async {
     final useCase = ref.watch(getPlacesUseCaseProvider);
     final result = await useCase(category: category);
@@ -31,8 +33,8 @@ final feedPlacesProvider = FutureProvider.family<List<PlaceEntity>, PlaceCategor
   },
 );
 
-// Single place detail
-final placeDetailProvider = FutureProvider.family<PlaceEntity, String>(
+final placeDetailProvider =
+    FutureProvider.family<PlaceEntity, String>(
   (ref, id) async {
     final useCase = ref.watch(getPlaceByIdUseCaseProvider);
     final result = await useCase(id);
@@ -43,8 +45,8 @@ final placeDetailProvider = FutureProvider.family<PlaceEntity, String>(
   },
 );
 
-// Top rated places
-final topRatedPlacesProvider = FutureProvider.family<List<PlaceEntity>, String?>(
+final topRatedPlacesProvider =
+    FutureProvider.family<List<PlaceEntity>, String?>(
   (ref, wilayaId) async {
     final repo = ref.watch(placeRepositoryProvider);
     final result = await repo.getTopRated(wilayaId: wilayaId, limit: 10);
@@ -55,10 +57,13 @@ final topRatedPlacesProvider = FutureProvider.family<List<PlaceEntity>, String?>
   },
 );
 
-// Similar places
-typedef SimilarPlacesParams = ({String placeId, PlaceCategoryEntity category});
+typedef SimilarPlacesParams = ({
+  String placeId,
+  PlaceCategoryEntity category
+});
 
-final similarPlacesProvider = FutureProvider.family<List<PlaceEntity>, SimilarPlacesParams>(
+final similarPlacesProvider =
+    FutureProvider.family<List<PlaceEntity>, SimilarPlacesParams>(
   (ref, params) async {
     final repo = ref.watch(placeRepositoryProvider);
     final result = await repo.getSimilarPlaces(
@@ -72,8 +77,8 @@ final similarPlacesProvider = FutureProvider.family<List<PlaceEntity>, SimilarPl
   },
 );
 
-// Search places
-final placeSearchProvider = FutureProvider.family<List<PlaceEntity>, String>(
+final placeSearchProvider =
+    FutureProvider.family<List<PlaceEntity>, String>(
   (ref, query) async {
     if (query.trim().isEmpty) return [];
     final repo = ref.watch(placeRepositoryProvider);
@@ -85,7 +90,6 @@ final placeSearchProvider = FutureProvider.family<List<PlaceEntity>, String>(
   },
 );
 
-// Saved places
 final savedPlacesProvider = FutureProvider<List<PlaceEntity>>(
   (ref) async {
     final repo = ref.watch(placeRepositoryProvider);

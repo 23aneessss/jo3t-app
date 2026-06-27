@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/config/app_env.dart';
+import '../../data/repositories/firebase_add_place_repository.dart';
 import '../../data/repositories/mock_add_place_repository.dart';
 import '../../domain/entities/new_place_entity.dart';
 import '../../domain/repositories/add_place_repository.dart';
@@ -6,14 +8,15 @@ import '../../domain/usecases/submit_place_usecase.dart';
 import '../../../place/domain/entities/place_entity.dart';
 
 final addPlaceRepositoryProvider = Provider<AddPlaceRepository>(
-  (_) => MockAddPlaceRepository(),
+  (_) => AppEnv.useFirebase
+      ? FirebaseAddPlaceRepository()
+      : MockAddPlaceRepository(),
 );
 
 final submitPlaceUseCaseProvider = Provider(
   (ref) => SubmitPlaceUseCase(ref.watch(addPlaceRepositoryProvider)),
 );
 
-// Form state
 class AddPlaceFormState {
   const AddPlaceFormState({
     this.name = '',
@@ -71,7 +74,7 @@ class AddPlaceFormState {
         0 => category != PlaceCategoryEntity.restaurant || name.isNotEmpty,
         1 => wilayaId.isNotEmpty && neighborhood.isNotEmpty,
         2 => address.isNotEmpty,
-        3 => true, // photos optional
+        3 => true,
         _ => false,
       };
 }
@@ -86,7 +89,8 @@ class AddPlaceFormNotifier extends Notifier<AddPlaceFormState> {
   void setWilaya(String v) => state = state.copyWith(wilayaId: v);
   void setNeighborhood(String v) => state = state.copyWith(neighborhood: v);
   void setAddress(String v) => state = state.copyWith(address: v);
-  void setPriceRange(PriceRangeEntity v) => state = state.copyWith(priceRange: v);
+  void setPriceRange(PriceRangeEntity v) =>
+      state = state.copyWith(priceRange: v);
   void setPhotos(List<String> paths) =>
       state = state.copyWith(photoPaths: List.unmodifiable(paths));
   void addPhoto(String path) =>
@@ -105,7 +109,6 @@ final addPlaceFormProvider =
   AddPlaceFormNotifier.new,
 );
 
-// Submit notifier
 class SubmitPlaceNotifier extends AsyncNotifier<void> {
   @override
   Future<void> build() async {}
@@ -129,4 +132,5 @@ class SubmitPlaceNotifier extends AsyncNotifier<void> {
 }
 
 final submitPlaceNotifierProvider =
-    AsyncNotifierProvider<SubmitPlaceNotifier, void>(SubmitPlaceNotifier.new);
+    AsyncNotifierProvider<SubmitPlaceNotifier, void>(
+        SubmitPlaceNotifier.new);
