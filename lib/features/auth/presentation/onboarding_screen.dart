@@ -5,6 +5,7 @@ import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../shared/widgets/primary_button.dart';
+import 'widgets/onboarding_art.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -19,19 +20,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final _pages = const [
     _OnboardingPage(
-      emoji: '🍽️',
+      art: DiscoverArt(),
       title: 'Discover real places',
       subtitle:
           'Find the best restaurants, cafés, and hidden gems across all 48 wilayas — recommended by real Algerians.',
     ),
     _OnboardingPage(
-      emoji: '⭐',
+      art: ReviewsArt(),
       title: 'Honest community reviews',
       subtitle:
           'No sponsored posts. No fake ratings. Just authentic reviews from people like you.',
     ),
     _OnboardingPage(
-      emoji: '📍',
+      art: WilayaArt(),
       title: 'Your wilaya, your feed',
       subtitle:
           'Get hyper-local picks from your city first. Then explore the whole country.',
@@ -128,12 +129,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
 class _OnboardingPage extends StatelessWidget {
   const _OnboardingPage({
-    required this.emoji,
+    required this.art,
     required this.title,
     required this.subtitle,
   });
 
-  final String emoji;
+  final Widget art;
   final String title;
   final String subtitle;
 
@@ -145,17 +146,17 @@ class _OnboardingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 80))
+          art
               .animate()
               .scale(
-                begin: const Offset(0.5, 0.5),
+                begin: const Offset(0.82, 0.82),
                 end: const Offset(1, 1),
                 duration: AppAnimations.medium,
                 curve: AppAnimations.overshoot,
               )
-              .fadeIn(duration: AppAnimations.fast),
+              .fadeIn(duration: AppAnimations.normal),
 
-          const SizedBox(height: AppSizes.s32),
+          const SizedBox(height: AppSizes.s48),
 
           Text(
             title,

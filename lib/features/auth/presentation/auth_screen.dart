@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
+import '../../../shared/widgets/jo3t_logo.dart';
 import 'providers/auth_providers.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
@@ -53,15 +54,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               const SizedBox(height: AppSizes.s48),
 
               // Header
-              Text(
-                'جعت',
-                style: const TextStyle(
-                  fontSize: 48,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primary,
-                  height: 1,
-                ),
-              )
+              const Jo3tWordmark(fontSize: 56, color: AppColors.primary)
                   .animate()
                   .fadeIn(duration: AppAnimations.normal)
                   .slideY(

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_animations.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../shared/widgets/jo3t_logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -75,41 +76,46 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Arabic logotype
-                Text(
-                  'جعت',
-                  style: TextStyle(
-                    fontSize: 80,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primary,
-                    height: 1,
-                  ),
-                )
+                // Brand mark
+                const Jo3tMark(size: 56, color: AppColors.primary)
                     .animate()
-                    .fadeIn(
-                      duration: AppAnimations.normal,
-                      curve: AppAnimations.enter,
-                    )
+                    .fadeIn(duration: AppAnimations.normal)
                     .scale(
-                      begin: const Offset(0.85, 0.85),
+                      begin: const Offset(0.7, 0.7),
                       end: const Offset(1, 1),
                       duration: AppAnimations.medium,
                       curve: AppAnimations.overshoot,
                     ),
 
-                const SizedBox(height: 12),
+                const SizedBox(height: 22),
+
+                // Arabic logotype (El Messiri)
+                const Jo3tWordmark(fontSize: 84, color: AppColors.primary)
+                    .animate(delay: const Duration(milliseconds: 120))
+                    .fadeIn(
+                      duration: AppAnimations.normal,
+                      curve: AppAnimations.enter,
+                    )
+                    .scale(
+                      begin: const Offset(0.88, 0.88),
+                      end: const Offset(1, 1),
+                      duration: AppAnimations.medium,
+                      curve: AppAnimations.overshoot,
+                    ),
+
+                const SizedBox(height: 16),
 
                 // Latin wordmark
-                Text(
+                const Text(
                   'JO3T',
-                  style: const TextStyle(
-                    fontSize: 22,
+                  style: TextStyle(
+                    fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: AppColors.neutral900,
-                    letterSpacing: 10,
+                    letterSpacing: 11,
                   ),
                 )
-                    .animate(delay: const Duration(milliseconds: 150))
+                    .animate(delay: const Duration(milliseconds: 250))
                     .fadeIn(duration: AppAnimations.normal)
                     .slideY(
                       begin: 0.3,
@@ -129,7 +135,7 @@ class _SplashScreenState extends State<SplashScreen>
                     letterSpacing: 0.5,
                   ),
                 )
-                    .animate(delay: const Duration(milliseconds: 280))
+                    .animate(delay: const Duration(milliseconds: 360))
                     .fadeIn(duration: AppAnimations.normal),
               ],
             ),
@@ -142,17 +148,9 @@ class _SplashScreenState extends State<SplashScreen>
               final opacity = ((_waveAnim.value - 0.6) / 0.4).clamp(0.0, 1.0);
               return Opacity(
                 opacity: opacity,
-                child: Align(
-                  alignment: const Alignment(0, 0.1),
-                  child: Text(
-                    'جعت',
-                    style: const TextStyle(
-                      fontSize: 80,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      height: 1,
-                    ),
-                  ),
+                child: const Align(
+                  alignment: Alignment(0, 0.1),
+                  child: Jo3tWordmark(fontSize: 84, color: Colors.white),
                 ),
               );
             },
