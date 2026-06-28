@@ -347,6 +347,7 @@ class _UserSuggestionCard extends StatelessWidget {
 
 
 
+        
           // Follow button
           GestureDetector(
             onTap: onFollow,
