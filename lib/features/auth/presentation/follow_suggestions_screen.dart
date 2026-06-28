@@ -345,6 +345,7 @@ class _UserSuggestionCard extends StatelessWidget {
 
           const SizedBox(width: AppSizes.s10),
 
+
           // Follow button
           GestureDetector(
             onTap: onFollow,
