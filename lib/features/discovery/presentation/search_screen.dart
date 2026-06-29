@@ -591,8 +591,21 @@ class _SearchBarState extends State<_SearchBar> {
         duration: AppAnimations.fast,
         height: 50,
         decoration: BoxDecoration(
-          color: _focused ? AppColors.neutral100 : AppColors.neutral50,
+          color: AppColors.neutral50,
           borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+          // Outer accent only — the orange focus ring.
+          border: Border.all(
+            color: _focused ? AppColors.primary : AppColors.neutral200,
+            width: _focused ? 1.5 : 1,
+          ),
+          boxShadow: _focused
+              ? [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.10),
+                    blurRadius: 14,
+                  ),
+                ]
+              : [],
         ),
         child: Row(
           children: [
@@ -600,7 +613,7 @@ class _SearchBarState extends State<_SearchBar> {
             Icon(
               Icons.search,
               size: AppSizes.iconInline,
-              color: _focused ? AppColors.neutral500 : AppColors.neutral300,
+              color: _focused ? AppColors.primary : AppColors.neutral300,
             ),
             const SizedBox(width: AppSizes.s10),
             Expanded(
@@ -608,7 +621,8 @@ class _SearchBarState extends State<_SearchBar> {
                 controller: widget.controller,
                 focusNode: widget.focus,
                 onChanged: widget.onChanged,
-                cursorColor: AppColors.primary,
+                // Neutral cursor so the only orange is the outer ring.
+                cursorColor: AppColors.neutral700,
                 cursorWidth: 2,
                 cursorRadius: const Radius.circular(2),
                 style: const TextStyle(
