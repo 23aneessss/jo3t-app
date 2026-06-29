@@ -40,9 +40,15 @@ Browse by category or wilaya, open a place to see its score, hours, gallery and 
 
 <div align="center">
 
-| Onboarding | Profile |
-|:---:|:---:|
-| <img src="Docs/screenshots/onboarding.png" width="240"/> | <img src="Docs/screenshots/profile.png" width="240"/> |
+| Onboarding | Home feed | Search |
+|:---:|:---:|:---:|
+| <img src="Docs/screenshots/onboarding.png" width="240"/> | <img src="Docs/screenshots/feed.png" width="240"/> | <img src="Docs/screenshots/search.png" width="240"/> |
+| Discover real places, with a custom radar illustration | For You / Following feed, wilaya cards, JO3T's pick of the day | Browse by category, see what's trending now |
+
+| Place profile | Profile | Sign in |
+|:---:|:---:|:---:|
+| <img src="Docs/screenshots/place.png" width="240"/> | <img src="Docs/screenshots/profile.png" width="240"/> | <img src="Docs/screenshots/signin.png" width="240"/> |
+| The JO3T Score, directions, photos and actions | Achievement badges, stats and reviewed places | Join with Google, phone, or as a guest |
 
 </div>
 
