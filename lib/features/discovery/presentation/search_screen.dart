@@ -591,33 +591,16 @@ class _SearchBarState extends State<_SearchBar> {
         duration: AppAnimations.fast,
         height: 50,
         decoration: BoxDecoration(
-          color: AppColors.neutral50,
+          color: _focused ? AppColors.neutral100 : AppColors.neutral50,
           borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-          border: Border.all(
-            color: _focused ? AppColors.primary : AppColors.neutral200,
-            width: _focused ? 1.5 : 1,
-          ),
-          boxShadow: _focused
-              ? [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.10),
-                    blurRadius: 14,
-                    spreadRadius: 0,
-                  ),
-                ]
-              : [],
         ),
         child: Row(
           children: [
             const SizedBox(width: AppSizes.s16),
-            AnimatedSwitcher(
-              duration: AppAnimations.fast,
-              child: Icon(
-                Icons.search,
-                key: ValueKey(_focused),
-                size: AppSizes.iconInline,
-                color: _focused ? AppColors.primary : AppColors.neutral300,
-              ),
+            Icon(
+              Icons.search,
+              size: AppSizes.iconInline,
+              color: _focused ? AppColors.neutral500 : AppColors.neutral300,
             ),
             const SizedBox(width: AppSizes.s10),
             Expanded(
@@ -625,6 +608,9 @@ class _SearchBarState extends State<_SearchBar> {
                 controller: widget.controller,
                 focusNode: widget.focus,
                 onChanged: widget.onChanged,
+                cursorColor: AppColors.primary,
+                cursorWidth: 2,
+                cursorRadius: const Radius.circular(2),
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
