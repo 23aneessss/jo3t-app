@@ -42,7 +42,7 @@ class _DiscoverArtState extends State<DiscoverArt>
         children: [
           AnimatedBuilder(
             animation: _c,
-            builder: (_, __) => CustomPaint(
+            builder: (_, _) => CustomPaint(
               size: const Size(_kArt, _kArt),
               painter: _DiscoverPainter(_c.value),
             ),
@@ -147,7 +147,7 @@ class _ReviewsArtState extends State<ReviewsArt>
       height: _kArt,
       child: AnimatedBuilder(
         animation: _c,
-        builder: (_, __) {
+        builder: (_, _) {
           final w = math.sin(_c.value * 2 * math.pi);
           return Stack(
             alignment: Alignment.center,
@@ -294,7 +294,7 @@ class _WilayaArtState extends State<WilayaArt>
         children: [
           AnimatedBuilder(
             animation: _c,
-            builder: (_, __) => CustomPaint(
+            builder: (_, _) => CustomPaint(
               size: const Size(_kArt, _kArt),
               painter: _WilayaPainter(_c.value),
             ),
