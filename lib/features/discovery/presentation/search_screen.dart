@@ -617,12 +617,18 @@ class _SearchBarState extends State<_SearchBar> {
             ),
             const SizedBox(width: AppSizes.s10),
             Expanded(
-              child: TextField(
-                controller: widget.controller,
-                focusNode: widget.focus,
-                onChanged: widget.onChanged,
-                // Neutral cursor so the only orange is the outer ring.
-                cursorColor: AppColors.neutral700,
+              // Hide the orange iOS insertion handle (the little dot atop the
+              // caret) so the only orange is the outer focus ring.
+              child: TextSelectionTheme(
+                data: const TextSelectionThemeData(
+                  selectionHandleColor: Colors.transparent,
+                ),
+                child: TextField(
+                  controller: widget.controller,
+                  focusNode: widget.focus,
+                  onChanged: widget.onChanged,
+                  // Neutral cursor so the only orange is the outer ring.
+                  cursorColor: AppColors.neutral700,
                 cursorWidth: 2,
                 cursorRadius: const Radius.circular(2),
                 style: const TextStyle(
@@ -640,6 +646,7 @@ class _SearchBarState extends State<_SearchBar> {
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.zero,
                   isDense: true,
+                  ),
                 ),
               ),
             ),
