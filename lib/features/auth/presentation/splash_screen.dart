@@ -50,14 +50,12 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Rising wave
+          // Rising orange wave
           AnimatedBuilder(
             animation: _waveAnim,
             builder: (context, _) => CustomPaint(
@@ -68,95 +66,86 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
 
-          // Logo — stays in upper zone, never covered
-          Positioned(
-            top: size.height * 0.32,
-            left: 0,
-            right: 0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Brand mark
-                const Jo3tMark(size: 56, color: AppColors.primary)
-                    .animate()
-                    .fadeIn(duration: AppAnimations.normal)
-                    .scale(
-                      begin: const Offset(0.7, 0.7),
-                      end: const Offset(1, 1),
-                      duration: AppAnimations.medium,
-                      curve: AppAnimations.overshoot,
+          // A single centred lockup that recolours orange→white as the wave
+          // sweeps over it — one element, so nothing overlaps or shows through.
+          Center(
+            child: AnimatedBuilder(
+              animation: _waveAnim,
+              builder: (context, _) {
+                final cover = ((_waveAnim.value - 0.48) / 0.30).clamp(0.0, 1.0);
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Opacity(
+                      opacity: 1 - cover,
+                      child: const _SplashLockup(onDark: false),
                     ),
-
-                const SizedBox(height: 22),
-
-                // Arabic logotype (El Messiri)
-                const Jo3tWordmark(fontSize: 84, color: AppColors.primary)
-                    .animate(delay: const Duration(milliseconds: 120))
-                    .fadeIn(
-                      duration: AppAnimations.normal,
-                      curve: AppAnimations.enter,
-                    )
-                    .scale(
-                      begin: const Offset(0.88, 0.88),
-                      end: const Offset(1, 1),
-                      duration: AppAnimations.medium,
-                      curve: AppAnimations.overshoot,
+                    Opacity(
+                      opacity: cover,
+                      child: const _SplashLockup(onDark: true),
                     ),
-
-                const SizedBox(height: 16),
-
-                // Latin wordmark
-                const Text(
-                  'JO3T',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.neutral900,
-                    letterSpacing: 11,
-                  ),
-                )
-                    .animate(delay: const Duration(milliseconds: 250))
-                    .fadeIn(duration: AppAnimations.normal)
-                    .slideY(
-                      begin: 0.3,
-                      end: 0,
-                      duration: AppAnimations.normal,
-                      curve: AppAnimations.enter,
-                    ),
-
-                const SizedBox(height: 10),
-
-                Text(
-                  "Algeria's food community",
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.neutral500,
-                    letterSpacing: 0.5,
-                  ),
-                )
-                    .animate(delay: const Duration(milliseconds: 360))
-                    .fadeIn(duration: AppAnimations.normal),
-              ],
-            ),
-          ),
-
-          // Wave text — "JO3T" appears in white as wave rises
-          AnimatedBuilder(
-            animation: _waveAnim,
-            builder: (context, _) {
-              final opacity = ((_waveAnim.value - 0.6) / 0.4).clamp(0.0, 1.0);
-              return Opacity(
-                opacity: opacity,
-                child: const Align(
-                  alignment: Alignment(0, 0.1),
-                  child: Jo3tWordmark(fontSize: 84, color: Colors.white),
+                  ],
+                );
+              },
+            )
+                .animate()
+                .fadeIn(duration: AppAnimations.normal)
+                .scale(
+                  begin: const Offset(0.9, 0.9),
+                  end: const Offset(1, 1),
+                  duration: AppAnimations.slow,
+                  curve: AppAnimations.overshoot,
                 ),
-              );
-            },
           ),
         ],
       ),
+    );
+  }
+}
+
+/// The full splash lockup — mark, Arabic logotype, JO3T, tagline.
+/// Rendered twice (orange-on-white, then white-on-orange) and cross-faded so
+/// the wave appears to recolour it.
+class _SplashLockup extends StatelessWidget {
+  const _SplashLockup({required this.onDark});
+
+  final bool onDark;
+
+  @override
+  Widget build(BuildContext context) {
+    final brand = onDark ? Colors.white : AppColors.primary;
+    final latin = onDark ? Colors.white : AppColors.neutral900;
+    final tagline =
+        onDark ? Colors.white.withValues(alpha: 0.85) : AppColors.neutral500;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Jo3tMark(size: 56, color: brand),
+        const SizedBox(height: 24),
+        Jo3tWordmark(fontSize: 84, color: brand),
+        // Generous gap so the descender of "جعت" never touches the line below.
+        const SizedBox(height: 30),
+        Text(
+          'JO3T',
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.w700,
+            color: latin,
+            letterSpacing: 11,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          "Algeria's food community",
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
+            color: tagline,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ],
     );
   }
 }
