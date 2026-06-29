@@ -17,18 +17,18 @@ class _FoodPreferencesScreenState extends State<FoodPreferencesScreen> {
   final _selected = <String>{};
 
   static const _prefs = [
-    (emoji: '🍖', label: 'Grills & BBQ'),
-    (emoji: '🥘', label: 'Traditional Algerian'),
-    (emoji: '☕', label: 'Coffee & Cafés'),
-    (emoji: '🍰', label: 'Patisserie & Sweets'),
-    (emoji: '🥙', label: 'Sandwiches & Fast food'),
-    (emoji: '🥤', label: 'Juices & Smoothies'),
-    (emoji: '🍕', label: 'Pizza & Italian'),
-    (emoji: '🥗', label: 'Salads & Healthy'),
-    (emoji: '🍜', label: 'Asian cuisine'),
-    (emoji: '🐟', label: 'Seafood'),
-    (emoji: '🥐', label: 'Bakeries'),
-    (emoji: '🌮', label: 'Street food'),
+    (icon: Icons.outdoor_grill_outlined, label: 'Grills & BBQ'),
+    (icon: Icons.ramen_dining_outlined, label: 'Traditional Algerian'),
+    (icon: Icons.local_cafe_outlined, label: 'Coffee & Cafés'),
+    (icon: Icons.cake_outlined, label: 'Patisserie & Sweets'),
+    (icon: Icons.lunch_dining_outlined, label: 'Sandwiches & Fast food'),
+    (icon: Icons.local_drink_outlined, label: 'Juices & Smoothies'),
+    (icon: Icons.local_pizza_outlined, label: 'Pizza & Italian'),
+    (icon: Icons.eco_outlined, label: 'Salads & Healthy'),
+    (icon: Icons.rice_bowl_outlined, label: 'Asian cuisine'),
+    (icon: Icons.set_meal_outlined, label: 'Seafood'),
+    (icon: Icons.bakery_dining_outlined, label: 'Bakeries'),
+    (icon: Icons.fastfood_outlined, label: 'Street food'),
   ];
 
   bool get _canContinue => _selected.length >= 3;
@@ -103,7 +103,7 @@ class _FoodPreferencesScreenState extends State<FoodPreferencesScreen> {
                   final pref = _prefs[i];
                   final active = _selected.contains(pref.label);
                   return _PrefCard(
-                    emoji: pref.emoji,
+                    icon: pref.icon,
                     label: pref.label,
                     selected: active,
                     onTap: () => setState(() {
@@ -128,13 +128,27 @@ class _FoodPreferencesScreenState extends State<FoodPreferencesScreen> {
               child: Column(
                 children: [
                   if (_selected.isNotEmpty)
-                    Text(
-                      '${_selected.length} selected${_canContinue ? ' ✓' : ' — pick ${3 - _selected.length} more'}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: _canContinue ? AppColors.success : AppColors.neutral500,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (_canContinue) ...[
+                          const Icon(Icons.check_circle,
+                              size: AppSizes.iconChip, color: AppColors.success),
+                          const SizedBox(width: AppSizes.s6),
+                        ],
+                        Text(
+                          _canContinue
+                              ? '${_selected.length} selected'
+                              : '${_selected.length} selected — pick ${3 - _selected.length} more',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: _canContinue
+                                ? AppColors.success
+                                : AppColors.neutral500,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     )
                         .animate()
                         .fadeIn(duration: AppAnimations.fast),
@@ -155,14 +169,14 @@ class _FoodPreferencesScreenState extends State<FoodPreferencesScreen> {
 
 class _PrefCard extends StatelessWidget {
   const _PrefCard({
-    required this.emoji,
+    required this.icon,
     required this.label,
     required this.selected,
     required this.onTap,
     required this.animationDelay,
   });
 
-  final String emoji;
+  final IconData icon;
   final String label;
   final bool selected;
   final VoidCallback onTap;
@@ -190,7 +204,11 @@ class _PrefCard extends StatelessWidget {
               scale: selected ? 1.15 : 1.0,
               duration: AppAnimations.fast,
               curve: AppAnimations.overshoot,
-              child: Text(emoji, style: const TextStyle(fontSize: 28)),
+              child: Icon(
+                icon,
+                size: 28,
+                color: selected ? AppColors.primary : AppColors.neutral500,
+              ),
             ),
             const SizedBox(height: AppSizes.s8),
             Text(

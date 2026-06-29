@@ -63,7 +63,7 @@ class _FollowersScreenState extends State<FollowersScreen>
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new,
-              size: 20, color: AppColors.neutral700),
+              size: AppSizes.iconInline, color: AppColors.neutral700),
           onPressed: () => context.pop(),
         ),
         title: const Text(

@@ -11,16 +11,28 @@ class NotificationsScreen extends StatefulWidget {
   State<NotificationsScreen> createState() => _NotificationsScreenState();
 }
 
+typedef _Notif = ({
+  _NotifType type,
+  String avatar,
+  IconData? icon,
+  Color avatarColor,
+  String title,
+  String subtitle,
+  String time,
+  bool unread,
+});
+
 class _NotificationsScreenState extends State<NotificationsScreen> {
   final _read = <int>{};
   int _filterTab = 0;
 
   static const _filterTabs = ['All', 'Reviews', 'Follows', 'Places', 'Weekly'];
 
-  static final _notifications = [
+  static final _notifications = <_Notif>[
     (
       type: _NotifType.review,
       avatar: 'A',
+      icon: null,
       avatarColor: const Color(0xFF4285F4),
       title: 'Amine liked your review',
       subtitle: 'Your review of Café Tanit · 8.5/10',
@@ -30,6 +42,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     (
       type: _NotifType.follow,
       avatar: 'S',
+      icon: null,
       avatarColor: const Color(0xFF34A853),
       title: 'Sara Meziane started following you',
       subtitle: 'Food lover · Blida',
@@ -38,7 +51,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     ),
     (
       type: _NotifType.place,
-      avatar: '🍽️',
+      avatar: '',
+      icon: Icons.restaurant_outlined,
       avatarColor: AppColors.primaryLight,
       title: 'New place in Blida',
       subtitle: 'Chez Atlas just opened near you',
@@ -48,15 +62,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     (
       type: _NotifType.review,
       avatar: 'Y',
+      icon: null,
       avatarColor: const Color(0xFFEA4335),
       title: 'Youcef commented on your review',
-      subtitle: '"Totally agree, Chez Fatima is 🔥"',
+      subtitle: '"Totally agree, Chez Fatima is a must"',
       time: '3h ago',
       unread: false,
     ),
     (
       type: _NotifType.weekly,
-      avatar: '📊',
+      avatar: '',
+      icon: Icons.insights_outlined,
       avatarColor: const Color(0xFFF5F0FF),
       title: 'Your weekly digest is ready',
       subtitle: '5 new places added in Blida this week',
@@ -66,6 +82,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     (
       type: _NotifType.follow,
       avatar: 'N',
+      icon: null,
       avatarColor: const Color(0xFFFF6B2B),
       title: 'Nadia Bensalem started following you',
       subtitle: 'Patisserie lover · Constantine',
@@ -74,7 +91,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     ),
     (
       type: _NotifType.place,
-      avatar: '⭐',
+      avatar: '',
+      icon: Icons.star_outline_rounded,
       avatarColor: const Color(0xFFFFFBEE),
       title: 'JO3T\'s Pick of the week',
       subtitle: 'Café Tanit has been selected this week',
@@ -86,7 +104,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   int get _unreadCount =>
       _notifications.where((n) => n.unread && !_read.contains(_notifications.indexOf(n))).length;
 
-  List<MapEntry<int, ({_NotifType type, String avatar, Color avatarColor, String title, String subtitle, String time, bool unread})>> get _filteredEntries {
+  List<MapEntry<int, _Notif>> get _filteredEntries {
     return _notifications.asMap().entries.where((e) {
       if (_filterTab == 0) return true;
       return switch (_filterTab) {
@@ -133,7 +151,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           if (_unreadCount > 0) ...[
             const SizedBox(width: AppSizes.s8),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSizes.s8, vertical: AppSizes.s2),
               decoration: BoxDecoration(
                 color: AppColors.primary,
                 borderRadius: BorderRadius.circular(AppSizes.radiusFull),
@@ -265,6 +284,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           return _NotifTile(
             type: n.type,
             avatar: n.avatar,
+            avatarIcon: n.icon,
             avatarColor: n.avatarColor,
             title: n.title,
             subtitle: n.subtitle,
@@ -286,6 +306,7 @@ class _NotifTile extends StatelessWidget {
   const _NotifTile({
     required this.type,
     required this.avatar,
+    required this.avatarIcon,
     required this.avatarColor,
     required this.title,
     required this.subtitle,
@@ -297,6 +318,7 @@ class _NotifTile extends StatelessWidget {
 
   final _NotifType type;
   final String avatar;
+  final IconData? avatarIcon;
   final Color avatarColor;
   final String title;
   final String subtitle;
@@ -321,8 +343,7 @@ class _NotifTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isEmoji = avatar.runes.length == 1 &&
-        avatar.runes.first > 127;
+    final hasIcon = avatarIcon != null;
 
     return GestureDetector(
       onTap: onTap,
@@ -342,18 +363,21 @@ class _NotifTile extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: isEmoji ? avatarColor : avatarColor,
+                    color: avatarColor,
                     shape: BoxShape.circle,
                   ),
                   child: Center(
-                    child: Text(
-                      avatar,
-                      style: TextStyle(
-                        color: isEmoji ? null : Colors.white,
-                        fontSize: isEmoji ? 22 : 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    child: hasIcon
+                        ? Icon(avatarIcon,
+                            size: AppSizes.iconInline, color: _typeColor)
+                        : Text(
+                            avatar,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                   ),
                 ),
                 Positioned(
@@ -408,7 +432,7 @@ class _NotifTile extends StatelessWidget {
                         ),
                     ],
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: AppSizes.s2),
                   Text(
                     subtitle,
                     maxLines: 1,

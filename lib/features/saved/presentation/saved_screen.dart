@@ -58,7 +58,7 @@ class _SavedScreenState extends State<SavedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F8F8),
+      backgroundColor: AppColors.neutral50,
       body: CustomScrollView(
         slivers: [
           _buildAppBar(context),
@@ -74,13 +74,13 @@ class _SavedScreenState extends State<SavedScreen> {
     return SliverAppBar(
       pinned: true,
       expandedHeight: 0,
-      backgroundColor: const Color(0xFFF8F8F8),
+      backgroundColor: AppColors.neutral50,
       elevation: 0,
       title: const Text(
         'Saved',
         style: TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.w800,
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
           color: AppColors.neutral900,
         ),
       )
@@ -536,7 +536,7 @@ class _CreateCollectionSheetState extends State<_CreateCollectionSheet> {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppSizes.radiusXl)),
       ),
       padding: EdgeInsets.fromLTRB(
         AppSizes.screenHorizontalPadding,
@@ -563,8 +563,8 @@ class _CreateCollectionSheetState extends State<_CreateCollectionSheet> {
           const Text(
             'New collection',
             style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
               color: AppColors.neutral900,
             ),
           ),

@@ -369,8 +369,8 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          const Icon(Icons.star_rounded,
-                              color: Colors.amber, size: 14),
+                          Icon(Icons.star_rounded,
+                              color: AppColors.scoreColor(pick.score), size: 14),
                           const SizedBox(width: 4),
                           Text(
                             '${pick.score}/10 · ${pick.reviewCount} reviews · ${pick.wilaya}',
@@ -1117,8 +1117,8 @@ class _TopRankedRowState extends State<_TopRankedRow> {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.star_rounded,
-                            size: 12, color: Colors.amber),
+                        Icon(Icons.star_rounded,
+                            size: 12, color: AppColors.scoreColor(p.score)),
                         const SizedBox(width: 3),
                         Text(
                           '${p.score}/10',
@@ -1265,7 +1265,7 @@ class _ActivityCardState extends State<_ActivityCard> {
       };
 
   Color get _typeColor => switch (widget.activity.type) {
-        'review' => Colors.amber,
+        'review' => AppColors.primary,
         'follow' => AppColors.primary,
         'new_place' => AppColors.success,
         'save' => AppColors.primary,
@@ -1506,7 +1506,7 @@ class _WilayaFilterSheet extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppSizes.radiusXl)),
       ),
       padding: const EdgeInsets.fromLTRB(
           AppSizes.screenHorizontalPadding,
@@ -1535,8 +1535,8 @@ class _WilayaFilterSheet extends StatelessWidget {
               const Text(
                 'Filter by wilaya',
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
                   color: AppColors.neutral900,
                 ),
               ),

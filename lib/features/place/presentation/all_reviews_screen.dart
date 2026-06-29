@@ -45,7 +45,7 @@ class _AllReviewsScreenState extends ConsumerState<AllReviewsScreen> {
         child: Container(
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(AppSizes.radiusXl)),
           ),
           padding: const EdgeInsets.fromLTRB(
               AppSizes.s20, AppSizes.s16, AppSizes.s20, AppSizes.s24),
@@ -270,7 +270,7 @@ class _AllReviewsScreenState extends ConsumerState<AllReviewsScreen> {
                                 ? AppColors.primary
                                 : AppColors.neutral100,
                             borderRadius:
-                                BorderRadius.circular(AppSizes.s20),
+                                BorderRadius.circular(AppSizes.radiusFull),
                           ),
                           child: Text(
                             label,
@@ -506,7 +506,7 @@ class _ReviewSkeleton extends StatelessWidget {
         height: 140,
         decoration: BoxDecoration(
           color: AppColors.neutral100,
-          borderRadius: BorderRadius.circular(AppSizes.s16),
+          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
         ),
       ),
     );

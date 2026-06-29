@@ -155,7 +155,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F8F8),
+      backgroundColor: AppColors.neutral50,
       body: CustomScrollView(
         slivers: [
           _buildAppBar(context, user),

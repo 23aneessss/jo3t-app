@@ -75,7 +75,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 backgroundColor: Colors.black.withValues(alpha: 0.3),
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back_rounded,
-                      color: Colors.white, size: 20),
+                      color: Colors.white, size: AppSizes.iconInline),
                   onPressed: () => context.pop(),
                 ),
               ),
@@ -105,7 +105,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                               horizontal: AppSizes.s10, vertical: AppSizes.s4),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(AppSizes.s20),
+                            borderRadius:
+                                BorderRadius.circular(AppSizes.radiusFull),
                           ),
                           child: Text(
                             widget.date,
@@ -181,10 +182,10 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   const SizedBox(height: AppSizes.s10),
                   Text(
                     widget.description ??
-                        'Join us for a special culinary experience at ${widget.placeName}. '
-                            'Featuring exclusive menu items, live entertainment, and a chance to '
-                            'connect with fellow food lovers in ${widget.date}. '
-                            'Spots are limited — RSVP to secure yours.',
+                        'Join us at ${widget.placeName} for a special evening — '
+                            'an exclusive menu, live entertainment, and good company '
+                            'with fellow food lovers. Spots are limited, so RSVP to '
+                            'secure yours.',
                     style: TextStyle(
                       color: AppColors.neutral700,
                       fontSize: 14,
@@ -235,7 +236,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 icon: const Icon(Icons.ios_share_rounded),
                 style: IconButton.styleFrom(
                   side: BorderSide(color: AppColors.neutral200),
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(AppSizes.s14),
                 ),
               ),
               const SizedBox(width: AppSizes.s12),
@@ -267,13 +268,13 @@ class _InfoChip extends StatelessWidget {
           horizontal: AppSizes.s10, vertical: AppSizes.s6),
       decoration: BoxDecoration(
         color: AppColors.neutral0,
-        borderRadius: BorderRadius.circular(AppSizes.s20),
+        borderRadius: BorderRadius.circular(AppSizes.radiusFull),
         border: Border.all(color: AppColors.neutral100),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: color),
+          Icon(icon, size: AppSizes.iconChip, color: color),
           const SizedBox(width: AppSizes.s6),
           Text(label,
               style: TextStyle(
@@ -377,7 +378,7 @@ class _EventInfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: AppColors.neutral500),
+        Icon(icon, size: AppSizes.iconChip, color: AppColors.neutral500),
         const SizedBox(width: AppSizes.s12),
         Text(label,
             style: TextStyle(

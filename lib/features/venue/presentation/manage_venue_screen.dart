@@ -83,7 +83,7 @@ class _ManageVenueScreenState extends State<ManageVenueScreen> {
             Text(
               widget.placeName,
               style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: AppColors.neutral500),
             ),
@@ -252,7 +252,7 @@ class _SectionCard extends StatelessWidget {
                         )),
                     Text(subtitle,
                         style: const TextStyle(
-                            fontSize: 12, color: AppColors.neutral500)),
+                            fontSize: 13, color: AppColors.neutral500)),
                   ],
                 ),
               ),

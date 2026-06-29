@@ -110,7 +110,7 @@ class VenueDashboardScreen extends StatelessWidget {
                     label: 'Score',
                     value: place.score.toStringAsFixed(1),
                     icon: Icons.star_rounded,
-                    color: const Color(0xFFFFA000),
+                    color: AppColors.scoreColor(place.score),
                     flex: 1,
                     animIndex: 0,
                   ),
@@ -380,12 +380,7 @@ class _ReviewRow extends StatelessWidget {
   final ({String name, double score, String text, String timeAgo}) review;
   final int animIndex;
 
-  Color get _scoreColor {
-    if (review.score >= 8.5) return AppColors.success;
-    if (review.score >= 7) return const Color(0xFF2ECC71);
-    if (review.score >= 5) return const Color(0xFFF39C12);
-    return AppColors.error;
-  }
+  Color get _scoreColor => AppColors.scoreColor(review.score);
 
   @override
   Widget build(BuildContext context) {
@@ -430,7 +425,7 @@ class _ReviewRow extends StatelessWidget {
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 7, vertical: 2),
+                          horizontal: AppSizes.s8, vertical: AppSizes.s2),
                       decoration: BoxDecoration(
                         color: _scoreColor.withValues(alpha: 0.1),
                         borderRadius:

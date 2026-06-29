@@ -101,7 +101,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.neutral0,
       body: Column(
         children: [
           _AddPlaceHeader(
@@ -119,7 +119,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                 animation: animation,
                 secondaryAnimation: secondaryAnimation,
                 transitionType: SharedAxisTransitionType.horizontal,
-                fillColor: Colors.white,
+                fillColor: AppColors.neutral0,
                 child: child,
               ),
               child: KeyedSubtree(
@@ -340,7 +340,7 @@ class _AddPlaceCTA extends StatelessWidget {
           AppSizes.screenHorizontalPadding,
           AppSizes.s32),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: AppColors.neutral0,
         border: Border(top: BorderSide(color: AppColors.neutral100)),
       ),
       child: PrimaryButton(
@@ -369,12 +369,12 @@ class _Step1 extends StatelessWidget {
   final ValueChanged<PlaceCategory> onCategorySelect;
 
   static final _categories = [
-    (cat: PlaceCategory.restaurant, emoji: '🍽️', label: 'Restaurant'),
-    (cat: PlaceCategory.cafe, emoji: '☕', label: 'Café'),
-    (cat: PlaceCategory.patisserie, emoji: '🍰', label: 'Patisserie'),
-    (cat: PlaceCategory.sandwich, emoji: '🥙', label: 'Sandwich'),
-    (cat: PlaceCategory.streetFood, emoji: '🌮', label: 'Street Food'),
-    (cat: PlaceCategory.juiceBar, emoji: '🥤', label: 'Juice Bar'),
+    (cat: PlaceCategory.restaurant, icon: Icons.restaurant, label: 'Restaurant'),
+    (cat: PlaceCategory.cafe, icon: Icons.local_cafe_outlined, label: 'Café'),
+    (cat: PlaceCategory.patisserie, icon: Icons.cake_outlined, label: 'Patisserie'),
+    (cat: PlaceCategory.sandwich, icon: Icons.lunch_dining_outlined, label: 'Sandwich'),
+    (cat: PlaceCategory.streetFood, icon: Icons.fastfood_outlined, label: 'Street Food'),
+    (cat: PlaceCategory.juiceBar, icon: Icons.local_drink_outlined, label: 'Juice Bar'),
   ];
 
   @override
@@ -461,8 +461,13 @@ class _Step1 extends StatelessWidget {
                         scale: active ? 1.15 : 1.0,
                         duration: AppAnimations.fast,
                         curve: AppAnimations.overshoot,
-                        child: Text(item.emoji,
-                            style: const TextStyle(fontSize: 22)),
+                        child: Icon(
+                          item.icon,
+                          size: AppSizes.iconInline,
+                          color: active
+                              ? AppColors.primary
+                              : AppColors.neutral500,
+                        ),
                       ),
                       const SizedBox(width: AppSizes.s10),
                       Text(

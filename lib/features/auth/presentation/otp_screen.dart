@@ -147,7 +147,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
 
               // Header
               Text(
-                _verified ? 'Verified! 🎉' : 'Verify your number',
+                _verified ? 'Verified' : 'Verify your number',
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,

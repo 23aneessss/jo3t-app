@@ -108,7 +108,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     ),
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.4),
-                      borderRadius: BorderRadius.circular(AppSizes.s20),
+                      borderRadius: BorderRadius.circular(AppSizes.radiusFull),
                     ),
                     child: Text(
                       '${_currentIndex + 1} / ${widget.photos.length}',
@@ -169,7 +169,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                           width: 56,
                           height: 56,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(AppSizes.s8),
+                            borderRadius: BorderRadius.circular(AppSizes.radiusMd),
                             border: Border.all(
                               color: isActive
                                   ? AppColors.primary
@@ -178,7 +178,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                             ),
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(AppSizes.s6),
+                            borderRadius: BorderRadius.circular(AppSizes.radiusSm),
                             child: CachedNetworkImage(
                               imageUrl: widget.photos[index],
                               fit: BoxFit.cover,

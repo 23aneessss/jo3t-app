@@ -86,8 +86,8 @@ class _ClaimVenueScreenState extends State<ClaimVenueScreen> {
                       child: OutlinedButton(
                         onPressed: () => setState(() => _step--),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          side: BorderSide(color: AppColors.neutral200),
+                          padding: const EdgeInsets.symmetric(vertical: AppSizes.s14),
+                          side: const BorderSide(color: AppColors.neutral200),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(AppSizes.radiusMd),
                           ),
@@ -167,13 +167,15 @@ class _ClaimVenueScreenState extends State<ClaimVenueScreen> {
                           Text(opt.label,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 14,
+                                fontSize: 15,
                                 color: selected ? AppColors.primary : AppColors.neutral900,
                               )),
+                          const SizedBox(height: AppSizes.s2),
                           Text(opt.desc,
-                              style: TextStyle(
-                                fontSize: 12,
+                              style: const TextStyle(
+                                fontSize: 13,
                                 color: AppColors.neutral500,
+                                height: 1.4,
                               )),
                         ],
                       ),
@@ -273,7 +275,10 @@ class _ClaimVenueScreenState extends State<ClaimVenueScreen> {
               Expanded(
                 child: Text(
                   'False claims are subject to account suspension.',
-                  style: TextStyle(color: AppColors.warning, fontSize: 12),
+                  style: TextStyle(
+                      color: AppColors.warning,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
             ],
@@ -340,7 +345,7 @@ class _StepHeader extends StatelessWidget {
             )),
         const SizedBox(height: AppSizes.s8),
         Text(subtitle,
-            style: TextStyle(color: AppColors.neutral500, fontSize: 14, height: 1.5)),
+            style: TextStyle(color: AppColors.neutral500, fontSize: 15, height: 1.5)),
       ],
     );
   }

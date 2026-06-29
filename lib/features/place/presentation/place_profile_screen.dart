@@ -364,7 +364,7 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
                 HapticFeedback.mediumImpact();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Checked in to ${place.name}! 📍'),
+                    content: Text('Checked in to ${place.name}'),
                     backgroundColor: AppColors.success,
                     behavior: SnackBarBehavior.floating,
                     shape: RoundedRectangleBorder(
@@ -1082,7 +1082,7 @@ class _PlaceProfileScreenState extends State<PlaceProfileScreen> {
   }
 
   String _scoreLabel(double s) {
-    if (s >= 9.5) return 'Exceptional ✨';
+    if (s >= 9.5) return 'Exceptional';
     if (s >= 9) return 'Excellent';
     if (s >= 8) return 'Great';
     if (s >= 7) return 'Very good';
@@ -1597,7 +1597,7 @@ class _ShareSheetState extends State<_ShareSheet> {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppSizes.radiusXl)),
       ),
       padding: const EdgeInsets.fromLTRB(
         AppSizes.screenHorizontalPadding, AppSizes.s16,
@@ -1654,8 +1654,8 @@ class _ShareSheetState extends State<_ShareSheet> {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.star_rounded,
-                            size: 12, color: Colors.amber),
+                        Icon(Icons.star_rounded,
+                            size: 12, color: AppColors.scoreColor(place.score)),
                         const SizedBox(width: 3),
                         Text(
                           '${place.score}/10',

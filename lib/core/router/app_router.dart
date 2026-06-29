@@ -29,16 +29,11 @@ import '../../features/events/presentation/event_detail_screen.dart';
 import '../../features/profile/presentation/edit_profile_screen.dart';
 import '../../features/place/presentation/suggest_edits_screen.dart';
 import '../../shared/widgets/main_shell.dart';
-import '../../design_preview.dart';
 import '../constants/app_animations.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/preview',
+  initialLocation: '/splash',
   routes: [
-    GoRoute(
-      path: '/preview',
-      pageBuilder: (context, state) => _fadePage(state, const DesignPreview()),
-    ),
     // Auth flow
     GoRoute(
       path: '/splash',

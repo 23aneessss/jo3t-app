@@ -23,13 +23,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F8F8),
+      backgroundColor: AppColors.neutral50,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF8F8F8),
+        backgroundColor: AppColors.neutral50,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new,
-              size: 20, color: AppColors.neutral700),
+              size: AppSizes.iconInline, color: AppColors.neutral700),
           onPressed: () => context.pop(),
         ),
         title: const Text(
@@ -285,9 +285,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (_) => Container(
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius:
+              BorderRadius.vertical(top: Radius.circular(AppSizes.radiusXl)),
         ),
-        padding: const EdgeInsets.fromLTRB(24, 20, 24, 48),
+        padding: const EdgeInsets.fromLTRB(
+            AppSizes.s24, AppSizes.s20, AppSizes.s24, AppSizes.s48),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -427,7 +429,7 @@ class _Divider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Divider(
-        height: 1, thickness: 1, indent: 16, endIndent: 0,
+        height: 1, thickness: 1, indent: AppSizes.s16, endIndent: 0,
         color: AppColors.neutral100);
   }
 }
@@ -645,9 +647,11 @@ class _OptionSheet extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(AppSizes.radiusXl)),
       ),
-      padding: const EdgeInsets.fromLTRB(24, 20, 24, 48),
+      padding: const EdgeInsets.fromLTRB(
+          AppSizes.s24, AppSizes.s20, AppSizes.s24, AppSizes.s48),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

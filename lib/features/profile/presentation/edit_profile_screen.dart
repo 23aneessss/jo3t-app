@@ -77,7 +77,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         builder: (_, controller) => Container(
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius:
+                BorderRadius.vertical(top: Radius.circular(AppSizes.radiusXl)),
           ),
           child: Column(
             children: [
@@ -116,7 +117,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           )),
                       trailing: selected
                           ? const Icon(Icons.check_circle,
-                              color: AppColors.primary, size: 20)
+                              color: AppColors.primary,
+                              size: AppSizes.iconInline)
                           : null,
                       onTap: () {
                         setState(() => _selectedWilaya = wilaya);
@@ -299,7 +301,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 20, color: AppColors.neutral500),
+                        size: AppSizes.iconInline, color: AppColors.neutral500),
                     const SizedBox(width: AppSizes.s12),
                     Expanded(
                       child: Column(
@@ -319,7 +321,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                     ),
                     const Icon(Icons.chevron_right,
-                        color: AppColors.neutral300, size: 20),
+                        color: AppColors.neutral300, size: AppSizes.iconInline),
                   ],
                 ),
               ),

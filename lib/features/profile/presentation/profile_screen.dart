@@ -223,7 +223,8 @@ class _ProfileHeader extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: AppSizes.s10, vertical: AppSizes.s4),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(AppSizes.radiusFull),
@@ -237,7 +238,7 @@ class _ProfileHeader extends StatelessWidget {
                         children: [
                           const Icon(Icons.location_on,
                               size: 11, color: Colors.white70),
-                          const SizedBox(width: 3),
+                          const SizedBox(width: AppSizes.s2),
                           const Text(
                             'Blida · Algeria',
                             style: TextStyle(
@@ -1201,7 +1202,7 @@ class _ProfileShareSheetState extends State<_ProfileShareSheet> {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppSizes.radiusXl)),
       ),
       padding: const EdgeInsets.fromLTRB(
         AppSizes.screenHorizontalPadding, AppSizes.s16,

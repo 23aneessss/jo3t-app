@@ -86,12 +86,12 @@ class _SearchScreenState extends State<SearchScreen> {
   int _searchTab = 0; // 0 = Places, 1 = People
 
   static const _categories = [
-    (label: 'Restaurant', emoji: '🍽️', color: Color(0xFFFFF3EE)),
-    (label: 'Café', emoji: '☕', color: Color(0xFFEFF6FF)),
-    (label: 'Patisserie', emoji: '🍰', color: Color(0xFFFFF5F7)),
-    (label: 'Street Food', emoji: '🌮', color: Color(0xFFEFFFF4)),
-    (label: 'Juice Bar', emoji: '🥤', color: Color(0xFFFFFBEE)),
-    (label: 'Sandwich', emoji: '🥙', color: Color(0xFFF5EEFF)),
+    (label: 'Restaurant', icon: Icons.restaurant_rounded, color: AppColors.primaryLight),
+    (label: 'Café', icon: Icons.local_cafe_rounded, color: AppColors.primaryLight),
+    (label: 'Patisserie', icon: Icons.cake_rounded, color: AppColors.primaryLight),
+    (label: 'Street Food', icon: Icons.lunch_dining_rounded, color: AppColors.primaryLight),
+    (label: 'Juice Bar', icon: Icons.local_drink_rounded, color: AppColors.primaryLight),
+    (label: 'Sandwich', icon: Icons.bakery_dining_rounded, color: AppColors.primaryLight),
   ];
 
   static const _suggestedPeople = [
@@ -391,7 +391,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 final cat = e.value;
                 return _CategoryCard(
                   label: cat.label,
-                  emoji: cat.emoji,
+                  icon: cat.icon,
                   color: cat.color,
                   index: e.key,
                   onTap: () {
@@ -592,7 +592,7 @@ class _SearchBarState extends State<_SearchBar> {
         height: 50,
         decoration: BoxDecoration(
           color: AppColors.neutral50,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
           border: Border.all(
             color: _focused ? AppColors.primary : AppColors.neutral200,
             width: _focused ? 1.5 : 1,
@@ -675,13 +675,13 @@ class _SearchBarState extends State<_SearchBar> {
 class _CategoryCard extends StatefulWidget {
   const _CategoryCard({
     required this.label,
-    required this.emoji,
+    required this.icon,
     required this.color,
     required this.index,
     required this.onTap,
   });
   final String label;
-  final String emoji;
+  final IconData icon;
   final Color color;
   final int index;
   final VoidCallback onTap;
@@ -713,9 +713,8 @@ class _CategoryCardState extends State<_CategoryCard> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(widget.emoji,
-                  style: const TextStyle(fontSize: 28)),
-              const SizedBox(height: 6),
+              Icon(widget.icon, size: 28, color: AppColors.primary),
+              const SizedBox(height: AppSizes.s8),
               Text(
                 widget.label,
                 textAlign: TextAlign.center,
@@ -1179,7 +1178,7 @@ class _FilterSheetState extends State<_FilterSheet> {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppSizes.radiusXl)),
       ),
       padding: EdgeInsets.fromLTRB(
           AppSizes.s20, AppSizes.s16, AppSizes.s20,

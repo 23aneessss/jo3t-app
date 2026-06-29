@@ -57,7 +57,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     Color(0xFFBF7340), // bronze
   ];
 
-  static const _podiumLabels = ['🥇', '🥈', '🥉'];
+  static const _podiumIcons = [
+    Icons.emoji_events_rounded, // gold
+    Icons.emoji_events_rounded, // silver
+    Icons.workspace_premium_rounded, // bronze
+  ];
 
   String _formatCount(int n) {
     if (n >= 1000) return '${(n / 1000).toStringAsFixed(1)}k';
@@ -67,7 +71,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F8F8),
+      backgroundColor: AppColors.neutral50,
       body: CustomScrollView(
         slivers: [
           _buildAppBar(context),
@@ -84,10 +88,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     return SliverAppBar(
       pinned: true,
       expandedHeight: 0,
-      backgroundColor: const Color(0xFFF8F8F8),
+      backgroundColor: AppColors.neutral50,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+        icon: const Icon(Icons.arrow_back_ios_new_rounded,
+            size: AppSizes.iconInline),
         onPressed: () => context.pop(),
       ),
       title: const Text(
@@ -219,9 +224,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      _podiumLabels[rank],
-                      style: TextStyle(fontSize: isFirst ? 28 : 22),
+                    Icon(
+                      _podiumIcons[rank],
+                      size: isFirst ? 34 : 26,
+                      color: color,
                     ),
                     const SizedBox(height: AppSizes.s8),
                     Text(

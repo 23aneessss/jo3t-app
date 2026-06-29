@@ -37,7 +37,7 @@ class _WriteReviewScreenState extends ConsumerState<WriteReviewScreen> {
     if (_score! <= 7) return 'Very good';
     if (_score! <= 8) return 'Great';
     if (_score! <= 9) return 'Excellent';
-    return 'Exceptional ✨';
+    return 'Exceptional';
   }
 
   bool get _canSubmit =>
@@ -88,7 +88,7 @@ class _WriteReviewScreenState extends ConsumerState<WriteReviewScreen> {
             Text(
               place.name,
               style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: AppColors.neutral500),
             ),
@@ -161,9 +161,10 @@ class _WriteReviewScreenState extends ConsumerState<WriteReviewScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: AppSizes.s4),
                       child: Text(
-                        '${20 - _controller.text.trim().length} more characters needed',
+                        '${20 - _controller.text.trim().length} more characters to go',
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
                           color: AppColors.warning,
                         ),
                       ),
@@ -232,7 +233,7 @@ class _Section extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 17,
                 fontWeight: FontWeight.w700,
                 color: AppColors.neutral900,
               ),
@@ -242,7 +243,7 @@ class _Section extends StatelessWidget {
               Text(
                 subtitle!,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                   color: AppColors.neutral300,
                   fontWeight: FontWeight.w400,
                 ),
@@ -286,8 +287,8 @@ class _ScorePicker extends StatelessWidget {
           child: AnimatedContainer(
             duration: AppAnimations.fast,
             curve: AppAnimations.stateChange,
-            width: isSelected ? 34 : 28,
-            height: isSelected ? 34 : 28,
+            width: isSelected ? AppSizes.scoreBadgeLg : AppSizes.scoreBadgeSm,
+            height: isSelected ? AppSizes.scoreBadgeLg : AppSizes.scoreBadgeSm,
             decoration: BoxDecoration(
               color: isSelected ? color : AppColors.neutral100,
               shape: BoxShape.circle,

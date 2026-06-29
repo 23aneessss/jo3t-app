@@ -25,7 +25,7 @@ class _FollowSuggestionsScreenState extends State<FollowSuggestionsScreen> {
       initial: 'A',
       color: Color(0xFF4285F4),
       reviews: 24,
-      bio: 'Street food hunter 🌮'
+      bio: 'Street food hunter'
     ),
     (
       name: 'Sara Meziane',
@@ -33,7 +33,7 @@ class _FollowSuggestionsScreenState extends State<FollowSuggestionsScreen> {
       initial: 'S',
       color: Color(0xFF34A853),
       reviews: 18,
-      bio: 'Café connoisseur ☕'
+      bio: 'Café connoisseur'
     ),
     (
       name: 'Youcef Hamdi',
@@ -41,7 +41,7 @@ class _FollowSuggestionsScreenState extends State<FollowSuggestionsScreen> {
       initial: 'Y',
       color: Color(0xFFEA4335),
       reviews: 31,
-      bio: 'Top restaurant reviewer 🍽️'
+      bio: 'Top restaurant reviewer'
     ),
     (
       name: 'Nadia Bensalem',
@@ -49,7 +49,7 @@ class _FollowSuggestionsScreenState extends State<FollowSuggestionsScreen> {
       initial: 'N',
       color: Color(0xFFFF6B2B),
       reviews: 12,
-      bio: 'Patisserie lover 🍰'
+      bio: 'Patisserie lover'
     ),
     (
       name: 'Riad Aouadi',
@@ -57,7 +57,7 @@ class _FollowSuggestionsScreenState extends State<FollowSuggestionsScreen> {
       initial: 'R',
       color: Color(0xFF7B2FBE),
       reviews: 47,
-      bio: 'Algeria food explorer 🇩🇿'
+      bio: 'Algeria food explorer'
     ),
   ];
 
@@ -345,9 +345,6 @@ class _UserSuggestionCard extends StatelessWidget {
 
           const SizedBox(width: AppSizes.s10),
 
-
-
-        
           // Follow button
           GestureDetector(
             onTap: onFollow,

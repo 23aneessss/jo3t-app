@@ -1,0 +1,17 @@
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="JO3T adaptive foreground">
+  <!-- Pin scaled into the Android adaptive safe zone (centre ~60%). Cutlery
+       drawn in the background orange so it reads as a cut-out. -->
+  <g transform="translate(512,512) scale(0.56) translate(-512,-528)">
+    <path d="M512 806 C 398 612, 320 528, 320 420 A 192 192 0 1 1 704 420 C 704 528, 626 612, 512 806 Z"
+          fill="#ffffff"/>
+    <g fill="#E8520A">
+      <rect x="452" y="338" width="13" height="58" rx="6"/>
+      <rect x="473" y="338" width="13" height="58" rx="6"/>
+      <rect x="494" y="338" width="13" height="58" rx="6"/>
+      <rect x="466" y="384" width="27" height="14" rx="7"/>
+      <rect x="472" y="392" width="15" height="150" rx="7.5"/>
+      <path d="M556 338 c26 0 30 36 30 78 c0 24 -14 30 -30 30 Z"/>
+      <rect x="550" y="430" width="14" height="112" rx="7"/>
+    </g>
+  </g>
+</svg>
