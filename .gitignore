@@ -63,3 +63,6 @@ functions/lib/
 # Environment
 .env
 *.env.local
+
+# Internal dev tracker — not part of the public repo
+CLAUDE.md
