@@ -1,10 +1,17 @@
 <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="JO3T adaptive foreground">
-  <!-- Pin scaled into the Android adaptive safe zone (centre ~60%). Cutlery
-       drawn in the background orange so it reads as a cut-out. -->
+  <defs>
+    <linearGradient id="pin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF8C3B"/>
+      <stop offset="0.55" stop-color="#F2630F"/>
+      <stop offset="1" stop-color="#C23E06"/>
+    </linearGradient>
+  </defs>
+  <!-- Orange pin scaled into the Android adaptive safe zone. The cutlery is
+       drawn white to match the white adaptive background (reads as a cut-out). -->
   <g transform="translate(512,512) scale(0.56) translate(-512,-528)">
     <path d="M512 806 C 398 612, 320 528, 320 420 A 192 192 0 1 1 704 420 C 704 528, 626 612, 512 806 Z"
-          fill="#ffffff"/>
-    <g fill="#E8520A">
+          fill="url(#pin)"/>
+    <g fill="#FFFFFF">
       <rect x="452" y="338" width="13" height="58" rx="6"/>
       <rect x="473" y="338" width="13" height="58" rx="6"/>
       <rect x="494" y="338" width="13" height="58" rx="6"/>

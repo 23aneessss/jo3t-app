@@ -1,6 +1,6 @@
 <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="JO3T icon">
   <defs>
-    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="pin" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#FF8C3B"/>
       <stop offset="0.55" stop-color="#F2630F"/>
       <stop offset="1" stop-color="#C23E06"/>
@@ -20,11 +20,9 @@
       </g>
     </mask>
   </defs>
-  <!-- full-bleed square (OS applies the corner mask) -->
-  <rect width="1024" height="1024" fill="url(#tile)"/>
-  <circle cx="300" cy="250" r="360" fill="#ffffff" opacity="0.06"/>
-  <circle cx="820" cy="880" r="220" fill="#ffffff" opacity="0.05"/>
+  <!-- Reversed: white tile, orange pin (full-bleed; OS applies the corner mask) -->
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+  <ellipse cx="512" cy="828" rx="40" ry="13" fill="#C23E06" opacity="0.10"/>
   <path d="M512 806 C 398 612, 320 528, 320 420 A 192 192 0 1 1 704 420 C 704 528, 626 612, 512 806 Z"
-        fill="#ffffff" mask="url(#cutlery)"/>
-  <ellipse cx="512" cy="828" rx="40" ry="13" fill="#ffffff" opacity="0.35"/>
+        fill="url(#pin)" mask="url(#cutlery)"/>
 </svg>

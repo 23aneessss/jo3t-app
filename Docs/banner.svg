@@ -22,11 +22,11 @@
 
   <!-- logo tile -->
   <g transform="translate(96,120)">
-    <rect width="180" height="180" rx="44" fill="url(#tile)" stroke="#ffffff" stroke-opacity="0.35" stroke-width="3"/>
-    <!-- white location pin -->
-    <path d="M90 150 C58 116 36 102 36 72 A54 54 0 1 1 144 72 C144 102 122 116 90 150 Z" fill="#ffffff"/>
-    <!-- cutlery (orange, reads as cut-out) -->
-    <g fill="#E8520A">
+    <rect width="180" height="180" rx="44" fill="#FFFFFF" stroke="#ffffff" stroke-opacity="0.5" stroke-width="3"/>
+    <!-- orange location pin -->
+    <path d="M90 150 C58 116 36 102 36 72 A54 54 0 1 1 144 72 C144 102 122 116 90 150 Z" fill="#E8520A"/>
+    <!-- cutlery (white, reads as cut-out) -->
+    <g fill="#FFFFFF">
       <rect x="72" y="44" width="3.5" height="15" rx="1.75"/>
       <rect x="78.5" y="44" width="3.5" height="15" rx="1.75"/>
       <rect x="85" y="44" width="3.5" height="15" rx="1.75"/>
