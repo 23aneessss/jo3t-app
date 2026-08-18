@@ -231,7 +231,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Anes Bouziani',
+                  'Yacine Belkacem',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,

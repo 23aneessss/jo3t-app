@@ -164,7 +164,7 @@ class _ProfileHeader extends StatelessWidget {
                       ),
                       child: const Center(
                         child: Text(
-                          'A',
+                          'Y',
                           style: TextStyle(
                             fontSize: 38,
                             fontWeight: FontWeight.w800,
@@ -204,7 +204,7 @@ class _ProfileHeader extends StatelessWidget {
 
                 // Name
                 const Text(
-                  'Anes Bouziani',
+                  'Yacine Belkacem',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 22,
@@ -240,7 +240,7 @@ class _ProfileHeader extends StatelessWidget {
                               size: 11, color: Colors.white70),
                           const SizedBox(width: AppSizes.s2),
                           const Text(
-                            'Blida · Algeria',
+                            'Alger · Algeria',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
