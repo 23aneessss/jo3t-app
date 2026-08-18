@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JO3T — Find places worth eating at in Algeria</title>
+<meta name="description" content="JO3T is a community-driven food and venue discovery app for Algeria. Browse by wilaya and category, read reviews scored 1–10, and add the places you know. Built with Flutter.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#E8520A">
+<link rel="icon" href="assets/jo3t-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <img class="brand-icon" src="assets/jo3t-icon.svg" alt="JO3T app icon: an orange map pin with a fork and knife cut out of it" width="36" height="36">
+      <span class="brand-text">
+        <span class="brand-name">JO3T</span>
+        <span class="brand-ar" lang="ar" dir="rtl">جعت</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="Sections">
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#product">Screens</a></li>
+        <li><a href="#privacy">Data</a></li>
+        <li><a href="#specs">Specs</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false">
+        <span class="theme-toggle-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle class="sun-core" cx="12" cy="12" r="4.2"/>
+            <g class="sun-rays">
+              <path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/>
+            </g>
+            <path class="moon" d="M20 13.4A8.2 8.2 0 0 1 10.6 4a8.4 8.4 0 1 0 9.4 9.4Z" fill="currentColor" stroke="none"/>
+          </svg>
+        </span>
+        <span class="theme-toggle-label">Dark</span>
+      </button>
+      <a class="btn btn-ghost header-cta" href="https://github.com/23aneessss/jo3t-app">GitHub</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="top">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Community food &amp; venue discovery · Algeria</p>
+        <h1>
+          <span class="hero-name">JO3T</span>
+          <span class="hero-ar" lang="ar" dir="rtl">جعت</span>
+        </h1>
+        <p class="hero-tagline">Find places worth eating at in Algeria — ranked by the people who actually ate there.</p>
+        <p class="hero-note">An open-source Flutter app. There is no published build yet — no App Store listing, no Play listing, no release APK. Clone the repository and build it yourself.</p>
+        <p class="hero-actions">
+          <a class="btn btn-primary" href="https://github.com/23aneessss/jo3t-app">View on GitHub</a>
+          <a class="btn btn-secondary" href="#features">See what it does</a>
+        </p>
+        <p class="hero-meta">Flutter · Android &amp; iOS · v1.0.0 · 48 wilayas</p>
+      </div>
+
+      <div class="hero-visual">
+        <div class="radar-shell">
+          <canvas id="radar" width="520" height="520" role="img"
+            aria-label="Illustration: a radar sweeping around a central map pin, with place markers orbiting it and ping rings expanding outward."></canvas>
+          <noscript>
+            <p class="radar-fallback">Radar illustration: places orbiting a central map pin.</p>
+          </noscript>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="section" aria-labelledby="features-title">
+    <div class="wrap">
+      <h2 id="features-title" class="section-title">What the app does</h2>
+      <p class="section-lead">Every item below is implemented in the app today.</p>
+
+      <ul class="feature-grid">
+        <li class="feature reveal">
+          <h3>Discovery feed</h3>
+          <p>A scrollable feed of places filtered by wilaya and by category — restaurant, café, patisserie, street food, juice bar, sandwich. A “For You” / “Following” toggle switches between the general feed and activity from people you follow.</p>
+        </li>
+        <li class="feature reveal">
+          <h3>The JO3T Score</h3>
+          <p>Each place carries a single score from 1 to 10. It is a weighted average of member reviews adjusted for recency, with a confidence dampener so a place with three reviews cannot outrank one with three hundred. The score is computed server-side in a Cloud Function.</p>
+        </li>
+        <li class="feature reveal">
+          <h3>Place profiles</h3>
+          <p>Cover photo and full gallery, the score with review count, opening hours for all seven days with an open/closed indicator, price range, address with a directions action, place tags, and the review list.</p>
+        </li>
+        <li class="feature reveal">
+          <h3>Write a review</h3>
+          <p>A 1–10 score picker, free-text notes, and photos attached from the device camera roll. Reviews appear on the place profile and on your own profile.</p>
+        </li>
+        <li class="feature reveal">
+          <h3>Search</h3>
+          <p>A category grid and trending shortcuts before you type, live results as you type, and a filter sheet for category, price range, minimum score, and open-now. A People tab searches members instead of places.</p>
+        </li>
+        <li class="feature reveal">
+          <h3>Map</h3>
+          <p>A Google map with custom pins per category and a preview sheet when you tap one. With no Maps API key configured, the app falls back to an illustrated map instead of failing.</p>
+        </li>
+        <li class="feature reveal">
+          <h3>Add a place</h3>
+          <p>A multi-step form — name, category, wilaya and neighbourhood, price range, photos — that submits into a moderation queue rather than publishing straight to the feed.</p>
+        </li>
+        <li class="feature reveal">
+          <h3>Social layer</h3>
+          <p>Follow other members, see their reviews and saves in the Following feed, keep saved and want-to-try lists, group places into collections, and check the weekly per-wilaya leaderboard.</p>
+        </li>
+        <li class="feature reveal">
+          <h3>Venue owner tools</h3>
+          <p>Claim a listing through a three-step verification flow, then manage opening hours, official photos, menu link and contact details, and reply publicly to reviews.</p>
+        </li>
+        <li class="feature reveal">
+          <h3>Works offline</h3>
+          <p>Saved places, the feed and place details are cached locally with Hive on a time-to-live basis, and a banner slides down when the device loses connectivity.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="product" class="section section-alt" aria-labelledby="product-title">
+    <div class="wrap">
+      <h2 id="product-title" class="section-title">Inside the app</h2>
+
+      <div class="showcase reveal">
+        <div class="showcase-copy">
+          <h3>Say what you are looking for</h3>
+          <p>Onboarding sets the two things the feed needs: the wilaya you are in and the kinds of places you care about. From there the app has enough to fill a feed without asking you to search for anything.</p>
+        </div>
+        <div class="showcase-shot">
+          <div class="phone">
+            <div class="phone-island" aria-hidden="true"></div>
+            <img src="assets/screens/onboarding.png" width="1206" height="2622" loading="lazy" decoding="async"
+              alt="JO3T onboarding screen: a radar illustration of orange rings expanding around a central map pin with place markers around it, the headline “Discover real places”, and a page indicator showing the first of three onboarding steps.">
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase showcase-reverse reveal">
+        <div class="showcase-copy">
+          <h3>Start from where you are</h3>
+          <p>The feed opens on your wilaya. Category chips narrow it down, the wilaya cards jump you to another province, and a featured card surfaces the pick of the day. Every card shows the place’s score before you tap it.</p>
+        </div>
+        <div class="showcase-shot">
+          <div class="phone">
+            <div class="phone-island" aria-hidden="true"></div>
+            <img src="assets/screens/feed.png" width="1206" height="2622" loading="lazy" decoding="async"
+              alt="JO3T discovery feed on a phone: For You and Following tabs, category chips for All, Restaurant, Café and Patisserie, a JO3T’s Pick Today card for Café Tanit rated 9.1, a horizontal Explore by wilaya row with Alger, Blida, Oran and Constantine tiles, and a Featured near you row of place cards.">
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase reveal">
+        <div class="showcase-copy">
+          <h3>One number, honestly earned</h3>
+          <p>The place profile leads with the JO3T Score and the number of community reviews behind it. Below it sit the actions that matter on the ground — directions, call, share, check-in — then photos, opening hours, price range and the reviews themselves.</p>
+        </div>
+        <div class="showcase-shot">
+          <div class="phone">
+            <div class="phone-island" aria-hidden="true"></div>
+            <img src="assets/screens/place.png" width="1206" height="2622" loading="lazy" decoding="async"
+              alt="JO3T place profile for Café Tanit: cover photo of the café interior, an Open until 22:00 badge, category and location chips, a 9.1 out of 10 score ring labelled Excellent with 287 community reviews, action buttons for Directions, Call, Share and Check In, a photos row, and a Write a review button.">
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase showcase-reverse reveal">
+        <div class="showcase-copy">
+          <h3>Search that knows the categories</h3>
+          <p>Before you type, search shows a category grid and what other members are looking up right now. As you type, results filter live; the filter sheet layers on price range, minimum score and open-now. Switch to the People tab to find members instead of places.</p>
+        </div>
+        <div class="showcase-shot">
+          <div class="phone">
+            <div class="phone-island" aria-hidden="true"></div>
+            <img src="assets/screens/search.png" width="1206" height="2622" loading="lazy" decoding="async"
+              alt="JO3T search screen: a search field reading Places, cities, cuisines, tabs for Places and People with a Filter button, a Browse by category grid of Restaurant, Café, Patisserie, Street Food, Juice Bar and Sandwich, and a Trending now row of shortcuts including Chez Fatima, Café Tanit, Blida, Cafés and Oran.">
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase reveal">
+        <div class="showcase-copy">
+          <h3>Your record, and the people you follow</h3>
+          <p>Your profile keeps the count of reviews you have written and the people you follow, plus badges you earn along the way. Tabs split what you have reviewed from what you still want to try and what you have saved.</p>
+        </div>
+        <div class="showcase-shot">
+          <div class="phone">
+            <div class="phone-island" aria-hidden="true"></div>
+            <img src="assets/screens/profile.png" width="1206" height="2622" loading="lazy" decoding="async"
+              alt="JO3T user profile: orange gradient header with avatar and the name Anes Bouziani, a Blida, Algeria badge, Top Reviewer, Explorer and Foodie badges, stat cards showing 12 reviews, 48 following and 23 followers, and a Reviews tab listing reviewed places Chez Fatima rated 8.5 and Café Tanit rated 9.2.">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="privacy" class="section" aria-labelledby="privacy-title">
+    <div class="wrap privacy-layout">
+      <div class="privacy-shot reveal">
+        <div class="phone">
+          <div class="phone-island" aria-hidden="true"></div>
+          <img src="assets/screens/signin.png" width="1206" height="2622" loading="lazy" decoding="async"
+            alt="JO3T sign-in screen: the Arabic wordmark جعت above the JO3T name, a Continue with Google button, a Continue with phone number button, and a link to continue as a guest without an account.">
+        </div>
+      </div>
+      <div class="privacy-copy">
+      <h2 id="privacy-title" class="section-title">Data and accounts</h2>
+      <p class="section-lead">What the app actually does with your data, and when.</p>
+      <ul class="fact-list">
+        <li class="reveal">
+          <h3>No backend by default</h3>
+          <p>Out of the box the app runs entirely on local sample data. No server is contacted, and no account is required to browse, search or open a place.</p>
+        </li>
+        <li class="reveal">
+          <h3>Firebase is opt-in</h3>
+          <p>Firebase Auth, Firestore and Storage are only wired in when the build is compiled with the Firebase flag enabled. Without that flag the repositories resolve to the local sample implementations.</p>
+        </li>
+        <li class="reveal">
+          <h3>Phone-number sign-in</h3>
+          <p>When Firebase is enabled, authentication is phone-number OTP, with Google sign-in as an alternative. Signing in stores a profile — display name, username, bio, wilaya, avatar — in Firestore.</p>
+        </li>
+        <li class="reveal">
+          <h3>Crash and usage reporting</h3>
+          <p>Crashlytics and Analytics are initialised only as part of Firebase start-up. In a build without Firebase they never run. In a build with Firebase they collect crash reports and usage events as those SDKs normally do.</p>
+        </li>
+        <li class="reveal">
+          <h3>Photos and location</h3>
+          <p>Photos are read from the device only when you attach them to a review or a place submission. Maps are rendered locally; with no Maps API key the app shows an illustrated map instead.</p>
+        </li>
+      </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="specs" class="section section-alt" aria-labelledby="specs-title">
+    <div class="wrap">
+      <h2 id="specs-title" class="section-title">Under the hood</h2>
+      <dl class="spec-grid">
+        <div class="spec reveal"><dt>Framework</dt><dd>Flutter (Dart)</dd></div>
+        <div class="spec reveal"><dt>State management</dt><dd>Riverpod</dd></div>
+        <div class="spec reveal"><dt>Navigation</dt><dd>GoRouter</dd></div>
+        <div class="spec reveal"><dt>Backend</dt><dd>Firebase — Auth, Firestore, Storage, Cloud Functions (optional)</dd></div>
+        <div class="spec reveal"><dt>Maps</dt><dd>google_maps_flutter, with illustrated fallback</dd></div>
+        <div class="spec reveal"><dt>Offline cache</dt><dd>Hive, with time-to-live invalidation</dd></div>
+        <div class="spec reveal"><dt>Motion</dt><dd>flutter_animate</dd></div>
+        <div class="spec reveal"><dt>Platforms</dt><dd>Android and iOS</dd></div>
+        <div class="spec reveal"><dt>Version</dt><dd>1.0.0</dd></div>
+        <div class="spec reveal"><dt>Coverage</dt><dd>48 Algerian wilayas</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section final-cta" aria-labelledby="cta-title">
+    <div class="wrap narrow center">
+      <h2 id="cta-title" class="section-title">Build it from source</h2>
+      <p class="section-lead">The full Flutter project — app, Cloud Functions, Firestore rules — is on GitHub. Clone it, run <code>flutter pub get</code>, and run it on a device or emulator.</p>
+      <p class="hero-actions center-actions">
+        <a class="btn btn-primary" href="https://github.com/23aneessss/jo3t-app">github.com/23aneessss/jo3t-app</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p class="footer-brand">
+      <img src="assets/jo3t-icon.svg" alt="" width="24" height="24" aria-hidden="true">
+      <span>JO3T <span lang="ar" dir="rtl">جعت</span></span>
+    </p>
+    <p>Built with Flutter, in Algeria.</p>
+    <p><a href="https://github.com/23aneessss/jo3t-app">Source on GitHub</a></p>
+  </div>
+</footer>
+
+<script src="scripts/ui.js" defer></script>
+</body>
+</html>
