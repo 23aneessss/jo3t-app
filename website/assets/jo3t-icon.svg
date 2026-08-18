@@ -1,0 +1,30 @@
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="JO3T app icon">
+  <defs>
+    <linearGradient id="pin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF8C3B"/>
+      <stop offset="0.55" stop-color="#F2630F"/>
+      <stop offset="1" stop-color="#C23E06"/>
+    </linearGradient>
+    <mask id="cutlery">
+      <rect width="1024" height="1024" fill="white"/>
+      <g fill="black">
+        <rect x="452" y="338" width="13" height="58" rx="6"/>
+        <rect x="473" y="338" width="13" height="58" rx="6"/>
+        <rect x="494" y="338" width="13" height="58" rx="6"/>
+        <rect x="466" y="384" width="27" height="14" rx="7"/>
+        <rect x="472" y="392" width="15" height="150" rx="7.5"/>
+      </g>
+      <g fill="black">
+        <path d="M556 338 c26 0 30 36 30 78 c0 24 -14 30 -30 30 Z"/>
+        <rect x="550" y="430" width="14" height="112" rx="7"/>
+      </g>
+    </mask>
+  </defs>
+  <!-- Reversed squircle: white tile with an orange pin. Hairline border so the
+       white tile is visible on a light README background. -->
+  <rect x="3" y="3" width="1018" height="1018" rx="227" fill="#FFFFFF"
+        stroke="#EAEAEA" stroke-width="6"/>
+  <ellipse cx="512" cy="828" rx="40" ry="13" fill="#C23E06" opacity="0.10"/>
+  <path d="M512 806 C 398 612, 320 528, 320 420 A 192 192 0 1 1 704 420 C 704 528, 626 612, 512 806 Z"
+        fill="url(#pin)" mask="url(#cutlery)"/>
+</svg>
