@@ -159,7 +159,8 @@ are no raster art assets. The Arabic wordmark (جعت) is set in El Messiri, bun
 - **Sharing produces no shareable link** — the share sheet copies a placeholder URL.
 - **Photo upload, push notifications, the score recompute and the Algolia sync** all depend on
   deployed Cloud Functions and Firebase Storage, which require the Blaze plan.
-- **Test coverage is minimal** — a single widget test.
+- **There are effectively no tests.** The suite contains one placeholder test that asserts
+  nothing; CI runs it and goes green regardless.
 - **Android-first.** iOS builds and runs, but there is no App Store release, and the Android
   release build stays unsigned until you supply `android/key.properties`.
 
