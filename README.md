@@ -15,6 +15,7 @@ A Flutter app for discovering restaurants, cafés and street food across the 48 
 <img src="https://img.shields.io/badge/state-Riverpod-F2630F?style=flat-square" alt="State management: Riverpod" />
 <img src="https://img.shields.io/badge/backend-Firebase%20(optional)-B33E06?style=flat-square" alt="Backend: Firebase, optional" />
 <img src="https://img.shields.io/badge/version-1.0.0-9E3006?style=flat-square" alt="Version 1.0.0" />
+<img src="https://img.shields.io/badge/license-MIT-FF6B2B?style=flat-square" alt="MIT licensed" />
 </p>
 
 </div>
@@ -159,8 +160,8 @@ are no raster art assets. The Arabic wordmark (جعت) is set in El Messiri, bun
 - **Sharing produces no shareable link** — the share sheet copies a placeholder URL.
 - **Photo upload, push notifications, the score recompute and the Algolia sync** all depend on
   deployed Cloud Functions and Firebase Storage, which require the Blaze plan.
-- **There are effectively no tests.** The suite contains one placeholder test that asserts
-  nothing; CI runs it and goes green regardless.
+- **Test coverage is thin** — unit tests cover the score-band colour mapping only. There are no
+  widget or integration tests.
 - **Android-first.** iOS builds and runs, but there is no App Store release, and the Android
   release build stays unsigned until you supply `android/key.properties`.
 
@@ -180,4 +181,4 @@ are no raster art assets. The Arabic wordmark (جعت) is set in El Messiri, bun
 
 ## License
 
-No license file has been added yet, so default copyright applies — all rights reserved.
+[MIT](LICENSE) © Anes Bouziani

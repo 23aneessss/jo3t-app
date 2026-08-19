@@ -1,14 +1,27 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jo3t/core/constants/app_colors.dart';
 
 void main() {
-  testWidgets('placeholder', (WidgetTester tester) async {
-    expect(true, isTrue);
+  group('AppColors.scoreColor', () {
+    test('maps each JO3T Score band to its colour', () {
+      expect(AppColors.scoreColor(1), AppColors.scoreLow);
+      expect(AppColors.scoreColor(5), AppColors.scoreMid);
+      expect(AppColors.scoreColor(7), AppColors.scoreHigh);
+      expect(AppColors.scoreColor(9.1), AppColors.scoreTop);
+    });
+
+    test('band boundaries are inclusive of their upper bound', () {
+      expect(AppColors.scoreColor(4), AppColors.scoreLow);
+      expect(AppColors.scoreColor(4.1), AppColors.scoreMid);
+      expect(AppColors.scoreColor(6), AppColors.scoreMid);
+      expect(AppColors.scoreColor(6.1), AppColors.scoreHigh);
+      expect(AppColors.scoreColor(8), AppColors.scoreHigh);
+      expect(AppColors.scoreColor(8.1), AppColors.scoreTop);
+    });
+
+    test('handles the ends of the 1-10 range', () {
+      expect(AppColors.scoreColor(0), AppColors.scoreLow);
+      expect(AppColors.scoreColor(10), AppColors.scoreTop);
+    });
   });
 }

@@ -66,3 +66,6 @@ functions/lib/
 
 # Internal dev tracker — not part of the public repo
 CLAUDE.md
+
+# Internal planning docs — not part of the public repo
+.claude/
