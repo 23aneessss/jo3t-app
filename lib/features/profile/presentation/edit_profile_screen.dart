@@ -18,8 +18,8 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   bool _saving = false;
   String? _avatarPath;
-  final _nameCtrl = TextEditingController(text: 'Yacine Belkacem');
-  final _usernameCtrl = TextEditingController(text: 'yacine.b');
+  final _nameCtrl = TextEditingController(text: 'Anes Bouziani');
+  final _usernameCtrl = TextEditingController(text: 'anes.b');
   final _bioCtrl = TextEditingController(
       text: 'Food explorer based in Alger. Always on the hunt for the best couscous.');
   String _selectedWilaya = 'Alger';

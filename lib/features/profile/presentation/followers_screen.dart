@@ -67,7 +67,7 @@ class _FollowersScreenState extends State<FollowersScreen>
           onPressed: () => context.pop(),
         ),
         title: const Text(
-          'Yacine Belkacem',
+          'Anes Bouziani',
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w700,

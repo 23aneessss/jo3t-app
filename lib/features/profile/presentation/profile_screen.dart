@@ -164,7 +164,7 @@ class _ProfileHeader extends StatelessWidget {
                       ),
                       child: const Center(
                         child: Text(
-                          'Y',
+                          'A',
                           style: TextStyle(
                             fontSize: 38,
                             fontWeight: FontWeight.w800,
@@ -204,7 +204,7 @@ class _ProfileHeader extends StatelessWidget {
 
                 // Name
                 const Text(
-                  'Yacine Belkacem',
+                  'Anes Bouziani',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 22,
@@ -240,7 +240,7 @@ class _ProfileHeader extends StatelessWidget {
                               size: 11, color: Colors.white70),
                           const SizedBox(width: AppSizes.s2),
                           const Text(
-                            'Alger · Algeria',
+                            'Blida · Algeria',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -1259,7 +1259,7 @@ class _ProfileShareSheetState extends State<_ProfileShareSheet> {
                   ),
                   SizedBox(height: 2),
                   Text(
-                    'jo3t.app/u/yacine.b',
+                    'jo3t.app/u/anes.b',
                     style: TextStyle(
                       fontSize: 13,
                       color: AppColors.neutral500,
