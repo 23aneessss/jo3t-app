@@ -23,84 +23,61 @@ A Flutter app for discovering restaurants, cafés and street food across the 48 
 
 ## Download
 
-**There is no published build yet.** No APK, no App Store or Play Store listing, and no tagged
-release on this repository. To try JO3T today you build it from source — see
-[Run locally](#run-locally).
+**There is no published build yet** — no APK, no App Store or Play listing, no tagged release.
+To try JO3T you build it from source, which takes two commands:
 
-The app runs fully without any backend: by default it starts on in-memory sample data, so
-`flutter run` is enough to explore every screen.
+```bash
+flutter pub get
+flutter run
+```
+
+The app boots on in-memory sample data, so that is enough to reach every screen. No Firebase
+project, no API keys, no account. See [Run locally](#run-locally) for the backed-by-Firebase
+setup.
+
+> Screenshots and a product tour live on the site in [`website/`](website/) — a static page you
+> can serve locally or deploy to Vercel.
 
 ---
 
-## What JO3T includes
+## What JO3T does
 
-Everything listed here exists in the code and runs today. Anything partial is called out in
-[Known limitations](#known-limitations).
+**Discovery** — a *For You* feed with category chips, a daily featured pick, wilaya shortcuts,
+a *Following* activity tab, and pull-to-refresh. Search adds a category grid, trending
+shortcuts, a people tab, and filters for price, minimum score and open-now.
 
-**Discovery feed** — a *For You* feed of places with category filter chips, a featured
-"JO3T's Pick Today" card, wilaya shortcut cards, a *Following* activity tab, and
-pull-to-refresh.
+**The JO3T Score** — one number, 1 to 10, per place. A weighted review average adjusted for
+recency and damped by confidence, so three glowing reviews cannot outrank three hundred. It is
+computed in a Firestore-triggered Cloud Function (`functions/src/index.ts`).
 
-**The JO3T Score** — every place carries a single 1–10 score. The scoring algorithm
-(weighted review average + recency weighting + a confidence dampener so a place with 3
-reviews cannot outrank one with 300) lives in `functions/src/index.ts` and runs as a
-Firestore-triggered Cloud Function.
+**Places** — hero gallery with pinch-to-zoom, the score ring, open/closed state from a 7-day
+hours table, price range, attribute chips, directions, similar places, and the full review list
+with sorting and a score distribution.
 
-**Place profiles** — hero image with a photo gallery (swipeable, pinch-to-zoom), the score
-ring, open/closed status from opening hours, a 7-day hours table, price range, category
-attribute chips, directions, similar places, and the full review list with sort and a score
-distribution.
+**Reviews** — an animated 1–10 score picker, photo attachments, expandable text and photo
+strips, sorted newest / highest / lowest.
 
-**Reviews** — write a review with an animated 1–10 score picker and attach photos; read
-reviews with expandable text and photo strips, sorted by newest / highest / lowest.
+**Map** — a Google Map with custom category pins and tap-to-preview cards. With no API key
+configured it falls back to a hand-drawn illustrated map carrying the same pins.
 
-**Search** — a search screen with a category grid, trending shortcuts, a people tab, and a
-filter sheet (category, price, minimum score, open now).
+**Contributing places** — a multi-step submission form (category, wilaya, neighbourhood, photos)
+that lands in a `places_pending` moderation queue.
 
-**Map** — a Google Map with custom category pins and a tap-to-preview place card. Without a
-Maps API key the screen falls back to a hand-drawn illustrated map with the same pins.
+**Social** — follow people, an activity feed, mutual recommendations on a place, a weekly wilaya
+leaderboard, and user profiles.
 
-**Add a place** — a multi-step submission form (category, wilaya and neighbourhood, photos)
-that writes to a `places_pending` moderation queue when Firebase is enabled.
-
-**Social layer** — follow users, an activity feed, mutual recommendations on a place
-("friends who know this place"), a weekly wilaya leaderboard, and user profiles.
-
-**Venue owner flow** — claim a listing (3-step verification), a dashboard with score and
-review stats, listing management (photos, per-day hours, menu URL, contact), and inline
+**Venue owners** — claim a listing through a 3-step verification, then a dashboard with score
+and review stats, listing management (photos, per-day hours, menu URL, contact) and inline
 replies to reviews.
 
-**Offline cache** — saved place IDs, the feed (2h TTL) and place details (6h TTL) are cached
-with Hive, and an offline banner appears when connectivity drops.
-
-**Backend, when enabled** — Firebase Auth (phone OTP), Firestore repositories for places,
-reviews and users, Storage uploads, Cloud Messaging with local notifications, plus
-Crashlytics and Analytics. Security rules and composite indexes are committed
-(`firestore.rules`, `firestore.indexes.json`, `storage.rules`).
-
----
-
-## Screenshots
-
-Captured on an iOS Simulator from a demo build with invented sample data.
-
-<div align="center">
-
-| Onboarding | Discovery feed | Search |
-|:---:|:---:|:---:|
-| <img src="Docs/screenshots/onboarding.png" width="230" alt="Onboarding screen with an animated radar illustration and the caption Discover real places" /> | <img src="Docs/screenshots/feed.png" width="230" alt="Discovery feed with For You and Following tabs, category chips and a featured place card" /> | <img src="Docs/screenshots/search.png" width="230" alt="Search screen with a category grid and trending shortcuts" /> |
-
-| Place profile | Profile | Sign in |
-|:---:|:---:|:---:|
-| <img src="Docs/screenshots/place.png" width="230" alt="Place profile showing a 9.1 out of 10 JO3T Score, action buttons and a photo gallery" /> | <img src="Docs/screenshots/profile.png" width="230" alt="User profile with achievement badges, review and follower counts, and reviewed places" /> | <img src="Docs/screenshots/signin.png" width="230" alt="Sign-in screen with the Arabic wordmark and Google, phone and guest options" /> |
-
-</div>
+**Offline** — saved place IDs, the feed (2h TTL) and place details (6h TTL) are cached in Hive,
+with a banner when connectivity drops.
 
 ---
 
 ## Run locally
 
-Requires the Flutter SDK (3.41 or newer) and Xcode or Android Studio.
+Needs the Flutter SDK 3.41+ and Xcode or Android Studio.
 
 ```bash
 git clone https://github.com/23aneessss/jo3t-app.git
@@ -109,120 +86,94 @@ flutter pub get
 flutter run
 ```
 
-That runs the app on **sample data** — no Firebase project, no API keys, no network. Every
-screen is reachable.
-
-### Running against Firebase
+### Against Firebase
 
 ```bash
 dart pub global activate flutterfire_cli
-flutterfire configure --project=<your-firebase-project>
+flutterfire configure --project=<your-project>
 firebase deploy --only firestore:rules,firestore:indexes
 
 flutter run --dart-define=USE_FIREBASE=true
 ```
 
-`USE_FIREBASE=true` swaps every repository from its mock implementation to the Firestore /
-Firebase Auth / Storage one. Storage uploads and Cloud Functions require the Firebase Blaze
-plan.
+`USE_FIREBASE=true` swaps every repository from its mock implementation to the Firestore,
+Firebase Auth and Storage one. Storage uploads and Cloud Functions need the Blaze plan.
 
-### Enabling the real map
+### With the real map
 
 The Maps key is read from a Gradle property on Android and an xcconfig on iOS, so it never
-lands in git:
+reaches git:
 
 ```bash
-cp ios/Flutter/Secrets.xcconfig.template ios/Flutter/Secrets.xcconfig
-# put your key in MAPS_API_KEY, then:
+cp ios/Flutter/Secrets.xcconfig.template ios/Flutter/Secrets.xcconfig   # set MAPS_API_KEY
 flutter run --dart-define=MAPS_API_KEY=<key> -PMAPS_API_KEY=<key>
 ```
 
-Enable **Maps SDK for Android** and **Maps SDK for iOS** on the key. Mobile map rendering is
-not billed by Google, but a billing account must be attached or the map renders watermarked.
+Enable *Maps SDK for Android* and *Maps SDK for iOS* on the key. Mobile map rendering is not
+billed, but the project needs a billing account attached or the map renders watermarked.
 
 ---
 
 ## Architecture
 
-Feature-first clean architecture. Each feature splits into `domain` (entities, repository
-interfaces, use cases), `data` (Firestore and mock implementations), and `presentation`
-(screens, widgets, Riverpod providers).
+Feature-first clean architecture. Every feature splits into `domain` (entities, repository
+interfaces, use cases), `data` (Firestore and mock implementations) and `presentation` (screens,
+widgets, Riverpod providers). Swapping `AppEnv.useFirebase` swaps the data layer without the
+presentation layer noticing.
 
 ```
 lib/
-├── core/
-│   ├── theme/         colour, typography and spacing tokens
-│   ├── constants/     animation curves, durations, sizes
-│   ├── router/        GoRouter config and page transitions
-│   ├── config/        AppEnv — reads --dart-define flags
-│   ├── firebase/      init, Crashlytics, Analytics
-│   ├── services/      FCM, Storage, connectivity
-│   ├── cache/         Hive offline cache with TTLs
-│   └── errors/        typed Failure hierarchy
-├── features/
-│   ├── auth/          onboarding, phone OTP, wilaya and food preferences
-│   ├── discovery/     feed, search, category filters, following tab
-│   ├── place/         profile, gallery, reviews, suggest edits
-│   ├── review/        write review, 1–10 score picker
-│   ├── add_place/     multi-step submission
-│   ├── map/           Google Map and illustrated fallback
-│   ├── profile/       profile, saved, settings, edit profile
-│   ├── saved/         collections
-│   ├── leaderboard/   weekly wilaya ranking
-│   ├── events/        event detail and RSVP
-│   ├── notifications/ activity list
-│   ├── venue/         owner dashboard, claim, manage listing
-│   └── wilaya/        Algerian wilaya data
-├── shared/widgets/    place cards, score badge, skeletons, brand logo
+├── core/          theme tokens, router, AppEnv, Firebase init,
+│                  services (FCM, storage, connectivity), Hive cache, failures
+├── features/      auth · discovery · place · review · add_place · map · profile
+│                  saved · leaderboard · events · notifications · venue · wilaya
+├── shared/        place cards, score badge, skeletons, brand logo
 └── main.dart
-functions/             Cloud Functions (TypeScript) — score, Algolia sync, FCM triggers
+functions/         Cloud Functions (TypeScript) — score, Algolia sync, FCM triggers
 ```
 
-**Key dependencies** — `flutter_riverpod` (state), `go_router` (navigation),
-`google_maps_flutter` (map), `flutter_animate` + `animations` (motion), `hive_flutter`
-(cache), `cached_network_image`, `image_picker`, `connectivity_plus`, `timeago`, and the
-`firebase_*` family (core, auth, firestore, storage, messaging, crashlytics, analytics).
+**Stack** — Riverpod (state), GoRouter (navigation), google_maps_flutter, flutter_animate +
+animations (motion), Hive (cache), cached_network_image, image_picker, connectivity_plus, and
+the `firebase_*` family (core, auth, firestore, storage, messaging, crashlytics, analytics).
 
-The brand mark and the onboarding illustrations are drawn in code with `CustomPainter` —
-there are no raster art assets. The Arabic wordmark (جعت) is set in El Messiri, bundled in
+The brand mark and the onboarding illustrations are drawn in code with `CustomPainter` — there
+are no raster art assets. The Arabic wordmark (جعت) is set in El Messiri, bundled under
 `assets/fonts/`.
 
 ---
 
 ## Known limitations
 
-Honest list of what is not finished:
-
-- **Mock data is the default.** Without `USE_FIREBASE=true` the app is a working prototype
-  over in-memory repositories. Nothing you create in that mode survives a restart.
+- **Sample data is the default.** Without `USE_FIREBASE=true` the app runs on in-memory
+  repositories; nothing you create survives a restart.
 - **Search does not use Algolia.** The Cloud Function that syncs places to an Algolia index
-  exists, but the app never queries it — search fetches up to 100 places from Firestore and
-  filters them client-side by substring.
-- **Google Sign-In is not implemented.** The button shows a "coming soon" message;
+  exists, but the app never queries it — search pulls up to 100 places from Firestore and filters
+  them client-side by substring.
+- **Google Sign-In is not implemented.** The button shows a "coming soon" message and
   `signInWithGoogle` returns a failure. Phone OTP is the working path.
-- **Profile screens still show sample data.** The profile, settings and followers screens
-  render hardcoded demo content instead of the signed-in Firestore user.
-- **Some interactions are UI-only.** Collections, check-in, RSVP and the events list hold
-  local widget state and are not persisted to any backend.
-- **Map gaps.** No marker clustering and no "near me" GPS mode.
-- **No address autocomplete** in the add-place flow (Places API is not wired up).
-- **Share produces no shareable link.** The share sheet copies a placeholder URL; there is no
-  deep-link backend.
-- **Photo upload, push notifications, the JO3T Score recompute and the Algolia sync all
-  require deployed Cloud Functions and Firebase Storage**, which need the Blaze plan.
+- **Profile screens render sample content** rather than the signed-in Firestore user.
+- **Some interactions are UI-only** — collections, check-in, RSVP and the events list hold local
+  widget state and are not persisted.
+- **Map gaps** — no marker clustering, no "near me" GPS mode.
+- **No address autocomplete** in the add-place flow.
+- **Sharing produces no shareable link** — the share sheet copies a placeholder URL.
+- **Photo upload, push notifications, the score recompute and the Algolia sync** all depend on
+  deployed Cloud Functions and Firebase Storage, which require the Blaze plan.
 - **Test coverage is minimal** — a single widget test.
-- **Android-first.** iOS builds and runs, but there is no App Store release and the release
-  build is unsigned until you supply a keystore (`android/key.properties`).
+- **Android-first.** iOS builds and runs, but there is no App Store release, and the Android
+  release build stays unsigned until you supply `android/key.properties`.
 
 ---
 
-## Project references
+## Repository map
 
-- `firestore.rules`, `storage.rules` — access control
-- `firestore.indexes.json` — composite indexes for the feed and review queries
-- `functions/src/index.ts` — JO3T Score, Algolia sync, FCM triggers, pending-place expiry
-- `.github/workflows/` — analyze, test and APK build on CI; Firebase deploy workflow
-- `website/` — the static marketing site for this project
+| Path | What it holds |
+|---|---|
+| `firestore.rules`, `storage.rules` | access control |
+| `firestore.indexes.json` | composite indexes for feed and review queries |
+| `functions/src/index.ts` | JO3T Score, Algolia sync, FCM triggers, pending-place expiry |
+| `.github/workflows/` | analyze + test + APK build; Firebase deploy |
+| `website/` | the static marketing site |
 
 ---
 
